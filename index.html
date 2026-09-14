@@ -16,7 +16,6 @@
   <header id="navbar" role="banner">
     <nav class="nav-container" aria-label="Main navigation">
       <a href="#home" class="nav-logo"><span class="logo-bracket">&lt;</span>DucManh<span class="logo-bracket">/&gt;</span></a>
-      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation" aria-expanded="false"><span></span><span></span><span></span></button>
       <ul class="nav-links" id="nav-links" role="list">
         <li><a href="#home"     class="nav-link" data-i18n="nav.home">Home</a></li>
         <li><a href="#about"    class="nav-link" data-i18n="nav.about">About</a></li>
@@ -24,15 +23,38 @@
         <li><a href="#blog"     class="nav-link" data-i18n="nav.blog">Blog</a></li>
         <li><a href="#github"   class="nav-link" data-i18n="nav.github">GitHub</a></li>
         <li><a href="#contact"  class="nav-link" data-i18n="nav.contact">Contact</a></li>
+        <li class="mobile-theme-menu">
+          <div class="mobile-theme-title" data-i18n="nav.theme_title">GIAO DIỆN</div>
+          <div class="mobile-theme-switcher">
+            <button class="mobile-theme-opt" data-theme-val="light">
+              <span class="opt-icon">☀️</span>
+              <span class="opt-text" data-i18n="theme.light">Nền trắng</span>
+            </button>
+            <button class="mobile-theme-opt" data-theme-val="dark">
+              <span class="opt-icon">🌙</span>
+              <span class="opt-text" data-i18n="theme.dark">Nền đen</span>
+            </button>
+            <button class="mobile-theme-opt" data-theme-val="system">
+              <span class="opt-icon">💻</span>
+              <span class="opt-text" data-i18n="theme.system">Tự động</span>
+            </button>
+          </div>
+        </li>
       </ul>
-      <div class="theme-toggle-group" role="group" aria-label="Color theme">
-        <button class="theme-btn active" id="theme-light" title="Light mode">&#9728;&#65039;</button>
-        <button class="theme-btn" id="theme-dark" title="Dark mode">&#127769;</button>
-        <button class="theme-btn" id="theme-system" title="System">&#128187;</button>
+      <div class="nav-actions">
+        <button class="theme-quick-btn" id="theme-quick-btn" aria-label="Đổi nền sáng/tối" title="Đổi nền trắng / đen">
+          <span class="theme-quick-icon" id="theme-quick-icon">🌙</span>
+        </button>
+        <div class="theme-toggle-group" role="group" aria-label="Color theme">
+          <button class="theme-btn active" id="theme-light" data-theme-val="light" title="Nền trắng">&#9728;&#65039;</button>
+          <button class="theme-btn" id="theme-dark" data-theme-val="dark" title="Nền đen">&#127769;</button>
+          <button class="theme-btn" id="theme-system" data-theme-val="system" title="Hệ thống">&#128187;</button>
+        </div>
+        <button class="lang-btn" id="lang-toggle" title="Chuyen sang Tieng Viet" aria-label="Switch language">
+          <span class="lang-flag">&#127759;&#127475;</span><span class="lang-label">VN</span>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation" aria-expanded="false"><span></span><span></span><span></span></button>
       </div>
-      <button class="lang-btn" id="lang-toggle" title="Chuyen sang Tieng Viet" aria-label="Switch language">
-        <span class="lang-flag">&#127759;&#127475;</span><span class="lang-label">VN</span>
-      </button>
     </nav>
   </header>
   <main id="main-content">

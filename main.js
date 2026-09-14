@@ -5,15 +5,35 @@ const THEMES = ['light', 'dark', 'system'];
 const html   = document.documentElement;
 
 function applyTheme(theme) {
+  let effectiveTheme = theme;
   if (theme === 'system') {
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    html.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+    effectiveTheme = prefersDark ? 'dark' : 'light';
+    html.setAttribute('data-theme', effectiveTheme);
   } else {
     html.setAttribute('data-theme', theme);
   }
-  document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
-  const btn = document.getElementById('theme-' + theme);
-  if (btn) btn.classList.add('active');
+
+  // Update active state on all theme buttons (desktop + mobile drawer)
+  document.querySelectorAll('[data-theme-val]').forEach(b => {
+    b.classList.toggle('active', b.getAttribute('data-theme-val') === theme);
+  });
+
+  // Update quick toggle button icon
+  const quickIcon = document.getElementById('theme-quick-icon');
+  const quickBtn  = document.getElementById('theme-quick-btn');
+  if (quickIcon && quickBtn) {
+    if (effectiveTheme === 'dark') {
+      quickIcon.textContent = '☀️';
+      quickBtn.title = 'Chuyển sang nền trắng (Light mode)';
+      quickBtn.setAttribute('aria-label', 'Chuyển sang nền trắng');
+    } else {
+      quickIcon.textContent = '🌙';
+      quickBtn.title = 'Chuyển sang nền đen (Dark mode)';
+      quickBtn.setAttribute('aria-label', 'Chuyển sang nền đen');
+    }
+  }
+
   localStorage.setItem('theme', theme);
 }
 
@@ -22,9 +42,21 @@ function applyTheme(theme) {
   applyTheme(saved);
 })();
 
-document.getElementById('theme-light') .addEventListener('click', () => applyTheme('light'));
-document.getElementById('theme-dark')  .addEventListener('click', () => applyTheme('dark'));
-document.getElementById('theme-system').addEventListener('click', () => applyTheme('system'));
+// Quick 1-tap toggle button
+const quickBtn = document.getElementById('theme-quick-btn');
+if (quickBtn) {
+  quickBtn.addEventListener('click', () => {
+    const current = html.getAttribute('data-theme') || 'light';
+    applyTheme(current === 'dark' ? 'light' : 'dark');
+  });
+}
+
+// All explicit theme buttons (desktop + mobile drawer)
+document.querySelectorAll('[data-theme-val]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    applyTheme(btn.getAttribute('data-theme-val'));
+  });
+});
 
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
   if (localStorage.getItem('theme') === 'system') applyTheme('system');
@@ -800,12 +832,16 @@ const PHRASES = {
 const TRANSLATIONS = {
   en: {
     // Nav
-    'nav.home':     'Home',
-    'nav.about':    'About',
-    'nav.projects': 'Projects',
-    'nav.blog':     'Blog',
-    'nav.github':   'GitHub',
-    'nav.contact':  'Contact',
+    'nav.home':        'Home',
+    'nav.about':       'About',
+    'nav.projects':    'Projects',
+    'nav.blog':        'Blog',
+    'nav.github':      'GitHub',
+    'nav.contact':     'Contact',
+    'nav.theme_title': 'THEME',
+    'theme.light':     'White',
+    'theme.dark':      'Black',
+    'theme.system':    'Auto',
     // Hero
     'hero.badge':   'Open to learning &amp; collaboration',
     'hero.sub':     'I am passionate about <strong>learning programming</strong> and building projects. I enjoy exploring new technologies, improving my coding skills, and documenting my learning journey — one commit at a time.',
@@ -916,12 +952,16 @@ const TRANSLATIONS = {
 
   vi: {
     // Nav
-    'nav.home':     'Trang chủ',
-    'nav.about':    'Giới thiệu',
-    'nav.projects': 'Dự án',
-    'nav.blog':     'Blog',
-    'nav.github':   'GitHub',
-    'nav.contact':  'Liên hệ',
+    'nav.home':        'Trang chủ',
+    'nav.about':       'Giới thiệu',
+    'nav.projects':    'Dự án',
+    'nav.blog':        'Blog',
+    'nav.github':      'GitHub',
+    'nav.contact':     'Liên hệ',
+    'nav.theme_title': 'GIAO DIỆN',
+    'theme.light':     'Nền trắng',
+    'theme.dark':      'Nền đen',
+    'theme.system':    'Tự động',
     // Hero
     'hero.badge':   'Sẵn sàng học hỏi &amp; hợp tác',
     'hero.sub':     'Tôi đam mê <strong>học lập trình</strong> và xây dựng các ứng dụng. Tôi thích khám phá công nghệ mới, nâng cao kỹ năng và ghi lại hành trình học tập — từng commit một.',
