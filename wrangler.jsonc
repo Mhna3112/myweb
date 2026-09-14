@@ -4,15 +4,10 @@
   "compatibility_date": "2026-09-14",
   "assets": {
     "directory": "."
-  },
-  "routes": [
-    {
-      "pattern": "ducmanh.xyz",
-      "custom_domain": true
-    },
-    {
-      "pattern": "www.ducmanh.xyz",
-      "custom_domain": true
-    }
-  ]
+  }
+  // Sau khi thêm domain ducmanh.xyz vào Cloudflare, bật lại routes:
+  // "routes": [
+  //   { "pattern": "ducmanh.xyz", "custom_domain": true },
+  //   { "pattern": "www.ducmanh.xyz", "custom_domain": true }
+  // ]
 }
