@@ -1,0 +1,10 @@
+﻿{
+  "name": "myweb",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Duc Manh's Personal Portfolio Website",
+  "scripts": {
+    "deploy": "wrangler pages deploy . --project-name myweb",
+    "preview": "wrangler pages dev ."
+  }
+}
