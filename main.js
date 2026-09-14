@@ -373,8 +373,11 @@ function renderGitHubProfile() {
   const avatarWrap = document.getElementById('github-avatar-wrap');
   if (avatarWrap && ghUserData.avatar_url) {
     avatarWrap.innerHTML = `
-      <img src="${ghUserData.avatar_url}" alt="${ghUserData.login} avatar" class="github-avatar-img" onerror="this.style.display='none'" />
+      <img src="${ghUserData.avatar_url}" alt="${ghUserData.login || 'Nguyễn Đức Mạnh'} avatar" class="github-avatar-img" onerror="this.style.display='none'" />
       <div class="github-avatar-fallback">DM</div>
+      <div class="avatar-zoom-badge" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+      </div>
     `;
   }
 }
@@ -765,23 +768,32 @@ window.closePost = function() {
 };
 
 // ── AVATAR MODAL PREVIEW ───────────────────────────────────────────
-window.openAvatarModal = function() {
+window.openAvatarModal = function(e) {
+  if (e) {
+    if (typeof e.preventDefault === 'function') e.preventDefault();
+    if (typeof e.stopPropagation === 'function') e.stopPropagation();
+  }
+  const modal = document.getElementById('avatar-modal');
+  if (!modal) return;
   const avatarImg = document.querySelector('#github-avatar-wrap img');
   const src = (avatarImg && avatarImg.src) || (typeof ghUserData !== 'undefined' && ghUserData && ghUserData.avatar_url) || 'https://avatars.githubusercontent.com/u/231286930?v=4';
-  const modal = document.getElementById('avatar-modal');
   const modalImg = document.getElementById('avatar-modal-img');
   const modalName = document.getElementById('avatar-modal-name');
   if (modalImg) modalImg.src = src;
-  if (modalName && typeof ghUserData !== 'undefined' && ghUserData) modalName.textContent = ghUserData.name || 'Nguyễn Đức Mạnh';
-  if (modal) {
-    modal.removeAttribute('hidden');
-    document.body.style.overflow = 'hidden';
+  if (modalName && typeof ghUserData !== 'undefined' && ghUserData) {
+    modalName.textContent = ghUserData.name || 'Nguyễn Đức Mạnh';
   }
+  modal.removeAttribute('hidden');
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
 };
 
 window.closeAvatarModal = function() {
   const modal = document.getElementById('avatar-modal');
-  if (modal) modal.setAttribute('hidden', '');
+  if (modal) {
+    modal.setAttribute('hidden', '');
+    modal.style.display = 'none';
+  }
   document.body.style.overflow = '';
 };
 
@@ -1122,16 +1134,22 @@ if (ghSyncBtn) {
   });
 }
 
-// Wire avatar preview modal
+// Wire avatar preview modal (direct + delegation)
 const avatarWrap = document.getElementById('github-avatar-wrap');
 if (avatarWrap) {
   avatarWrap.addEventListener('click', window.openAvatarModal);
   avatarWrap.addEventListener('keydown', e => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
-      window.openAvatarModal();
+      window.openAvatarModal(e);
     }
   });
 }
+document.addEventListener('click', e => {
+  const target = e.target.closest('#github-avatar-wrap');
+  if (target) {
+    window.openAvatarModal(e);
+  }
+});
 
 
