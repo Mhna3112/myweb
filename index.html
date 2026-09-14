@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Duc Manh — Programming Learner &amp; Aspiring Developer." />
+  <title>Duc Manh — Dev Journey</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="reading-progress" role="progressbar" aria-label="Reading progress"></div>
+  <header id="navbar" role="banner">
+    <nav class="nav-container" aria-label="Main navigation">
+      <a href="#home" class="nav-logo"><span class="logo-bracket">&lt;</span>DucManh<span class="logo-bracket">/&gt;</span></a>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation" aria-expanded="false"><span></span><span></span><span></span></button>
+      <ul class="nav-links" id="nav-links" role="list">
+        <li><a href="#home"     class="nav-link" data-i18n="nav.home">Home</a></li>
+        <li><a href="#about"    class="nav-link" data-i18n="nav.about">About</a></li>
+        <li><a href="#projects" class="nav-link" data-i18n="nav.projects">Projects</a></li>
+        <li><a href="#blog"     class="nav-link" data-i18n="nav.blog">Blog</a></li>
+        <li><a href="#github"   class="nav-link" data-i18n="nav.github">GitHub</a></li>
+        <li><a href="#contact"  class="nav-link" data-i18n="nav.contact">Contact</a></li>
+      </ul>
+      <div class="theme-toggle-group" role="group" aria-label="Color theme">
+        <button class="theme-btn active" id="theme-light" title="Light mode">&#9728;&#65039;</button>
+        <button class="theme-btn" id="theme-dark" title="Dark mode">&#127769;</button>
+        <button class="theme-btn" id="theme-system" title="System">&#128187;</button>
+      </div>
+      <button class="lang-btn" id="lang-toggle" title="Chuyen sang Tieng Viet" aria-label="Switch language">
+        <span class="lang-flag">&#127759;&#127475;</span><span class="lang-label">VN</span>
+      </button>
+    </nav>
+  </header>
+  <main id="main-content">
+    <section id="home" class="section hero-section">
+      <div class="hero-bg-grid" aria-hidden="true"></div>
+      <div class="container hero-container">
+        <div class="hero-text">
+          <div class="hero-badge"><span class="badge-dot"></span><span data-i18n="hero.badge">Open to learning &amp; collaboration</span></div>
+          <h1 class="hero-title"><span id="typewriter"></span><span class="cursor" aria-hidden="true">|</span></h1>
+          <p class="hero-sub" data-i18n="hero.sub">I am passionate about <strong>learning programming</strong> and building projects. I enjoy exploring new technologies, improving my coding skills, and documenting my learning journey — one commit at a time.</p>
+          <div class="hero-cta">
+            <a href="#about"    class="btn btn-primary"  data-i18n="hero.cta.about">About Me</a>
+            <a href="#projects" class="btn btn-outline"  data-i18n="hero.cta.projects">My Projects</a>
+            <a href="#blog"     class="btn btn-ghost"    data-i18n="hero.cta.blog">Read My Blog</a>
+          </div>
+          <div class="hero-stats">
+            <div class="stat-item"><span class="stat-num" id="stat-repos">--</span><span class="stat-label" data-i18n="hero.stats.repos">Repos</span></div>
+            <div class="stat-divider"></div>
+            <div class="stat-item"><span class="stat-num" id="stat-stars">--</span><span class="stat-label" data-i18n="hero.stats.stars">Stars</span></div>
+            <div class="stat-divider"></div>
+            <div class="stat-item"><span class="stat-num" id="stat-forks">--</span><span class="stat-label" data-i18n="hero.stats.forks">Forks</span></div>
+          </div>
+        </div>
+        <div class="hero-visual" aria-hidden="true">
+          <div class="terminal-card">
+            <div class="terminal-header">
+              <span class="t-dot t-red"></span><span class="t-dot t-yellow"></span><span class="t-dot t-green"></span>
+              <span class="t-title">~/duc-manh $ bash</span>
+            </div>
+            <div class="terminal-body">
+              <pre class="terminal-code"><code><span class="t-comment">#!/bin/bash</span>
+<span class="t-comment"># About me</span>
+
+<span class="t-var">NAME</span>=<span class="t-str">"Duc Manh"</span>
+<span class="t-var">ROLE</span>=<span class="t-str">"Aspiring Developer"</span>
+<span class="t-var">LOCATION</span>=<span class="t-str">"Vietnam"</span>
+
+<span class="t-var">SKILLS</span>=(<span class="t-str">
+  "HTML" "CSS" "JavaScript"
+  "Python" "C" "Git"
+</span>)
+
+<span class="t-fn">echo</span> <span class="t-str">"Building the future,
+one line at a time"</span></code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="scroll-indicator" aria-hidden="true"><div class="scroll-arrow"></div><span data-i18n="hero.scroll">Scroll to explore</span></div>
+    </section>
+    <section id="about" class="section about-section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label" data-i18n="about.label">01. About</span>
+          <h2 class="section-title" data-i18n="about.title">Who Am I?</h2>
+          <p class="section-desc" data-i18n="about.desc">A curious developer-in-progress, passionate about code and learning.</p>
+        </div>
+        <div class="about-grid">
+          <div class="about-cards">
+            <article class="about-card reveal">
+              <div class="about-card-icon">👤</div>
+              <h3 data-i18n="about.card1.title">Who I Am</h3>
+              <p data-i18n="about.card1.desc">I'm Duc Manh, a programming learner based in Vietnam. I'm on a journey to become a full-stack developer, building real projects and sharpening my skills every day.</p>
+            </article>
+            <article class="about-card reveal">
+              <div class="about-card-icon">📚</div>
+              <h3 data-i18n="about.card2.title">What I'm Learning</h3>
+              <p data-i18n="about.card2.desc">Currently diving deep into <strong>JavaScript</strong>, <strong>Python</strong>, and <strong>C</strong>. I'm also exploring web development fundamentals and version control with Git.</p>
+            </article>
+            <article class="about-card reveal">
+              <div class="about-card-icon">💡</div>
+              <h3 data-i18n="about.card3.title">My Interests</h3>
+              <p data-i18n="about.card3.desc">I love solving problems through code, experimenting with new programming languages, building personal projects, and reading about software engineering principles.</p>
+            </article>
+            <article class="about-card reveal">
+              <div class="about-card-icon">🎯</div>
+              <h3 data-i18n="about.card4.title">My Goals</h3>
+              <p data-i18n="about.card4.desc">Become a proficient full-stack developer, contribute to open-source projects, build useful tools, and document my journey to help others who are also learning.</p>
+            </article>
+          </div>
+          <div class="skills-panel reveal">
+            <h3 class="skills-title" data-i18n="about.skills.title">Technologies &amp; Tools</h3>
+            <div class="skills-grid">
+              <span class="skill-badge skill-html">🌐 HTML5</span>
+              <span class="skill-badge skill-css">🎨 CSS3</span>
+              <span class="skill-badge skill-js">⚡ JavaScript</span>
+              <span class="skill-badge skill-python">🐍 Python</span>
+              <span class="skill-badge skill-c">⚙️ C</span>
+              <span class="skill-badge skill-git">🌿 Git</span>
+              <span class="skill-badge skill-github">🐙 GitHub</span>
+              <span class="skill-badge skill-html">💻 VS Code</span>
+            </div>
+            <div class="learning-note">
+              <span>🌱</span>
+              <p data-i18n="about.skills.note">Currently improving: <strong>JavaScript algorithms</strong>, <strong>Python data structures</strong>, and <strong>C memory management</strong>.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="projects" class="section projects-section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label" data-i18n="projects.label">02. Projects</span>
+          <h2 class="section-title" data-i18n="projects.title">Things I've Built</h2>
+          <p class="section-desc" data-i18n="projects.desc">A collection of personal projects I've built while learning to code.</p>
+        </div>
+        <div class="projects-grid" id="projects-grid">
+          <article class="project-card reveal">
+            <div class="project-card-header"><div class="project-icon">🌐</div><div class="project-links"><a href="https://github.com/Mhna3112/Mhna3112.github.io" target="_blank" rel="noopener" title="GitHub" class="project-link-gh"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.868-.013-1.703-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836c.85.004 1.705.114 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.741 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg></a><a href="#" target="_blank" rel="noopener" title="Live demo">↗</a></div></div>
+            <h3 class="project-name" data-i18n="projects.p1.name">Personal Portfolio</h3>
+            <p class="project-desc" data-i18n="projects.p1.desc">This very website! A modern developer portfolio &amp; blog built with pure HTML, CSS, and JavaScript. Features dark/light themes, typewriter effect, and GitHub API integration.</p>
+            <div class="project-tags"><span class="project-tag">HTML</span><span class="project-tag">CSS</span><span class="project-tag">JavaScript</span></div>
+          </article>
+          <article class="project-card reveal">
+            <div class="project-card-header"><div class="project-icon">🖩</div><div class="project-links"><a href="https://github.com/Mhna3112/todp-cal" target="_blank" rel="noopener" title="GitHub" class="project-link-gh"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.868-.013-1.703-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836c.85.004 1.705.114 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.741 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg></a><a href="#" target="_blank" rel="noopener" title="Live demo">↗</a></div></div>
+            <h3 class="project-name" data-i18n="projects.p2.name">Calculator App</h3>
+            <p class="project-desc" data-i18n="projects.p2.desc">A fully functional calculator built with vanilla JavaScript. Supports basic arithmetic, keyboard input, and a clean responsive UI. My first real JavaScript project.</p>
+            <div class="project-tags"><span class="project-tag">JavaScript</span><span class="project-tag">HTML</span><span class="project-tag">CSS</span></div>
+          </article>
+          <article class="project-card reveal">
+            <div class="project-card-header"><div class="project-icon">📝</div><div class="project-links"><a href="https://github.com/Mhna3112/todp-cal" target="_blank" rel="noopener" title="GitHub" class="project-link-gh"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.868-.013-1.703-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836c.85.004 1.705.114 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.741 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg></a><a href="#" target="_blank" rel="noopener" title="Live demo">↗</a></div></div>
+            <h3 class="project-name" data-i18n="projects.p3.name">Todo List App</h3>
+            <p class="project-desc" data-i18n="projects.p3.desc">A task management app with local storage persistence. Users can add, complete, and delete tasks. Taught me DOM manipulation and browser storage APIs.</p>
+            <div class="project-tags"><span class="project-tag">JavaScript</span><span class="project-tag">LocalStorage</span><span class="project-tag">CSS</span></div>
+          </article>
+          <article class="project-card reveal">
+            <div class="project-card-header"><div class="project-icon">🎮</div><div class="project-links"><a href="https://github.com/Mhna3112/Learn-C-C-" target="_blank" rel="noopener" title="GitHub" class="project-link-gh"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.868-.013-1.703-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836c.85.004 1.705.114 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.741 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg></a></div></div>
+            <h3 class="project-name" data-i18n="projects.p4.name">Number Guessing Game</h3>
+            <p class="project-desc" data-i18n="projects.p4.desc">A command-line number guessing game written in C. Practices concepts like loops, conditionals, and random number generation. One of my first C programs.</p>
+            <div class="project-tags"><span class="project-tag">C</span><span class="project-tag">CLI</span></div>
+          </article>
+          <article class="project-card reveal">
+            <div class="project-card-header"><div class="project-icon">🐍</div><div class="project-links"><a href="https://github.com/Mhna3112/discord-bot-auto-quest" target="_blank" rel="noopener" title="GitHub" class="project-link-gh"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.868-.013-1.703-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836c.85.004 1.705.114 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.741 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg></a></div></div>
+            <h3 class="project-name" data-i18n="projects.p5.name">Python Data Scraper</h3>
+            <p class="project-desc" data-i18n="projects.p5.desc">A simple Python script that scrapes and processes data from public websites using requests and BeautifulSoup. Introduced me to the world of automation.</p>
+            <div class="project-tags"><span class="project-tag">Python</span><span class="project-tag">BeautifulSoup</span><span class="project-tag">Automation</span></div>
+          </article>
+          <article class="project-card reveal project-card--wip">
+            <div class="project-card-header"><div class="project-icon">🚧</div><div class="project-links"><span class="wip-badge" data-i18n="projects.wip">In Progress</span></div></div>
+            <h3 class="project-name" data-i18n="projects.p6.name">Dev Learning Tracker</h3>
+            <p class="project-desc" data-i18n="projects.p6.desc">A web app to track my daily coding progress, set learning goals, and visualize my improvement over time. Currently in development!</p>
+            <div class="project-tags"><span class="project-tag">JavaScript</span><span class="project-tag">CSS Grid</span><span class="project-tag">Charts.js</span></div>
+          </article>
+        </div>
+        <div class="projects-cta"><a href="https://github.com/Mhna3112" target="_blank" rel="noopener" class="btn btn-outline" data-i18n="projects.cta">View All on GitHub</a></div>
+      </div>
+    </section>
+    <section id="blog" class="section blog-section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label" data-i18n="blog.label">03. Blog</span>
+          <h2 class="section-title" data-i18n="blog.title">Learning Journey</h2>
+          <p class="section-desc" data-i18n="blog.desc">Notes, tutorials, and reflections from my programming adventure.</p>
+        </div>
+        <div class="blog-grid">
+          <article class="blog-card reveal"><div class="blog-card-img"><span class="blog-emoji">🧠</span></div><div class="blog-card-body"><div class="blog-meta"><span class="blog-date" data-i18n="blog.b1.date">Sep 10, 2026</span><span class="blog-read" data-i18n="blog.b1.read">5 min read</span></div><h3 class="blog-title" data-i18n="blog.b1.title">Understanding JavaScript Variables: var, let, and const</h3><p class="blog-excerpt" data-i18n="blog.b1.excerpt">When I first started learning JavaScript, variable declarations were confusing. Here's what I learned about the differences between var, let, and const.</p><div class="blog-tags"><span class="blog-tag">JavaScript</span><span class="blog-tag">Beginner</span></div><button class="blog-read-btn" onclick="openPost('js-variables')" data-i18n="blog.readmore">Read More</button></div></article>
+          <article class="blog-card reveal"><div class="blog-card-img"><span class="blog-emoji">🌿</span></div><div class="blog-card-body"><div class="blog-meta"><span class="blog-date" data-i18n="blog.b2.date">Aug 28, 2026</span><span class="blog-read" data-i18n="blog.b2.read">7 min read</span></div><h3 class="blog-title" data-i18n="blog.b2.title">Git Basics: My First Week Using Version Control</h3><p class="blog-excerpt" data-i18n="blog.b2.excerpt">My experience learning Git from scratch — the commands I use every day, the mistakes I made, and why every developer should know version control from day one.</p><div class="blog-tags"><span class="blog-tag">Git</span><span class="blog-tag">Workflow</span></div><button class="blog-read-btn" onclick="openPost('git-basics')" data-i18n="blog.readmore">Read More</button></div></article>
+          <article class="blog-card reveal"><div class="blog-card-img"><span class="blog-emoji">🔧</span></div><div class="blog-card-body"><div class="blog-meta"><span class="blog-date" data-i18n="blog.b3.date">Aug 15, 2026</span><span class="blog-read" data-i18n="blog.b3.read">10 min read</span></div><h3 class="blog-title" data-i18n="blog.b3.title">Pointers in C: Finally Getting It</h3><p class="blog-excerpt" data-i18n="blog.b3.excerpt">Pointers are the most infamous concept in C. After many failed attempts, here's the mental model that finally made them click for me.</p><div class="blog-tags"><span class="blog-tag">C</span><span class="blog-tag">Memory</span></div><button class="blog-read-btn" onclick="openPost('c-pointers')" data-i18n="blog.readmore">Read More</button></div></article>
+          <article class="blog-card reveal"><div class="blog-card-img"><span class="blog-emoji">🐍</span></div><div class="blog-card-body"><div class="blog-meta"><span class="blog-date" data-i18n="blog.b4.date">Jul 30, 2026</span><span class="blog-read" data-i18n="blog.b4.read">6 min read</span></div><h3 class="blog-title" data-i18n="blog.b4.title">Python List Comprehensions: Writing Cleaner Code</h3><p class="blog-excerpt" data-i18n="blog.b4.excerpt">List comprehensions blew my mind when I first saw them. Let me show you how I went from verbose loops to elegant one-liners.</p><div class="blog-tags"><span class="blog-tag">Python</span><span class="blog-tag">Tips</span></div><button class="blog-read-btn" onclick="openPost('python-lists')" data-i18n="blog.readmore">Read More</button></div></article>
+          <article class="blog-card reveal"><div class="blog-card-img"><span class="blog-emoji">🎨</span></div><div class="blog-card-body"><div class="blog-meta"><span class="blog-date" data-i18n="blog.b5.date">Jul 12, 2026</span><span class="blog-read" data-i18n="blog.b5.read">8 min read</span></div><h3 class="blog-title" data-i18n="blog.b5.title">CSS Flexbox vs Grid: When to Use Which</h3><p class="blog-excerpt" data-i18n="blog.b5.excerpt">Understanding when to use Flexbox vs CSS Grid changed how I approach web layouts entirely.</p><div class="blog-tags"><span class="blog-tag">CSS</span><span class="blog-tag">Layout</span></div><button class="blog-read-btn" onclick="openPost('css-flexbox')" data-i18n="blog.readmore">Read More</button></div></article>
+          <article class="blog-card reveal"><div class="blog-card-img"><span class="blog-emoji">🚀</span></div><div class="blog-card-body"><div class="blog-meta"><span class="blog-date" data-i18n="blog.b6.date">Jun 1, 2026</span><span class="blog-read" data-i18n="blog.b6.read">4 min read</span></div><h3 class="blog-title" data-i18n="blog.b6.title">My First Week Learning to Code</h3><p class="blog-excerpt" data-i18n="blog.b6.excerpt">Everyone starts somewhere. This is the honest story of my first week writing code — the excitement, the frustration, and why I decided to keep going.</p><div class="blog-tags"><span class="blog-tag">Journey</span><span class="blog-tag">Beginner</span></div><button class="blog-read-btn" onclick="openPost('first-week')" data-i18n="blog.readmore">Read More</button></div></article>
+        </div>
+      </div>
+    </section>
+    <section class="section code-section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label" data-i18n="code.label">04. Code</span>
+          <h2 class="section-title" data-i18n="code.title">Code Samples</h2>
+          <p class="section-desc" data-i18n="code.desc">Some snippets from my learning sessions.</p>
+        </div>
+        <div class="code-tabs">
+          <button class="code-tab active" data-tab="js">JavaScript</button>
+          <button class="code-tab" data-tab="python">Python</button>
+          <button class="code-tab" data-tab="c">C</button>
+        </div>
+        <div class="code-blocks">
+          <div class="code-block-wrapper active" id="tab-js"><div class="code-block-header"><span class="code-lang">javascript</span><button class="copy-btn" data-target="code-js" data-i18n="code.copy">Copy</button></div><pre><code class="language-javascript" id="code-js">// JavaScript: Finding duplicates in an array
+function findDuplicates(arr) {
+  const seen = new Set(); const duplicates = new Set();
+  for (const item of arr) { if (seen.has(item)) { duplicates.add(item); } else { seen.add(item); } }
+  return [...duplicates];
+}
+const numbers = [1, 2, 3, 2, 4, 3, 5];
+console.log(findDuplicates(numbers)); // [2, 3]</code></pre></div>
+          <div class="code-block-wrapper" id="tab-python"><div class="code-block-header"><span class="code-lang">python</span><button class="copy-btn" data-target="code-python" data-i18n="code.copy">Copy</button></div><pre><code class="language-python" id="code-python"># Python: List comprehension magic
+numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+even_squares = [n ** 2 for n in numbers if n % 2 == 0]
+print(even_squares)  # [4, 16, 36, 64, 100]
+matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+flat = [num for row in matrix for num in row]
+print(flat)  # [1, 2, 3, 4, 5, 6, 7, 8, 9]</code></pre></div>
+          <div class="code-block-wrapper" id="tab-c"><div class="code-block-header"><span class="code-lang">c</span><button class="copy-btn" data-target="code-c" data-i18n="code.copy">Copy</button></div><pre><code class="language-c" id="code-c">/* C: Reverse a string in-place */
+#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+void reverse_string(char *str) {
+    int left = 0, right = strlen(str) - 1; char temp;
+    while (left &lt; right) { temp=str[left]; str[left]=str[right]; str[right]=temp; left++; right--; }
+}
+int main() {
+    char message[] = "Hello, World!";
+    printf("Before: %s\n", message); reverse_string(message); printf("After:  %s\n", message); return 0;
+}</code></pre></div>
+        </div>
+      </div>
+    </section>
+    <section id="github" class="section github-section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label" data-i18n="github.label">05. GitHub</span>
+          <h2 class="section-title" data-i18n="github.title">GitHub Activity</h2>
+          <p class="section-desc" data-i18n="github.desc">Live stats from my GitHub profile.</p>
+        </div>
+        <div class="github-panel">
+          <div class="github-profile">
+            <div class="github-avatar" id="github-avatar-wrap" title="Bấm để xem ảnh phóng to" role="button" tabindex="0" aria-label="Xem ảnh đại diện">
+              <img src="https://avatars.githubusercontent.com/u/231286930?v=4" alt="Nguyễn Đức Mạnh" class="github-avatar-img" onerror="this.style.display='none'" />
+              <div class="github-avatar-fallback">DM</div>
+            </div>
+            <div class="github-info">
+              <div class="gh-info-top">
+                <div class="gh-info-text">
+                  <div class="gh-name-row">
+                    <h3 id="github-name" class="github-name">Nguyễn Đức Mạnh</h3>
+                    <a href="https://github.com/Mhna3112" target="_blank" rel="noopener" class="github-handle">@Mhna3112</a>
+                    <span class="gh-status-badge"><span class="badge-dot"></span><span data-i18n="github.status">Active</span></span>
+                  </div>
+                  <p id="github-bio" class="github-bio">try get best · Aspiring Developer · Learning to code every day</p>
+                </div>
+                <a href="https://github.com/Mhna3112" target="_blank" rel="noopener" class="btn btn-outline btn-sm gh-profile-btn">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.868-.013-1.703-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836c.85.004 1.705.114 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.741 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
+                  <span data-i18n="github.viewProfile">View Profile</span> ↗
+                </a>
+              </div>
+              <div class="gh-meta-tags">
+                <span class="gh-meta-item">📍 <span data-i18n="github.location">Vietnam</span></span>
+                <span class="gh-meta-item">📅 <span data-i18n="github.joined">Joined Sep 2025</span></span>
+                <span class="gh-meta-item">📦 <span id="gh-meta-repos">19</span> <span data-i18n="github.stat.repos">Public Repos</span></span>
+              </div>
+            </div>
+          </div>
+          <div class="github-stats-grid">
+            <div class="gh-stat-card"><div class="gh-stat-icon">📁</div><div class="gh-stat-num" id="gh-repos">19</div><div class="gh-stat-label" data-i18n="github.stat.repos">Public Repos</div></div>
+            <div class="gh-stat-card"><div class="gh-stat-icon">⭐</div><div class="gh-stat-num" id="gh-stars">16</div><div class="gh-stat-label" data-i18n="github.stat.stars">Total Stars</div></div>
+            <div class="gh-stat-card"><div class="gh-stat-icon">🍴</div><div class="gh-stat-num" id="gh-forks">1</div><div class="gh-stat-label" data-i18n="github.stat.forks">Total Forks</div></div>
+            <div class="gh-stat-card"><div class="gh-stat-icon">👥</div><div class="gh-stat-num" id="gh-followers">0</div><div class="gh-stat-label" data-i18n="github.stat.followers">Followers</div></div>
+          </div>
+          <div class="github-languages">
+            <div class="gh-subhead">
+              <h4 data-i18n="github.languages">Languages Breakdown</h4>
+              <span class="gh-subhead-note" data-i18n="github.languagesNote">Top technologies across public repositories</span>
+            </div>
+            <div class="gh-lang-bar" id="gh-lang-bar"></div>
+            <div class="gh-lang-legend" id="gh-lang-legend"></div>
+          </div>
+          <div class="github-repos">
+            <div class="repos-header-row">
+              <h4 class="repos-heading" data-i18n="github.recentRepos">Repositories</h4>
+              <div class="gh-filter-tabs" role="tablist">
+                <button class="gh-filter-btn active" data-filter="featured" data-i18n="github.filter.featured">Featured</button>
+                <button class="gh-filter-btn" data-filter="recent" data-i18n="github.filter.recent">Recent</button>
+                <button class="gh-filter-btn" data-filter="all" data-i18n="github.filter.all">All</button>
+              </div>
+            </div>
+            <div class="repos-grid" id="repos-grid">
+              <div class="repo-skeleton"></div>
+              <div class="repo-skeleton"></div>
+              <div class="repo-skeleton"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="contact" class="section contact-section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label" data-i18n="contact.label">06. Contact</span>
+          <h2 class="section-title" data-i18n="contact.title">Get In Touch</h2>
+          <p class="section-desc" data-i18n="contact.desc">I'd love to connect! Questions, collaborations, or just saying hi.</p>
+        </div>
+        <div class="contact-grid">
+          <div class="contact-text reveal">
+            <p data-i18n="contact.body">I'm currently <strong>learning</strong> and always open to new connections, feedback on my projects, or simply chatting about programming. My inbox is always open.</p>
+            <div class="contact-links">
+              <a href="https://github.com/Mhna3112" target="_blank" rel="noopener" class="contact-link"><div class="contact-link-icon">🐙</div><div><strong>GitHub</strong><span>github.com/Mhna3112</span></div></a>
+              <a href="mailto:ducmanh@example.com" class="contact-link"><div class="contact-link-icon">📧</div><div><strong>Email</strong><span>ducmanh@example.com</span></div></a>
+              <a href="#" target="_blank" rel="noopener" class="contact-link"><div class="contact-link-icon">💼</div><div><strong>LinkedIn</strong><span data-i18n="contact.linkedin">Connect with me</span></div></a>
+            </div>
+          </div>
+          <div class="contact-card reveal">
+            <div class="contact-card-inner">
+              <div class="contact-greeting"><span class="greeting-emoji">👋</span><div><h3 data-i18n="contact.card.hello">Say Hello!</h3><p data-i18n="contact.card.respond">I respond within 24 hours.</p></div></div>
+              <a href="mailto:ducmanh@example.com" class="btn btn-primary btn-lg" data-i18n="contact.card.cta">📨 Send me an Email</a>
+              <p class="contact-note" data-i18n="contact.card.note">Or open a discussion on my <a href="https://github.com/Mhna3112" target="_blank" rel="noopener">GitHub</a>.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="footer" role="contentinfo">
+    <div class="container footer-inner">
+      <p class="footer-brand"><span class="logo-bracket">&lt;</span>DucManh<span class="logo-bracket">/&gt;</span></p>
+      <p class="footer-copy"><span data-i18n="footer.copy">Built with love · </span><span id="footer-year"></span></p>
+      <p class="footer-stack">Pure <strong>HTML</strong> · <strong>CSS</strong> · <strong>JavaScript</strong></p>
+    </div>
+  </footer>
+  <div id="post-modal" class="modal" role="dialog" aria-modal="true" hidden>
+    <div class="modal-backdrop" onclick="closePost()"></div>
+    <div class="modal-panel"><button class="modal-close" onclick="closePost()" aria-label="Close">&#10005;</button><div class="modal-content" id="modal-content"></div></div>
+  </div>
+  <div id="avatar-modal" class="modal avatar-modal" role="dialog" aria-modal="true" hidden>
+    <div class="modal-backdrop" onclick="closeAvatarModal()"></div>
+    <div class="modal-panel avatar-modal-panel">
+      <button class="modal-close" onclick="closeAvatarModal()" aria-label="Close">&#10005;</button>
+      <div class="avatar-modal-body">
+        <img id="avatar-modal-img" src="" alt="Avatar preview" class="avatar-modal-img" />
+        <div class="avatar-modal-footer">
+          <div class="avatar-modal-user">
+            <strong id="avatar-modal-name">Nguyễn Đức Mạnh</strong>
+            <span>@Mhna3112</span>
+          </div>
+          <a id="avatar-modal-link" href="https://github.com/Mhna3112" target="_blank" rel="noopener" class="btn btn-outline btn-sm">GitHub Profile ↗</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
