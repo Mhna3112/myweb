@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
   <div id="reading-progress" role="progressbar" aria-label="Reading progress"></div>
   <header id="navbar" role="banner">
     <nav class="nav-container" aria-label="Main navigation">
@@ -27,15 +28,21 @@
           <div class="mobile-theme-title" data-i18n="nav.theme_title">GIAO DIỆN</div>
           <div class="mobile-theme-switcher">
             <button class="mobile-theme-opt" data-theme-val="light">
-              <span class="opt-icon">☀️</span>
+              <span class="opt-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+              </span>
               <span class="opt-text" data-i18n="theme.light">Nền trắng</span>
             </button>
             <button class="mobile-theme-opt" data-theme-val="dark">
-              <span class="opt-icon">🌙</span>
+              <span class="opt-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+              </span>
               <span class="opt-text" data-i18n="theme.dark">Nền đen</span>
             </button>
             <button class="mobile-theme-opt" data-theme-val="system">
-              <span class="opt-icon">💻</span>
+              <span class="opt-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              </span>
               <span class="opt-text" data-i18n="theme.system">Tự động</span>
             </button>
           </div>
@@ -43,15 +50,26 @@
       </ul>
       <div class="nav-actions">
         <button class="theme-quick-btn" id="theme-quick-btn" aria-label="Đổi nền sáng/tối" title="Đổi nền trắng / đen">
-          <span class="theme-quick-icon" id="theme-quick-icon">🌙</span>
+          <span class="theme-quick-icon" id="theme-quick-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          </span>
         </button>
         <div class="theme-toggle-group" role="group" aria-label="Color theme">
-          <button class="theme-btn active" id="theme-light" data-theme-val="light" title="Nền trắng">&#9728;&#65039;</button>
-          <button class="theme-btn" id="theme-dark" data-theme-val="dark" title="Nền đen">&#127769;</button>
-          <button class="theme-btn" id="theme-system" data-theme-val="system" title="Hệ thống">&#128187;</button>
+          <button class="theme-btn active" id="theme-light" data-theme-val="light" title="Nền trắng" aria-label="Nền trắng">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          </button>
+          <button class="theme-btn" id="theme-dark" data-theme-val="dark" title="Nền đen" aria-label="Nền đen">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          </button>
+          <button class="theme-btn" id="theme-system" data-theme-val="system" title="Hệ thống" aria-label="Hệ thống">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          </button>
         </div>
         <button class="lang-btn" id="lang-toggle" title="Chuyen sang Tieng Viet" aria-label="Switch language">
-          <span class="lang-flag">&#127759;&#127475;</span><span class="lang-label">VN</span>
+          <span class="lang-flag" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          </span>
+          <span class="lang-label">VN</span>
         </button>
         <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation" aria-expanded="false"><span></span><span></span><span></span></button>
       </div>
@@ -115,22 +133,30 @@ one line at a time"</span></code></pre>
         <div class="about-grid">
           <div class="about-cards">
             <article class="about-card reveal">
-              <div class="about-card-icon">👤</div>
+              <div class="about-card-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              </div>
               <h3 data-i18n="about.card1.title">Who I Am</h3>
               <p data-i18n="about.card1.desc">I'm Duc Manh, a programming learner based in Vietnam. I'm on a journey to become a full-stack developer, building real projects and sharpening my skills every day.</p>
             </article>
             <article class="about-card reveal">
-              <div class="about-card-icon">📚</div>
+              <div class="about-card-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+              </div>
               <h3 data-i18n="about.card2.title">What I'm Learning</h3>
               <p data-i18n="about.card2.desc">Currently diving deep into <strong>JavaScript</strong>, <strong>Python</strong>, and <strong>C</strong>. I'm also exploring web development fundamentals and version control with Git.</p>
             </article>
             <article class="about-card reveal">
-              <div class="about-card-icon">💡</div>
+              <div class="about-card-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="1" x2="12" y2="3"/><path d="M12 18a6 6 0 1 0-6-6c0 2 1.5 3.5 2 4.5V18a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-1.5c.5-1 2-2.5 2-4.5z"/><line x1="10" y1="22" x2="14" y2="22"/></svg>
+              </div>
               <h3 data-i18n="about.card3.title">My Interests</h3>
               <p data-i18n="about.card3.desc">I love solving problems through code, experimenting with new programming languages, building personal projects, and reading about software engineering principles.</p>
             </article>
             <article class="about-card reveal">
-              <div class="about-card-icon">🎯</div>
+              <div class="about-card-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+              </div>
               <h3 data-i18n="about.card4.title">My Goals</h3>
               <p data-i18n="about.card4.desc">Become a proficient full-stack developer, contribute to open-source projects, build useful tools, and document my journey to help others who are also learning.</p>
             </article>
@@ -138,17 +164,43 @@ one line at a time"</span></code></pre>
           <div class="skills-panel reveal">
             <h3 class="skills-title" data-i18n="about.skills.title">Technologies &amp; Tools</h3>
             <div class="skills-grid">
-              <span class="skill-badge skill-html">🌐 HTML5</span>
-              <span class="skill-badge skill-css">🎨 CSS3</span>
-              <span class="skill-badge skill-js">⚡ JavaScript</span>
-              <span class="skill-badge skill-python">🐍 Python</span>
-              <span class="skill-badge skill-c">⚙️ C</span>
-              <span class="skill-badge skill-git">🌿 Git</span>
-              <span class="skill-badge skill-github">🐙 GitHub</span>
-              <span class="skill-badge skill-html">💻 VS Code</span>
+              <span class="skill-badge skill-html">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                HTML5
+              </span>
+              <span class="skill-badge skill-css">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>
+                CSS3
+              </span>
+              <span class="skill-badge skill-js">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                JavaScript
+              </span>
+              <span class="skill-badge skill-python">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+                Python
+              </span>
+              <span class="skill-badge skill-c">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                C
+              </span>
+              <span class="skill-badge skill-git">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg>
+                Git
+              </span>
+              <span class="skill-badge skill-github">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.868-.013-1.703-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836c.85.004 1.705.114 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.741 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
+                GitHub
+              </span>
+              <span class="skill-badge skill-vscode">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                VS Code
+              </span>
             </div>
             <div class="learning-note">
-              <span>🌱</span>
+              <span class="learning-note-icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+              </span>
               <p data-i18n="about.skills.note">Currently improving: <strong>JavaScript algorithms</strong>, <strong>Python data structures</strong>, and <strong>C memory management</strong>.</p>
             </div>
           </div>
@@ -164,37 +216,67 @@ one line at a time"</span></code></pre>
         </div>
         <div class="projects-grid" id="projects-grid">
           <article class="project-card reveal">
-            <div class="project-card-header"><div class="project-icon">🌐</div><div class="project-links"><a href="https://github.com/Mhna3112/Mhna3112.github.io" target="_blank" rel="noopener" title="GitHub" class="project-link-gh"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.868-.013-1.703-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836c.85.004 1.705.114 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.741 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg></a><a href="#" target="_blank" rel="noopener" title="Live demo">↗</a></div></div>
+            <div class="project-card-header">
+              <div class="project-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+              </div>
+              <div class="project-links"><a href="https://github.com/Mhna3112/Mhna3112.github.io" target="_blank" rel="noopener" title="GitHub" class="project-link-gh"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.868-.013-1.703-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836c.85.004 1.705.114 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.741 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg></a><a href="#" target="_blank" rel="noopener" title="Live demo">↗</a></div>
+            </div>
             <h3 class="project-name" data-i18n="projects.p1.name">Personal Portfolio</h3>
             <p class="project-desc" data-i18n="projects.p1.desc">This very website! A modern developer portfolio &amp; blog built with pure HTML, CSS, and JavaScript. Features dark/light themes, typewriter effect, and GitHub API integration.</p>
             <div class="project-tags"><span class="project-tag">HTML</span><span class="project-tag">CSS</span><span class="project-tag">JavaScript</span></div>
           </article>
           <article class="project-card reveal">
-            <div class="project-card-header"><div class="project-icon">🖩</div><div class="project-links"><a href="https://github.com/Mhna3112/todp-cal" target="_blank" rel="noopener" title="GitHub" class="project-link-gh"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.868-.013-1.703-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836c.85.004 1.705.114 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.741 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg></a><a href="#" target="_blank" rel="noopener" title="Live demo">↗</a></div></div>
+            <div class="project-card-header">
+              <div class="project-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>
+              </div>
+              <div class="project-links"><a href="https://github.com/Mhna3112/todp-cal" target="_blank" rel="noopener" title="GitHub" class="project-link-gh"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.868-.013-1.703-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836c.85.004 1.705.114 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.741 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg></a><a href="#" target="_blank" rel="noopener" title="Live demo">↗</a></div>
+            </div>
             <h3 class="project-name" data-i18n="projects.p2.name">Calculator App</h3>
             <p class="project-desc" data-i18n="projects.p2.desc">A fully functional calculator built with vanilla JavaScript. Supports basic arithmetic, keyboard input, and a clean responsive UI. My first real JavaScript project.</p>
             <div class="project-tags"><span class="project-tag">JavaScript</span><span class="project-tag">HTML</span><span class="project-tag">CSS</span></div>
           </article>
           <article class="project-card reveal">
-            <div class="project-card-header"><div class="project-icon">📝</div><div class="project-links"><a href="https://github.com/Mhna3112/todp-cal" target="_blank" rel="noopener" title="GitHub" class="project-link-gh"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.868-.013-1.703-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836c.85.004 1.705.114 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.741 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg></a><a href="#" target="_blank" rel="noopener" title="Live demo">↗</a></div></div>
+            <div class="project-card-header">
+              <div class="project-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+              </div>
+              <div class="project-links"><a href="https://github.com/Mhna3112/todp-cal" target="_blank" rel="noopener" title="GitHub" class="project-link-gh"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.868-.013-1.703-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836c.85.004 1.705.114 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.741 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg></a><a href="#" target="_blank" rel="noopener" title="Live demo">↗</a></div>
+            </div>
             <h3 class="project-name" data-i18n="projects.p3.name">Todo List App</h3>
             <p class="project-desc" data-i18n="projects.p3.desc">A task management app with local storage persistence. Users can add, complete, and delete tasks. Taught me DOM manipulation and browser storage APIs.</p>
             <div class="project-tags"><span class="project-tag">JavaScript</span><span class="project-tag">LocalStorage</span><span class="project-tag">CSS</span></div>
           </article>
           <article class="project-card reveal">
-            <div class="project-card-header"><div class="project-icon">🎮</div><div class="project-links"><a href="https://github.com/Mhna3112/Learn-C-C-" target="_blank" rel="noopener" title="GitHub" class="project-link-gh"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.868-.013-1.703-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836c.85.004 1.705.114 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.741 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg></a></div></div>
+            <div class="project-card-header">
+              <div class="project-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="2"/><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><line x1="15" y1="13" x2="15.01" y2="13"/><line x1="18" y1="11" x2="18.01" y2="11"/></svg>
+              </div>
+              <div class="project-links"><a href="https://github.com/Mhna3112/Learn-C-C-" target="_blank" rel="noopener" title="GitHub" class="project-link-gh"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.868-.013-1.703-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836c.85.004 1.705.114 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.741 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg></a></div>
+            </div>
             <h3 class="project-name" data-i18n="projects.p4.name">Number Guessing Game</h3>
             <p class="project-desc" data-i18n="projects.p4.desc">A command-line number guessing game written in C. Practices concepts like loops, conditionals, and random number generation. One of my first C programs.</p>
             <div class="project-tags"><span class="project-tag">C</span><span class="project-tag">CLI</span></div>
           </article>
           <article class="project-card reveal">
-            <div class="project-card-header"><div class="project-icon">🐍</div><div class="project-links"><a href="https://github.com/Mhna3112/discord-bot-auto-quest" target="_blank" rel="noopener" title="GitHub" class="project-link-gh"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.868-.013-1.703-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836c.85.004 1.705.114 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.741 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg></a></div></div>
+            <div class="project-card-header">
+              <div class="project-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+              </div>
+              <div class="project-links"><a href="https://github.com/Mhna3112/discord-bot-auto-quest" target="_blank" rel="noopener" title="GitHub" class="project-link-gh"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.868-.013-1.703-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836c.85.004 1.705.114 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.741 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg></a></div>
+            </div>
             <h3 class="project-name" data-i18n="projects.p5.name">Python Data Scraper</h3>
             <p class="project-desc" data-i18n="projects.p5.desc">A simple Python script that scrapes and processes data from public websites using requests and BeautifulSoup. Introduced me to the world of automation.</p>
             <div class="project-tags"><span class="project-tag">Python</span><span class="project-tag">BeautifulSoup</span><span class="project-tag">Automation</span></div>
           </article>
           <article class="project-card reveal project-card--wip">
-            <div class="project-card-header"><div class="project-icon">🚧</div><div class="project-links"><span class="wip-badge" data-i18n="projects.wip">In Progress</span></div></div>
+            <div class="project-card-header">
+              <div class="project-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+              </div>
+              <div class="project-links"><span class="wip-badge" data-i18n="projects.wip">In Progress</span></div>
+            </div>
             <h3 class="project-name" data-i18n="projects.p6.name">Dev Learning Tracker</h3>
             <p class="project-desc" data-i18n="projects.p6.desc">A web app to track my daily coding progress, set learning goals, and visualize my improvement over time. Currently in development!</p>
             <div class="project-tags"><span class="project-tag">JavaScript</span><span class="project-tag">CSS Grid</span><span class="project-tag">Charts.js</span></div>
@@ -211,12 +293,90 @@ one line at a time"</span></code></pre>
           <p class="section-desc" data-i18n="blog.desc">Notes, tutorials, and reflections from my programming adventure.</p>
         </div>
         <div class="blog-grid">
-          <article class="blog-card reveal"><div class="blog-card-img"><span class="blog-emoji">🧠</span></div><div class="blog-card-body"><div class="blog-meta"><span class="blog-date" data-i18n="blog.b1.date">Sep 10, 2026</span><span class="blog-read" data-i18n="blog.b1.read">5 min read</span></div><h3 class="blog-title" data-i18n="blog.b1.title">Understanding JavaScript Variables: var, let, and const</h3><p class="blog-excerpt" data-i18n="blog.b1.excerpt">When I first started learning JavaScript, variable declarations were confusing. Here's what I learned about the differences between var, let, and const.</p><div class="blog-tags"><span class="blog-tag">JavaScript</span><span class="blog-tag">Beginner</span></div><button class="blog-read-btn" onclick="openPost('js-variables')" data-i18n="blog.readmore">Read More</button></div></article>
-          <article class="blog-card reveal"><div class="blog-card-img"><span class="blog-emoji">🌿</span></div><div class="blog-card-body"><div class="blog-meta"><span class="blog-date" data-i18n="blog.b2.date">Aug 28, 2026</span><span class="blog-read" data-i18n="blog.b2.read">7 min read</span></div><h3 class="blog-title" data-i18n="blog.b2.title">Git Basics: My First Week Using Version Control</h3><p class="blog-excerpt" data-i18n="blog.b2.excerpt">My experience learning Git from scratch — the commands I use every day, the mistakes I made, and why every developer should know version control from day one.</p><div class="blog-tags"><span class="blog-tag">Git</span><span class="blog-tag">Workflow</span></div><button class="blog-read-btn" onclick="openPost('git-basics')" data-i18n="blog.readmore">Read More</button></div></article>
-          <article class="blog-card reveal"><div class="blog-card-img"><span class="blog-emoji">🔧</span></div><div class="blog-card-body"><div class="blog-meta"><span class="blog-date" data-i18n="blog.b3.date">Aug 15, 2026</span><span class="blog-read" data-i18n="blog.b3.read">10 min read</span></div><h3 class="blog-title" data-i18n="blog.b3.title">Pointers in C: Finally Getting It</h3><p class="blog-excerpt" data-i18n="blog.b3.excerpt">Pointers are the most infamous concept in C. After many failed attempts, here's the mental model that finally made them click for me.</p><div class="blog-tags"><span class="blog-tag">C</span><span class="blog-tag">Memory</span></div><button class="blog-read-btn" onclick="openPost('c-pointers')" data-i18n="blog.readmore">Read More</button></div></article>
-          <article class="blog-card reveal"><div class="blog-card-img"><span class="blog-emoji">🐍</span></div><div class="blog-card-body"><div class="blog-meta"><span class="blog-date" data-i18n="blog.b4.date">Jul 30, 2026</span><span class="blog-read" data-i18n="blog.b4.read">6 min read</span></div><h3 class="blog-title" data-i18n="blog.b4.title">Python List Comprehensions: Writing Cleaner Code</h3><p class="blog-excerpt" data-i18n="blog.b4.excerpt">List comprehensions blew my mind when I first saw them. Let me show you how I went from verbose loops to elegant one-liners.</p><div class="blog-tags"><span class="blog-tag">Python</span><span class="blog-tag">Tips</span></div><button class="blog-read-btn" onclick="openPost('python-lists')" data-i18n="blog.readmore">Read More</button></div></article>
-          <article class="blog-card reveal"><div class="blog-card-img"><span class="blog-emoji">🎨</span></div><div class="blog-card-body"><div class="blog-meta"><span class="blog-date" data-i18n="blog.b5.date">Jul 12, 2026</span><span class="blog-read" data-i18n="blog.b5.read">8 min read</span></div><h3 class="blog-title" data-i18n="blog.b5.title">CSS Flexbox vs Grid: When to Use Which</h3><p class="blog-excerpt" data-i18n="blog.b5.excerpt">Understanding when to use Flexbox vs CSS Grid changed how I approach web layouts entirely.</p><div class="blog-tags"><span class="blog-tag">CSS</span><span class="blog-tag">Layout</span></div><button class="blog-read-btn" onclick="openPost('css-flexbox')" data-i18n="blog.readmore">Read More</button></div></article>
-          <article class="blog-card reveal"><div class="blog-card-img"><span class="blog-emoji">🚀</span></div><div class="blog-card-body"><div class="blog-meta"><span class="blog-date" data-i18n="blog.b6.date">Jun 1, 2026</span><span class="blog-read" data-i18n="blog.b6.read">4 min read</span></div><h3 class="blog-title" data-i18n="blog.b6.title">My First Week Learning to Code</h3><p class="blog-excerpt" data-i18n="blog.b6.excerpt">Everyone starts somewhere. This is the honest story of my first week writing code — the excitement, the frustration, and why I decided to keep going.</p><div class="blog-tags"><span class="blog-tag">Journey</span><span class="blog-tag">Beginner</span></div><button class="blog-read-btn" onclick="openPost('first-week')" data-i18n="blog.readmore">Read More</button></div></article>
+          <article class="blog-card reveal">
+            <div class="blog-card-img">
+              <span class="blog-emoji" aria-hidden="true">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+              </span>
+            </div>
+            <div class="blog-card-body">
+              <div class="blog-meta"><span class="blog-date" data-i18n="blog.b1.date">Sep 10, 2026</span><span class="blog-read" data-i18n="blog.b1.read">5 min read</span></div>
+              <h3 class="blog-title" data-i18n="blog.b1.title">Understanding JavaScript Variables: var, let, and const</h3>
+              <p class="blog-excerpt" data-i18n="blog.b1.excerpt">When I first started learning JavaScript, variable declarations were confusing. Here's what I learned about the differences between var, let, and const.</p>
+              <div class="blog-tags"><span class="blog-tag">JavaScript</span><span class="blog-tag">Beginner</span></div>
+              <button class="blog-read-btn" onclick="openPost('js-variables')" data-i18n="blog.readmore">Read More</button>
+            </div>
+          </article>
+          <article class="blog-card reveal">
+            <div class="blog-card-img">
+              <span class="blog-emoji" aria-hidden="true">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg>
+              </span>
+            </div>
+            <div class="blog-card-body">
+              <div class="blog-meta"><span class="blog-date" data-i18n="blog.b2.date">Aug 28, 2026</span><span class="blog-read" data-i18n="blog.b2.read">7 min read</span></div>
+              <h3 class="blog-title" data-i18n="blog.b2.title">Git Basics: My First Week Using Version Control</h3>
+              <p class="blog-excerpt" data-i18n="blog.b2.excerpt">My experience learning Git from scratch — the commands I use every day, the mistakes I made, and why every developer should know version control from day one.</p>
+              <div class="blog-tags"><span class="blog-tag">Git</span><span class="blog-tag">Workflow</span></div>
+              <button class="blog-read-btn" onclick="openPost('git-basics')" data-i18n="blog.readmore">Read More</button>
+            </div>
+          </article>
+          <article class="blog-card reveal">
+            <div class="blog-card-img">
+              <span class="blog-emoji" aria-hidden="true">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>
+              </span>
+            </div>
+            <div class="blog-card-body">
+              <div class="blog-meta"><span class="blog-date" data-i18n="blog.b3.date">Aug 15, 2026</span><span class="blog-read" data-i18n="blog.b3.read">10 min read</span></div>
+              <h3 class="blog-title" data-i18n="blog.b3.title">Pointers in C: Finally Getting It</h3>
+              <p class="blog-excerpt" data-i18n="blog.b3.excerpt">Pointers are the most infamous concept in C. After many failed attempts, here's the mental model that finally made them click for me.</p>
+              <div class="blog-tags"><span class="blog-tag">C</span><span class="blog-tag">Memory</span></div>
+              <button class="blog-read-btn" onclick="openPost('c-pointers')" data-i18n="blog.readmore">Read More</button>
+            </div>
+          </article>
+          <article class="blog-card reveal">
+            <div class="blog-card-img">
+              <span class="blog-emoji" aria-hidden="true">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+              </span>
+            </div>
+            <div class="blog-card-body">
+              <div class="blog-meta"><span class="blog-date" data-i18n="blog.b4.date">Jul 30, 2026</span><span class="blog-read" data-i18n="blog.b4.read">6 min read</span></div>
+              <h3 class="blog-title" data-i18n="blog.b4.title">Python List Comprehensions: Writing Cleaner Code</h3>
+              <p class="blog-excerpt" data-i18n="blog.b4.excerpt">List comprehensions blew my mind when I first saw them. Let me show you how I went from verbose loops to elegant one-liners.</p>
+              <div class="blog-tags"><span class="blog-tag">Python</span><span class="blog-tag">Tips</span></div>
+              <button class="blog-read-btn" onclick="openPost('python-lists')" data-i18n="blog.readmore">Read More</button>
+            </div>
+          </article>
+          <article class="blog-card reveal">
+            <div class="blog-card-img">
+              <span class="blog-emoji" aria-hidden="true">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+              </span>
+            </div>
+            <div class="blog-card-body">
+              <div class="blog-meta"><span class="blog-date" data-i18n="blog.b5.date">Jul 12, 2026</span><span class="blog-read" data-i18n="blog.b5.read">8 min read</span></div>
+              <h3 class="blog-title" data-i18n="blog.b5.title">CSS Flexbox vs Grid: When to Use Which</h3>
+              <p class="blog-excerpt" data-i18n="blog.b5.excerpt">Understanding when to use Flexbox vs CSS Grid changed how I approach web layouts entirely.</p>
+              <div class="blog-tags"><span class="blog-tag">CSS</span><span class="blog-tag">Layout</span></div>
+              <button class="blog-read-btn" onclick="openPost('css-flexbox')" data-i18n="blog.readmore">Read More</button>
+            </div>
+          </article>
+          <article class="blog-card reveal">
+            <div class="blog-card-img">
+              <span class="blog-emoji" aria-hidden="true">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/></svg>
+              </span>
+            </div>
+            <div class="blog-card-body">
+              <div class="blog-meta"><span class="blog-date" data-i18n="blog.b6.date">Jun 1, 2026</span><span class="blog-read" data-i18n="blog.b6.read">4 min read</span></div>
+              <h3 class="blog-title" data-i18n="blog.b6.title">My First Week Learning to Code</h3>
+              <p class="blog-excerpt" data-i18n="blog.b6.excerpt">Everyone starts somewhere. This is the honest story of my first week writing code — the excitement, the frustration, and why I decided to keep going.</p>
+              <div class="blog-tags"><span class="blog-tag">Journey</span><span class="blog-tag">Beginner</span></div>
+              <button class="blog-read-btn" onclick="openPost('first-week')" data-i18n="blog.readmore">Read More</button>
+            </div>
+          </article>
         </div>
       </div>
     </section>
@@ -291,17 +451,50 @@ int main() {
                 </a>
               </div>
               <div class="gh-meta-tags">
-                <span class="gh-meta-item">📍 <span data-i18n="github.location">Vietnam</span></span>
-                <span class="gh-meta-item">📅 <span data-i18n="github.joined">Joined Sep 2025</span></span>
-                <span class="gh-meta-item">📦 <span id="gh-meta-repos">6</span> <span data-i18n="github.stat.repos">Public Repos</span></span>
+                <span class="gh-meta-item">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  <span data-i18n="github.location">Vietnam</span>
+                </span>
+                <span class="gh-meta-item">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                  <span data-i18n="github.joined">Joined Sep 2025</span>
+                </span>
+                <span class="gh-meta-item">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                  <span id="gh-meta-repos">6</span> <span data-i18n="github.stat.repos">Public Repos</span>
+                </span>
               </div>
             </div>
           </div>
           <div class="github-stats-grid">
-            <div class="gh-stat-card"><div class="gh-stat-icon">📁</div><div class="gh-stat-num" id="gh-repos">6</div><div class="gh-stat-label" data-i18n="github.stat.repos">Public Repos</div></div>
-            <div class="gh-stat-card"><div class="gh-stat-icon">⭐</div><div class="gh-stat-num" id="gh-stars">4</div><div class="gh-stat-label" data-i18n="github.stat.stars">Total Stars</div></div>
-            <div class="gh-stat-card"><div class="gh-stat-icon">🍴</div><div class="gh-stat-num" id="gh-forks">1</div><div class="gh-stat-label" data-i18n="github.stat.forks">Total Forks</div></div>
-            <div class="gh-stat-card"><div class="gh-stat-icon">👥</div><div class="gh-stat-num" id="gh-followers">0</div><div class="gh-stat-label" data-i18n="github.stat.followers">Followers</div></div>
+            <div class="gh-stat-card">
+              <div class="gh-stat-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+              </div>
+              <div class="gh-stat-num" id="gh-repos">6</div>
+              <div class="gh-stat-label" data-i18n="github.stat.repos">Public Repos</div>
+            </div>
+            <div class="gh-stat-card">
+              <div class="gh-stat-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              </div>
+              <div class="gh-stat-num" id="gh-stars">4</div>
+              <div class="gh-stat-label" data-i18n="github.stat.stars">Total Stars</div>
+            </div>
+            <div class="gh-stat-card">
+              <div class="gh-stat-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg>
+              </div>
+              <div class="gh-stat-num" id="gh-forks">1</div>
+              <div class="gh-stat-label" data-i18n="github.stat.forks">Total Forks</div>
+            </div>
+            <div class="gh-stat-card">
+              <div class="gh-stat-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              </div>
+              <div class="gh-stat-num" id="gh-followers">0</div>
+              <div class="gh-stat-label" data-i18n="github.stat.followers">Followers</div>
+            </div>
           </div>
           <div class="github-languages">
             <div class="gh-subhead">
@@ -348,15 +541,38 @@ int main() {
           <div class="contact-text reveal">
             <p data-i18n="contact.body">I'm currently <strong>learning</strong> and always open to new connections, feedback on my projects, or simply chatting about programming. My inbox is always open.</p>
             <div class="contact-links">
-              <a href="https://github.com/Mhna3112" target="_blank" rel="noopener" class="contact-link"><div class="contact-link-icon">🐙</div><div><strong>GitHub</strong><span>github.com/Mhna3112</span></div></a>
-              <a href="mailto:manhntp22@gmail.com" class="contact-link"><div class="contact-link-icon">📧</div><div><strong>Email</strong><span>manhntp22@gmail.com</span></div></a>
-              <a href="#" target="_blank" rel="noopener" class="contact-link"><div class="contact-link-icon">💼</div><div><strong>LinkedIn</strong><span data-i18n="contact.linkedin">Connect with me</span></div></a>
+              <a href="https://github.com/Mhna3112" target="_blank" rel="noopener" class="contact-link">
+                <div class="contact-link-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.868-.013-1.703-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836c.85.004 1.705.114 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.741 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
+                </div>
+                <div><strong>GitHub</strong><span>github.com/Mhna3112</span></div>
+              </a>
+              <a href="mailto:manhntp22@gmail.com" class="contact-link">
+                <div class="contact-link-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                </div>
+                <div><strong>Email</strong><span>manhntp22@gmail.com</span></div>
+              </a>
+              <a href="#" target="_blank" rel="noopener" class="contact-link">
+                <div class="contact-link-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                </div>
+                <div><strong>LinkedIn</strong><span data-i18n="contact.linkedin">Connect with me</span></div>
+              </a>
             </div>
           </div>
           <div class="contact-card reveal">
             <div class="contact-card-inner">
-              <div class="contact-greeting"><span class="greeting-emoji">👋</span><div><h3 data-i18n="contact.card.hello">Say Hello!</h3><p data-i18n="contact.card.respond">I respond within 24 hours.</p></div></div>
-              <a href="mailto:manhntp22@gmail.com" class="btn btn-primary btn-lg" data-i18n="contact.card.cta">📨 Send me an Email</a>
+              <div class="contact-greeting">
+                <span class="greeting-emoji" aria-hidden="true">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                </span>
+                <div><h3 data-i18n="contact.card.hello">Say Hello!</h3><p data-i18n="contact.card.respond">I respond within 24 hours.</p></div>
+              </div>
+              <a href="mailto:manhntp22@gmail.com" class="btn btn-primary btn-lg">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                <span data-i18n="contact.card.cta">Send me an Email</span>
+              </a>
               <p class="contact-note" data-i18n="contact.card.note">Or open a discussion on my <a href="https://github.com/Mhna3112" target="_blank" rel="noopener">GitHub</a>.</p>
             </div>
           </div>
