@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lịch Công Việc</title>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+<!-- Thư viện SheetJS đọc/ghi file Excel & CSV -->
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="header-left">
+      <a href="../" class="btn-back-portfolio" title="Trở về Trang chủ Portfolio">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        <span>Portfolio</span>
+      </a>
+      <h1>⚒ Lịch Công Việc</h1>
+    </div>
+    
+    <div class="header-actions">
+      <div class="stats">
+        <div class="stat-card stat-btn" onclick="openExcelModal()" title="Nhập và xuất dữ liệu từ Excel / CSV">
+          Nhập dữ liệu
+        </div>
+        <div class="stat-card stat-btn btn-del-all" onclick="openDeleteModal()" title="Xóa toàn bộ hoặc xóa các ngày chỉ định">
+          Xóa dữ liệu
+        </div>
+        <div class="stat-card"><div class="num" id="statTotal">0</div><div class="label">Tổng</div></div>
+        <div class="stat-card"><div class="num" id="statDone">0</div><div class="label">Hoàn thành</div></div>
+        <div class="stat-card"><div class="num" id="statPending">0</div><div class="label">Còn lại</div></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Bố cục 2 cột mặc định (Giống Ảnh 1) -->
+  <div class="layout">
+    <!-- Cột trái: Lịch tháng -->
+    <div class="panel">
+      <div class="cal-header">
+        <div class="cal-title" id="calTitle"></div>
+        <div class="cal-nav">
+          <button onclick="changeMonth(-1)">‹ Trước</button>
+          <button onclick="goToday()">Hôm nay</button>
+          <button onclick="changeMonth(1)">Sau ›</button>
+          <button id="btnNoti" onclick="enableNotifications()" title="Bật thông báo">🔔</button>
+        </div>
+      </div>
+      <div class="weekdays">
+        <div class="weekday">Hai</div><div class="weekday">Ba</div><div class="weekday">Tư</div>
+        <div class="weekday">Năm</div><div class="weekday">Sáu</div><div class="weekday">Bảy</div><div class="weekday">CN</div>
+      </div>
+      <div class="days" id="daysGrid"></div>
+    </div>
+
+    <!-- Cột phải: Bảng công việc ngày đang chọn (Giống Ảnh 1) -->
+    <div class="panel task-panel">
+      <div class="task-header-row">
+        <div>
+          <h2>Công việc</h2>
+          <div class="task-date" id="taskDate"></div>
+        </div>
+        <button onclick="quickPasteToCurrentDay()" title="Dán danh sách công việc trực tiếp vào ngày đang chọn" style="font-size:12px;padding:5px 8px;">
+          📋 Dán nhanh
+        </button>
+      </div>
+
+      <!-- Thanh chọn màu & ảnh nền riêng cho ô ngày đang chọn -->
+      <div class="color-picker-bar">
+        <span class="color-picker-label">🎨 Nền ô:</span>
+        <div class="color-dot" style="background:#1c1c1c;" onclick="setDayBgColor('')" title="Mặc định"></div>
+        <div class="color-dot" style="background:#450a0a;" onclick="setDayBgColor('#450a0a')" title="Đỏ Ruby"></div>
+        <div class="color-dot" style="background:#451a03;" onclick="setDayBgColor('#451a03')" title="Cam Hổ Phách"></div>
+        <div class="color-dot" style="background:#422006;" onclick="setDayBgColor('#422006')" title="Vàng Gold"></div>
+        <div class="color-dot" style="background:#064e3b;" onclick="setDayBgColor('#064e3b')" title="Xanh Ngọc"></div>
+        <div class="color-dot" style="background:#172554;" onclick="setDayBgColor('#172554')" title="Xanh Biển"></div>
+        <div class="color-dot" style="background:#3b0764;" onclick="setDayBgColor('#3b0764')" title="Tím"></div>
+        <div class="color-dot" style="background:#500724;" onclick="setDayBgColor('#500724')" title="Hồng Sen"></div>
+        <input type="color" class="color-input-custom" id="customColorPicker" onchange="setDayBgColor(this.value)" title="Chọn màu tùy ý">
+        <button class="btn-img-picker" onclick="openDayImageModal(selectedDate)" title="Đặt ảnh nền cho riêng ô ngày này">🖼 Đổi ảnh ô</button>
+      </div>
+
+      <!-- Form thêm công việc bên phải -->
+      <div class="add-form-side">
+        <input type="text" id="sideTaskInput" placeholder="Tên công việc..." onkeydown="if(event.key==='Enter')addSideTask()">
+        <div style="display:flex;gap:8px;">
+          <input type="time" id="sideTaskTime" style="flex:1;">
+          <select id="sideTaskPriority" style="flex:1;">
+            <option value="low">Thấp</option>
+            <option value="medium" selected>Vừa</option>
+            <option value="high">Cao</option>
+          </select>
+        </div>
+        <button class="btn-add" onclick="addSideTask()">+ Thêm công việc</button>
+      </div>
+
+      <!-- Danh sách công việc dạng list -->
+      <div class="task-list" id="sideTaskList"></div>
+
+      <!-- Nút mở xem 24 giờ dạng popup lớn -->
+      <button class="btn-view-24h" onclick="openDayDetailModal()">
+        ⏱ Mở thời gian biểu 24 Giờ (Toàn màn hình)
+      </button>
+    </div>
+  </div>
+
+  <footer>☁ <span id="syncStatus">Đang kết nối...</span> — Dữ liệu đồng bộ realtime qua Firebase</footer>
+</div>
+
+<!-- Floating Menu Đổi Màu / Đổi Ảnh Nhanh khi Click Chuột Phải vào ô Ngày -->
+<div class="context-color-menu" id="contextColorMenu">
+  <div class="context-color-title" id="contextColorTitle">Tùy biến ô ngày: </div>
+  <div class="context-dots-row">
+    <div class="color-dot" style="background:#1c1c1c;" onclick="setDayBgColorContext('')" title="Mặc định"></div>
+    <div class="color-dot" style="background:#450a0a;" onclick="setDayBgColorContext('#450a0a')" title="Đỏ"></div>
+    <div class="color-dot" style="background:#451a03;" onclick="setDayBgColorContext('#451a03')" title="Cam"></div>
+    <div class="color-dot" style="background:#422006;" onclick="setDayBgColorContext('#422006')" title="Vàng"></div>
+    <div class="color-dot" style="background:#064e3b;" onclick="setDayBgColorContext('#064e3b')" title="Xanh lá"></div>
+    <div class="color-dot" style="background:#172554;" onclick="setDayBgColorContext('#172554')" title="Xanh dương"></div>
+    <div class="color-dot" style="background:#3b0764;" onclick="setDayBgColorContext('#3b0764')" title="Tím"></div>
+    <div class="color-dot" style="background:#500724;" onclick="setDayBgColorContext('#500724')" title="Hồng"></div>
+    <input type="color" class="color-input-custom" onchange="setDayBgColorContext(this.value)" title="Màu khác">
+  </div>
+  <button class="btn-img-picker" style="width:100%;margin-top:2px;" onclick="openDayImageModal(contextTargetDateKey)">🖼 Đổi ảnh nền ô ngày này</button>
+</div>
+
+<!-- ===== MODAL ĐỔI ẢNH NỀN CHO Ô NGÀY ===== -->
+<div class="modal-overlay" id="dayImageModal" onclick="if(event.target===this)closeDayImageModal()">
+  <div class="modal-box" style="max-width: 480px;">
+    <div class="modal-header">
+      <h3>🖼 Đặt Ảnh Nền Ô Ngày: <span id="imgModalDateLabel"></span></h3>
+      <button class="modal-close" onclick="closeDayImageModal()">✕</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="edit-form-group">
+        <label>📁 Tải ảnh từ máy tính (Tự động nén tối ưu):</label>
+        <input type="file" id="dayImageFileInput" accept="image/*" onchange="handleDayImageUpload(event)" style="cursor:pointer;">
+      </div>
+
+      <div class="edit-form-group">
+        <label>🔗 Hoặc dán link (URL) hình ảnh:</label>
+        <input type="text" id="dayImageUrlInput" placeholder="https://images.unsplash.com/..." oninput="handleDayImageUrlInput()">
+      </div>
+
+      <div class="edit-form-group">
+        <label>Xem trước hiển thị trên ô ngày:</label>
+        <div class="day-img-preview" id="dayImgPreviewBox">
+          <span>Chưa chọn hình ảnh</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <div class="modal-footer-left">
+        <button class="btn-delete-modal" onclick="removeDayImage()">🗑 Xóa ảnh nền</button>
+      </div>
+      <div class="modal-footer-right">
+        <button class="btn-secondary" onclick="closeDayImageModal()">Đóng</button>
+        <button class="btn-confirm" onclick="applyDayImage()">✔ Lưu ảnh nền</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== POPUP TO Ở GIỮA: THỜI GIAN BIỂU 24H (GIỐNG ẢNH 2) ===== -->
+<div class="modal-overlay" id="dayDetailModal" onclick="if(event.target===this)closeDayDetailModal()">
+  <div class="timeline-modal-box">
+    <!-- Header Popup -->
+    <div class="timeline-modal-header">
+      <div class="timeline-modal-title" id="modalDayTitle">
+        <span>Thứ tư, 19/8/2026</span>
+      </div>
+
+      <div class="timeline-modal-controls">
+        <!-- Nút chọn màu & ảnh ngay trên header popup -->
+        <div class="color-picker-bar" style="margin-bottom:0;padding:3px 8px;">
+          <span class="color-picker-label" style="font-size:10px;">Nền:</span>
+          <div class="color-dot" style="width:16px;height:16px;background:#1c1c1c;" onclick="setDayBgColor('')" title="Mặc định"></div>
+          <div class="color-dot" style="width:16px;height:16px;background:#450a0a;" onclick="setDayBgColor('#450a0a')" title="Đỏ"></div>
+          <div class="color-dot" style="width:16px;height:16px;background:#064e3b;" onclick="setDayBgColor('#064e3b')" title="Xanh lá"></div>
+          <div class="color-dot" style="width:16px;height:16px;background:#172554;" onclick="setDayBgColor('#172554')" title="Xanh dương"></div>
+          <div class="color-dot" style="width:16px;height:16px;background:#3b0764;" onclick="setDayBgColor('#3b0764')" title="Tím"></div>
+          <input type="color" class="color-input-custom" style="width:18px;height:18px;" onchange="setDayBgColor(this.value)" title="Tùy chỉnh">
+          <button class="btn-img-picker" style="padding:2px 6px;font-size:10px;" onclick="openDayImageModal(selectedDate)">🖼 Đổi ảnh</button>
+        </div>
+
+        <div class="cal-nav">
+          <button onclick="changeSelectedDay(-1)" title="Ngày trước" style="padding:5px 8px;font-size:12px;">‹</button>
+          <button onclick="goTodayModal()" title="Về hôm nay" style="padding:5px 8px;font-size:12px;">Hôm nay</button>
+          <button onclick="changeSelectedDay(1)" title="Ngày sau" style="padding:5px 8px;font-size:12px;">›</button>
+        </div>
+        <div class="view-toggle">
+          <button class="view-toggle-btn active" id="btnViewTimeline" onclick="switchPopupView('timeline')">⏱ 24 Giờ</button>
+          <button class="view-toggle-btn" id="btnViewList" onclick="switchPopupView('list')">📋 Danh sách</button>
+        </div>
+        <button class="modal-close" onclick="closeDayDetailModal()" title="Đóng cửa sổ">✕</button>
+      </div>
+    </div>
+
+    <!-- Body Popup -->
+    <div class="timeline-modal-body">
+      <!-- Form thêm công việc trên Popup -->
+      <div class="popup-add-form">
+        <input type="text" id="popupTaskInput" placeholder="Nhập tên việc cần làm (gõ Enter để thêm)..." onkeydown="if(event.key==='Enter')addPopupTask()">
+        <div style="display:flex;gap:8px;">
+          <input type="time" id="popupTaskTime" style="flex:1;" title="Chọn mốc giờ (HH:mm)">
+          <select id="popupTaskPriority" style="flex:1;">
+            <option value="low">Ưu tiên Thấp</option>
+            <option value="medium" selected>Ưu tiên Vừa</option>
+            <option value="high">Ưu tiên Cao</option>
+          </select>
+          <button class="btn-add" onclick="addPopupTask()">+ Thêm vào lịch</button>
+        </div>
+      </div>
+
+      <!-- Khung hiển thị thời gian biểu 24h (00:00 -> 23:00) -->
+      <div class="timeline-container" id="timelineContainer">
+        <!-- Vùng Untimed Tasks (Không đặt giờ) -->
+        <div id="untimedSection" class="untimed-section" style="display:none;">
+          <div class="untimed-header">📌 Cả ngày / Chưa xếp giờ</div>
+          <div id="untimedTaskList" style="display:flex;flex-direction:column;gap:4px;"></div>
+        </div>
+
+        <!-- 24 Mốc thời gian -->
+        <div id="timelineHoursList"></div>
+      </div>
+
+      <!-- Khung hiển thị danh sách dạng list trong Popup -->
+      <div class="task-list" id="popupTaskList" style="display:none;flex:1;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Xóa Dữ Liệu Toàn Bộ / Theo Ngày Chỉ Định -->
+<div class="modal-overlay" id="deleteModal" onclick="if(event.target===this)closeDeleteModal()">
+  <div class="modal-box" style="max-width: 480px;">
+    <div class="modal-header">
+      <h3 style="color:#ef4444;">🗑 Xóa Dữ Liệu Công Việc</h3>
+      <button class="modal-close" onclick="closeDeleteModal()">✕</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="option-group">
+        <div style="font-size:12px; font-weight:600; color:var(--silver-dim); text-transform:uppercase;">Chọn hình thức xóa:</div>
+        
+        <label>
+          <input type="radio" name="deleteType" value="singleDate" checked onchange="toggleDeleteTypeUI()">
+          <span><b>Xóa 1 ngày chỉ định</b></span>
+        </label>
+        <div id="deleteSingleDateInput" style="margin-left: 24px; margin-bottom: 4px;">
+          <input type="date" id="delTargetDate" style="background:#141414; border:1px solid var(--border); border-radius:6px; padding:6px 10px; color:#fff; font-size:13px;">
+        </div>
+
+        <label>
+          <input type="radio" name="deleteType" value="dateRange" onchange="toggleDeleteTypeUI()">
+          <span><b>Xóa theo khoảng ngày (Từ ngày ➔ Đến ngày)</b></span>
+        </label>
+        <div id="deleteRangeDateInput" style="margin-left: 24px; display:none; gap:8px; align-items:center; margin-bottom: 4px;">
+          <input type="date" id="delRangeStart" style="background:#141414; border:1px solid var(--border); border-radius:6px; padding:6px 8px; color:#fff; font-size:12px; flex:1;">
+          <span>➔</span>
+          <input type="date" id="delRangeEnd" style="background:#141414; border:1px solid var(--border); border-radius:6px; padding:6px 8px; color:#fff; font-size:12px; flex:1;">
+        </div>
+
+        <label>
+          <input type="radio" name="deleteType" value="completedOnly" onchange="toggleDeleteTypeUI()">
+          <span><b>Chỉ xóa các việc ĐÃ HOÀN THÀNH</b> (dọn dẹp việc xong)</span>
+        </label>
+
+        <label>
+          <input type="radio" name="deleteType" value="all" onchange="toggleDeleteTypeUI()">
+          <span style="color:#ef4444;"><b>XÓA TOÀN BỘ DỮ LIỆU TẤT CẢ CÁC NGÀY</b> (Làm mới lịch)</span>
+        </label>
+      </div>
+
+      <div class="info-hint" style="color:#f87171;">
+        ⚠️ Lưu ý: Hành động xóa không thể khôi phục tự động. Hãy xuất dữ liệu Excel để sao lưu trước khi xóa nếu cần thiết.
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <div class="modal-footer-left">
+        <button class="btn-secondary" onclick="exportDataToExcel('all')">📥 Tải sao lưu Excel</button>
+      </div>
+      <div class="modal-footer-right">
+        <button class="btn-secondary" onclick="closeDeleteModal()">Hủy</button>
+        <button class="btn-delete-modal" onclick="confirmExecuteDelete()">Xác nhận xóa</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Chỉnh Sửa Chi Tiết Công Việc (Edit Task Modal) -->
+<div class="modal-overlay" id="editTaskModal" onclick="if(event.target===this)closeEditTaskModal()">
+  <div class="modal-box" style="max-width: 460px;">
+    <div class="modal-header">
+      <h3>✏ Chỉnh Sửa Công Việc</h3>
+      <button class="modal-close" onclick="closeEditTaskModal()">✕</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="edit-form-group">
+        <label>Tên công việc</label>
+        <input type="text" id="editTaskTitle" placeholder="Nhập tên công việc...">
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+        <div class="edit-form-group">
+          <label>Ngày thực hiện</label>
+          <input type="date" id="editTaskDate">
+        </div>
+        <div class="edit-form-group">
+          <label>Giờ thực hiện</label>
+          <input type="time" id="editTaskTime">
+        </div>
+      </div>
+
+      <div class="edit-form-group">
+        <label>Mức độ ưu tiên</label>
+        <select id="editTaskPriority">
+          <option value="low">Thấp</option>
+          <option value="medium">Vừa</option>
+          <option value="high">Cao</option>
+        </select>
+      </div>
+
+      <div class="edit-form-group" style="margin-top:4px;">
+        <label style="display:flex; align-items:center; gap:8px; cursor:pointer; text-transform:none; font-size:13px; color:var(--text);">
+          <input type="checkbox" id="editTaskDone" style="width:18px;height:18px;cursor:pointer;">
+          <span>Đã hoàn thành công việc này</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <div class="modal-footer-left">
+        <button class="btn-delete-modal" onclick="deleteEditingTask()">🗑 Xóa việc</button>
+      </div>
+      <div class="modal-footer-right">
+        <button class="btn-secondary" onclick="closeEditTaskModal()">Hủy</button>
+        <button class="btn-confirm" onclick="saveEditedTask()">💾 Lưu thay đổi</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Nhập / Xuất Excel & Dữ liệu -->
+<div class="modal-overlay" id="excelModal" onclick="if(event.target===this)closeExcelModal()">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>📊 Nhập / Xuất Dữ Liệu Excel, CSV</h3>
+      <button class="modal-close" onclick="closeExcelModal()">✕</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="tab-nav">
+        <button class="tab-btn active" id="tabFileBtn" onclick="switchExcelTab('file')">📁 Tải File Excel / CSV</button>
+        <button class="tab-btn" id="tabPasteBtn" onclick="switchExcelTab('paste')">📋 Dán từ Bảng / Sheets</button>
+        <button class="tab-btn" id="tabExportBtn" onclick="switchExcelTab('export')">📤 Xuất Dữ Liệu</button>
+      </div>
+
+      <div id="tabFileContent">
+        <div class="drop-zone" id="dropZone" onclick="document.getElementById('excelFileInput').click()">
+          <div class="drop-zone-icon">📥</div>
+          <div class="drop-zone-text">Nhấp để chọn file hoặc kéo thả file vào đây</div>
+          <div class="drop-zone-hint">Hỗ trợ định dạng: .xlsx, .xls, .csv, .txt</div>
+          <input type="file" id="excelFileInput" accept=".xlsx, .xls, .csv, .txt" onchange="handleExcelFileSelect(event)">
+        </div>
+      </div>
+
+      <div id="tabPasteContent" style="display:none;">
+        <div class="info-hint" style="margin-bottom:8px;">
+          💡 Bạn có thể bôi đen và <b>Copy (Ctrl+C)</b> các ô trong Excel, Google Sheets, Word table rồi <b>Dán (Ctrl+V)</b> vào ô bên dưới:
+        </div>
+        <textarea id="pasteInput" class="paste-textarea" placeholder="Dán nội dung bảng từ Excel/Sheets vào đây...
+Ví dụ:
+2026-08-19	Họp nhóm đầu tuần	09:00	Cao	0
+2026-08-19	Nộp báo cáo tài chính	14:00	Vừa	0" oninput="handlePasteInput()"></textarea>
+      </div>
+
+      <div id="tabExportContent" style="display:none; flex-direction:column; gap:12px;">
+        <div class="export-section">
+          <div>
+            <div style="font-weight:600; color:var(--silver);">Xuất toàn bộ công việc ra Excel (.xlsx)</div>
+            <div class="info-hint">Tải về toàn bộ danh sách công việc của tất cả các ngày</div>
+          </div>
+          <button class="btn-excel" onclick="exportDataToExcel('all')">📥 Xuất tất cả</button>
+        </div>
+
+        <div class="export-section">
+          <div>
+            <div style="font-weight:600; color:var(--silver);">Xuất công việc ngày đang chọn (<span id="exportSelectedDateLabel"></span>)</div>
+            <div class="info-hint">Chỉ tải công việc của ngày bạn đang xem trên lịch</div>
+          </div>
+          <button class="btn-secondary" onclick="exportDataToExcel('selected')">📥 Xuất ngày này</button>
+        </div>
+
+        <div class="export-section">
+          <div>
+            <div style="font-weight:600; color:var(--silver);">Sao lưu file JSON</div>
+            <div class="info-hint">Sao lưu dữ liệu gốc để lưu trữ hoặc khôi phục</div>
+          </div>
+          <button class="btn-secondary" onclick="exportDataToJSON()">💾 Sao lưu JSON</button>
+        </div>
+      </div>
+
+      <div id="importOptionsSection" style="display:flex; flex-direction:column; gap:12px;">
+        <div class="option-group">
+          <div style="font-size:12px; font-weight:600; color:var(--silver-dim); text-transform:uppercase;">Chế độ nhập:</div>
+          <label>
+            <input type="radio" name="importMode" value="merge" checked>
+            <span><b>Gộp thêm vào lịch</b> (giữ lại công việc cũ, bổ sung việc mới)</span>
+          </label>
+          <label>
+            <input type="radio" name="importMode" value="targetCurrent">
+            <span><b>Chỉ gán tất cả vào ngày đang chọn</b> (<span id="currentDateOptionLabel"></span>)</span>
+          </label>
+          <label>
+            <input type="radio" name="importMode" value="replace">
+            <span><b style="color:#f87171;">Ghi đè hoàn toàn</b> (xóa hết dữ liệu hiện có và thay thế bằng file mới)</span>
+          </label>
+        </div>
+
+        <div class="preview-section" id="previewSection" style="display:none;">
+          <div class="preview-title">
+            <span>Danh sách nhận diện được: <b id="previewCount" style="color:#4ade80;">0 việc</b></span>
+            <span style="font-size:11px; color:var(--text-dim);">Kiểm tra trước khi bấm Lưu</span>
+          </div>
+          <div class="preview-table-container">
+            <table class="preview-table">
+              <thead>
+                <tr>
+                  <th>Ngày</th>
+                  <th>Công việc</th>
+                  <th>Giờ</th>
+                  <th>Ưu tiên</th>
+                  <th>Trạng thái</th>
+                </tr>
+              </thead>
+              <tbody id="previewTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <div class="modal-footer-left">
+        <button class="btn-secondary" onclick="downloadExcelTemplate()" title="Tải file mẫu Excel chuẩn để điền">
+          📄 Tải file Excel mẫu
+        </button>
+      </div>
+      <div class="modal-footer-right">
+        <button class="btn-secondary" onclick="closeExcelModal()">Đóng</button>
+        <button class="btn-confirm" id="btnConfirmImport" onclick="confirmImport()" style="display:none;">
+          ✔ Nhập vào lịch
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+  <script src="script.js"></script>
+</body>
+</html>

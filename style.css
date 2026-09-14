@@ -191,6 +191,32 @@ body {
 .nav-link:hover, .nav-link.active { color: var(--fg); background: var(--bg3); }
 .nav-link--github { color: var(--accent); }
 .nav-link--github:hover { background: rgba(99,102,241,0.1); }
+.nav-link--app { color: var(--accent); font-weight: 600; }
+.nav-link--app:hover { background: rgba(99, 102, 241, 0.12); }
+
+.nav-app-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(99, 102, 241, 0.08);
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  border-radius: 8px;
+  padding: 6px 12px;
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all var(--trans);
+  flex-shrink: 0;
+}
+.nav-app-btn:hover {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
 
 /* Right actions group (Theme, Lang, Nav-toggle) */
 .nav-actions {

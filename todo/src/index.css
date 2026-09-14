@@ -1,0 +1,128 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --carbon-black: #000000;
+    --carbon-dark: #0A0A0C;
+    --carbon-mid: #141416;
+    --carbon-gray: #202024;
+    --silver-metallic: #D4D4D8;
+    --silver-chrome: #F4F4F5;
+    --silver-dark: #A1A1AA;
+    --silver-muted: #71717A;
+    --border-silver: rgba(212, 212, 216, 0.2);
+  }
+
+  body {
+    background-color: #000000;
+    color: #F4F4F5;
+    font-family: 'Inter', system-ui, sans-serif;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+}
+
+/* Dark, Strong Textural Feel (High-grain carbon paper texture & noise) */
+.dark-texture-atmosphere {
+  position: relative;
+  background-color: #000000;
+}
+
+.dark-texture-atmosphere::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 50% 40%, rgba(38, 38, 44, 0.45), transparent 75%),
+    radial-gradient(ellipse at 15% 15%, rgba(28, 28, 33, 0.35), transparent 60%),
+    radial-gradient(ellipse at 85% 85%, rgba(45, 45, 52, 0.25), transparent 60%),
+    #000000;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Strong Paper Grain & Tactile Texture Overlay */
+.dark-texture-atmosphere::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: 
+    radial-gradient(rgba(244, 244, 245, 0.05) 1px, transparent 0),
+    repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255, 255, 255, 0.018) 2px, rgba(255, 255, 255, 0.018) 3px),
+    repeating-linear-gradient(90deg, transparent, transparent 3px, rgba(255, 255, 255, 0.008) 3px, rgba(255, 255, 255, 0.008) 4px);
+  background-size: 16px 16px, auto, auto;
+  pointer-events: none;
+  z-index: 2;
+  mix-blend-mode: screen;
+  opacity: 0.85;
+}
+
+/* Roman Section Divider with Metallic Silver */
+.roman-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 6rem 2rem 3rem;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 1rem;
+  color: #D4D4D8;
+  letter-spacing: 0.05em;
+  position: relative;
+  z-index: 3;
+}
+
+.roman-divider::before, .roman-divider::after {
+  content: '';
+  display: block;
+  width: 4rem;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #D4D4D8, transparent);
+  opacity: 0.6;
+}
+
+.roman-numeral {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.6rem;
+  font-style: normal;
+  color: #F4F4F5;
+  letter-spacing: 0.15em;
+  padding: 0 0.5rem;
+  text-shadow: 0 0 12px rgba(212, 212, 216, 0.25);
+}
+
+/* Custom Silver Scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: #08080A;
+}
+::-webkit-scrollbar-thumb {
+  background: #52525B;
+  border-radius: 0px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #D4D4D8;
+}
+
+/* Filmstrip Sprocket Holes */
+.sprocket-hole {
+  width: 12px;
+  height: 14px;
+  background-color: #000000;
+  border: 1px solid rgba(212, 212, 216, 0.35);
+  border-radius: 2px;
+}
+
+/* Metallic Silver Foil Sheen effect */
+.silver-foil-sheen {
+  background: linear-gradient(135deg, #FFFFFF 0%, #D4D4D8 40%, #A1A1AA 70%, #E4E4E7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}

@@ -1,0 +1,1768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MediaHub Downloader — Download Media. Simple. Fast.</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+<style>
+/* ============ Design tokens ============ */
+:root{
+  --bg:#08080c; --bg2:#0d0d15;
+  --ink:#f4f4f8; --mut:#9d9daf; --dim:#6d6d80;
+  --line:rgba(255,255,255,.08); --line2:rgba(255,255,255,.13);
+  --glass:rgba(255,255,255,.04); --glass2:rgba(255,255,255,.06);
+  --acc:#9d5cff; --acc-hi:#b585ff; --acc-dim:rgba(157,92,255,.14);
+  --ok:#4ade80; --warn:#fbbf24; --err:#f87171; --cyan:#4cc9f0;
+  --r:16px; --r-sm:10px;
+  --fh:'Space Grotesk',sans-serif; --fb:'Inter',sans-serif; --fm:'JetBrains Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg); color:var(--ink); font-family:var(--fb);
+  font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased;
+  overflow-x:hidden; min-height:100vh;
+}
+::selection{background:var(--acc-dim); color:#fff}
+a{color:inherit; text-decoration:none}
+button{font-family:inherit; cursor:pointer; border:none; background:none; color:inherit}
+input{font-family:inherit; color:inherit}
+h1,h2,h3,h4{font-family:var(--fh); font-weight:600; letter-spacing:-.02em; line-height:1.15}
+
+/* ============ Animated aurora background ============ */
+.aurora{position:fixed; inset:0; z-index:-2; overflow:hidden; pointer-events:none}
+.aurora span{position:absolute; border-radius:50%; filter:blur(130px); opacity:.16; will-change:transform}
+.aurora .a1{width:640px;height:640px; background:var(--acc); top:-220px; left:-140px; animation:drift1 26s ease-in-out infinite alternate}
+.aurora .a2{width:560px;height:560px; background:#3b2a86; bottom:-240px; right:-120px; animation:drift2 32s ease-in-out infinite alternate}
+.aurora .a3{width:380px;height:380px; background:var(--cyan); opacity:.07; top:40%; left:55%; animation:drift3 40s ease-in-out infinite alternate}
+@keyframes drift1{to{transform:translate(140px,90px) scale(1.15)}}
+@keyframes drift2{to{transform:translate(-120px,-70px) scale(1.1)}}
+@keyframes drift3{to{transform:translate(-180px,120px)}}
+.dotgrid{position:fixed; inset:0; z-index:-1; pointer-events:none;
+  background-image:radial-gradient(rgba(255,255,255,.05) 1px, transparent 1px);
+  background-size:34px 34px;
+  mask-image:radial-gradient(ellipse 90% 60% at 50% 0%, #000 20%, transparent 75%);
+}
+
+/* ============ Layout helpers ============ */
+.wrap{max-width:1120px; margin:0 auto; padding:0 24px}
+.glass{background:var(--glass); border:1px solid var(--line); border-radius:var(--r);
+  backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px)}
+.mono{font-family:var(--fm)}
+.accent{color:var(--acc-hi)}
+.reveal{opacity:0; transform:translateY(26px); transition:opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1)}
+.reveal.in{opacity:1; transform:none}
+@keyframes rot{to{transform:rotate(360deg)}}
+
+/* ============ Nav ============ */
+header{position:sticky; top:0; z-index:50; backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+  background:rgba(8,8,12,.72); border-bottom:1px solid var(--line)}
+.nav{display:flex; align-items:center; gap:28px; height:64px}
+.brand{display:flex; align-items:center; gap:11px; font-family:var(--fh); font-weight:700; font-size:17px}
+.brand .mark{width:32px;height:32px; border-radius:9px; background:var(--acc-dim); border:1px solid rgba(157,92,255,.4);
+  display:grid; place-items:center; color:var(--acc-hi)}
+.brand small{font-family:var(--fm); font-size:9px; color:var(--dim); letter-spacing:.22em; display:block; margin-top:-2px}
+.nav-links{display:flex; gap:4px; margin-left:8px}
+.nav-links a{padding:7px 13px; border-radius:8px; color:var(--mut); font-size:13.5px; font-weight:500; transition:.2s}
+.nav-links a:hover{color:var(--ink); background:var(--glass2)}
+.nav-links a.on{color:var(--ink); background:var(--glass2)}
+.nav-right{margin-left:auto; display:flex; align-items:center; gap:10px}
+.qbtn{position:relative; width:36px;height:36px; border-radius:9px; border:1px solid var(--line);
+  display:grid; place-items:center; color:var(--mut); transition:.2s}
+.qbtn:hover{color:var(--ink); border-color:var(--line2)}
+.qbtn .badge{position:absolute; top:-6px; right:-6px; min-width:17px; height:17px; padding:0 4px; border-radius:9px;
+  background:var(--acc); color:#fff; font-size:10px; font-weight:600; display:grid; place-items:center; font-family:var(--fm)}
+.guest-btn{padding:7px 14px; border-radius:9px; border:1px solid var(--line); font-size:13px; font-weight:500;
+  color:var(--mut); display:flex; align-items:center; gap:7px; transition:.2s}
+.guest-btn:hover{color:var(--ink); border-color:var(--line2)}
+.menu-btn{display:none}
+.m-nav{display:none}
+
+/* ============ Pages & transitions ============ */
+.page{display:none}
+.page.on{display:block; animation:pageIn .5s cubic-bezier(.2,.7,.2,1)}
+@keyframes pageIn{from{opacity:0; transform:translateY(16px)} to{opacity:1; transform:none}}
+
+/* ============ Hero ============ */
+.hero{padding:96px 0 56px; text-align:center}
+.eyebrow{display:inline-flex; align-items:center; gap:8px; padding:6px 14px; border-radius:99px;
+  border:1px solid var(--line); background:var(--glass); font-family:var(--fm); font-size:11.5px;
+  letter-spacing:.06em; color:var(--mut); margin-bottom:30px}
+.eyebrow i{width:6px;height:6px;border-radius:50%; background:var(--ok); display:inline-block}
+.hero h1{font-size:clamp(2.7rem,7vw,5.1rem); letter-spacing:-.035em; font-weight:700}
+.hero h1 .row2{display:block}
+.hero .desc{color:var(--mut); font-size:17px; max-width:520px; margin:22px auto 0}
+
+/* URL input */
+.urlbox{max-width:680px; margin:42px auto 0; display:flex; gap:8px; padding:9px; border-radius:18px;
+  background:rgba(255,255,255,.05); border:1px solid var(--line2);
+  backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+  box-shadow:0 24px 70px rgba(0,0,0,.45); transition:border-color .25s, box-shadow .25s}
+.urlbox:focus-within{border-color:rgba(157,92,255,.55); box-shadow:0 24px 70px rgba(0,0,0,.45), 0 0 0 4px rgba(157,92,255,.1)}
+.urlbox .licon{display:grid; place-items:center; padding:0 6px 0 14px; color:var(--dim)}
+.urlbox input{flex:1; background:none; border:none; outline:none; font-size:15px; min-width:0; color:var(--ink)}
+.urlbox input::placeholder{color:var(--dim)}
+.btn-accent{background:var(--acc); color:#fff; font-weight:600; border-radius:11px; padding:12px 24px;
+  font-size:14.5px; display:inline-flex; align-items:center; gap:8px; transition:.2s; white-space:nowrap}
+.btn-accent:hover{background:var(--acc-hi); transform:translateY(-1px); box-shadow:0 10px 30px rgba(157,92,255,.35)}
+.btn-accent:active{transform:none}
+.btn-accent:disabled{opacity:.55; cursor:not-allowed; transform:none; box-shadow:none}
+.paste-btn{padding:12px 14px; border-radius:11px; border:1px solid var(--line); color:var(--mut);
+  display:grid; place-items:center; transition:.2s}
+.paste-btn:hover{color:var(--ink); border-color:var(--line2)}
+
+.chips{display:flex; flex-wrap:wrap; justify-content:center; gap:9px; margin-top:36px}
+.chip{display:inline-flex; align-items:center; gap:8px; padding:8px 15px; border-radius:99px;
+  border:1px solid var(--line); background:var(--glass); font-size:13px; color:var(--mut); transition:.2s}
+.chip:hover{color:var(--ink); border-color:var(--line2); transform:translateY(-2px)}
+.chip svg{width:15px;height:15px}
+.tagline{margin-top:26px; font-family:var(--fm); font-size:12px; color:var(--dim); letter-spacing:.04em}
+.tagline b{color:var(--mut); font-weight:500}
+.tagline .sep{margin:0 10px; color:var(--acc)}
+
+/* ============ Quick type detector ============ */
+.dt{max-width:680px; margin:26px auto 0; padding:18px 20px; text-align:left}
+.dt-top{display:flex; gap:12px; align-items:center; margin-bottom:14px}
+.dt-ic{width:36px;height:36px;border-radius:10px;background:var(--acc-dim);border:1px solid rgba(157,92,255,.35);
+  display:grid;place-items:center;color:var(--acc-hi);flex:none}
+.dt-top b{font-family:var(--fh);font-size:14.5px;display:block}
+.dt-top small{color:var(--dim);font-size:12px}
+.dt form{display:flex;gap:8px}
+.dt input{flex:1;min-width:0;background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:10px;
+  padding:10px 14px;font-size:13px;outline:none;color:var(--ink);font-family:var(--fm);transition:border-color .2s}
+.dt input:focus{border-color:rgba(157,92,255,.5)}
+.dt-out{margin-top:14px;display:none}
+.dt-out.on{display:block;animation:pageIn .35s ease}
+.dt-verdict{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:12px;flex-wrap:wrap;
+  border:1px solid var(--line);background:var(--glass);margin-bottom:12px}
+.dt-verdict .dv{width:48px;height:48px;border-radius:12px;display:grid;place-items:center;flex:none;
+  font-family:var(--fm);font-size:11px;font-weight:600;letter-spacing:.1em}
+.dt-verdict.image .dv{color:var(--cyan);border:1px solid rgba(76,201,240,.4);background:rgba(76,201,240,.1)}
+.dt-verdict.video .dv{color:var(--acc-hi);border:1px solid rgba(157,92,255,.4);background:var(--acc-dim)}
+.dt-verdict.audio .dv{color:var(--ok);border:1px solid rgba(74,222,128,.4);background:rgba(74,222,128,.08)}
+.dt-verdict.unknown .dv{color:var(--dim);border:1px solid var(--line);background:var(--glass)}
+.dt-verdict h4{font-size:16px}
+.dt-verdict p{font-family:var(--fm);font-size:11px;color:var(--dim)}
+.dt-chain{font-family:var(--fm);font-size:11.5px}
+.dt-chain .dc{display:flex;justify-content:space-between;gap:14px;padding:5px 2px;border-bottom:1px dashed var(--line)}
+.dt-chain .dc:last-child{border:none}
+.dt-chain .dc b{color:var(--mut);font-weight:500}
+.dt-chain .dc.y b:last-child{color:var(--ok)}
+.dt-chain .dc.n b:last-child{color:var(--dim)}
+
+/* ============ Analyze console ============ */
+.analyze-zone{max-width:680px; margin:34px auto 0; display:none}
+.analyze-zone.on{display:block; animation:pageIn .4s ease}
+.console{border:1px solid var(--line); border-radius:var(--r); background:rgba(10,10,16,.7);
+  backdrop-filter:blur(14px); padding:18px 20px; text-align:left; font-family:var(--fm); font-size:12.5px}
+.console .chead{display:flex; align-items:center; gap:8px; color:var(--dim); font-size:10.5px;
+  letter-spacing:.18em; text-transform:uppercase; margin-bottom:12px}
+.console .chead .dots{display:flex; gap:5px; margin-right:6px}
+.console .chead .dots i{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.12)}
+.cline{display:flex; gap:10px; color:var(--mut); padding:3px 0; opacity:0; animation:clIn .35s forwards}
+.cline .p{color:var(--acc-hi)}
+.cline.ok .v{color:var(--ok)} .cline.warn .v{color:var(--warn)} .cline.err .v{color:var(--err)}
+@keyframes clIn{from{opacity:0; transform:translateX(-8px)} to{opacity:1; transform:none}}
+.pbar{height:4px; border-radius:99px; background:rgba(255,255,255,.08); margin-top:16px; overflow:hidden}
+.pbar i{display:block; height:100%; width:0%; border-radius:99px;
+  background:linear-gradient(90deg, var(--acc), var(--acc-hi)); transition:width .4s cubic-bezier(.3,.8,.3,1)}
+
+/* ============ Media card ============ */
+.result-zone{margin:44px 0 20px; display:none}
+.result-zone.on{display:block; animation:pageIn .55s cubic-bezier(.2,.7,.2,1)}
+.media-card{display:grid; grid-template-columns:400px 1fr; gap:0; overflow:hidden}
+.mc-preview{position:relative; background:#000; min-height:280px; border-right:1px solid var(--line)}
+.mc-preview img{width:100%; height:100%; object-fit:cover; display:block; min-height:280px}
+.mc-preview iframe{width:100%; height:100%; min-height:280px; display:block; border:0}
+.mc-preview video.mcvid{width:100%;height:100%;min-height:280px;object-fit:contain;background:#000;display:block}
+.mc-audio{width:100%;height:100%;min-height:280px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;
+  background:radial-gradient(ellipse at 30% 20%, rgba(157,92,255,.16), transparent 60%),
+             radial-gradient(ellipse at 75% 85%, rgba(76,201,240,.10), transparent 55%), #0a0a12}
+.mc-play{position:absolute; inset:0; display:grid; place-items:center; background:rgba(0,0,0,.25); transition:.25s}
+.mc-play:hover{background:rgba(0,0,0,.1)}
+.mc-play .pl{width:64px;height:64px; border-radius:50%; background:rgba(157,92,255,.92); display:grid; place-items:center;
+  box-shadow:0 12px 40px rgba(0,0,0,.5); transition:.25s}
+.mc-play:hover .pl{transform:scale(1.08)}
+.mc-tags{position:absolute; left:14px; bottom:14px; display:flex; gap:8px; flex-wrap:wrap}
+.mtag{padding:5px 11px; border-radius:8px; background:rgba(0,0,0,.66); backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,.14); font-size:12px; font-weight:500; display:flex; align-items:center; gap:6px}
+.mtag svg{width:13px;height:13px; color:var(--acc-hi)}
+.mc-info{padding:30px 32px}
+.mc-meta{display:flex; align-items:center; flex-wrap:wrap; gap:9px; margin-bottom:14px}
+.pill{display:inline-flex; align-items:center; gap:6px; padding:4px 11px; border-radius:99px;
+  border:1px solid var(--line); background:var(--glass); font-family:var(--fm); font-size:11px; color:var(--mut)}
+.pill.hl{color:var(--acc-hi); border-color:rgba(157,92,255,.4); background:var(--acc-dim)}
+.mc-info h3{font-size:22px; margin-bottom:6px}
+.mc-url{font-family:var(--fm); font-size:12px; color:var(--dim); display:inline-flex; align-items:center; gap:6px; word-break:break-all}
+.mc-url:hover{color:var(--mut)}
+.sec-label{font-family:var(--fm); font-size:10.5px; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--dim); margin:26px 0 12px; display:flex; align-items:center; gap:10px}
+.sec-label::after{content:""; flex:1; height:1px; background:var(--line)}
+.fmt-row{display:flex; align-items:center; gap:14px; padding:12px 14px; border:1px solid var(--line);
+  border-radius:var(--r-sm); margin-bottom:9px; background:var(--glass); transition:.2s}
+.fmt-row:hover{border-color:var(--line2); background:var(--glass2)}
+.fmt-badge{font-family:var(--fm); font-size:11.5px; font-weight:500; padding:5px 10px; border-radius:7px;
+  background:var(--acc-dim); color:var(--acc-hi); border:1px solid rgba(157,92,255,.3); white-space:nowrap}
+.fmt-note{color:var(--dim); font-size:12.5px; flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.btn-ghost{padding:8px 15px; border-radius:9px; border:1px solid var(--line2); font-size:12.5px; font-weight:500;
+  display:inline-flex; align-items:center; gap:7px; color:var(--ink); transition:.2s; white-space:nowrap}
+.btn-ghost:hover{border-color:var(--acc); color:var(--acc-hi); background:var(--acc-dim)}
+.btn-ghost svg{width:14px;height:14px}
+
+.sel-row{display:flex; flex-wrap:wrap; gap:9px; margin-bottom:14px}
+.sel{display:inline-flex; align-items:center; gap:8px; padding:8px 14px; border-radius:9px; border:1px solid var(--line);
+  background:var(--glass); font-size:13px; color:var(--mut); transition:.2s; user-select:none}
+.sel svg{width:15px;height:15px}
+.sel:hover{border-color:var(--line2)}
+.sel.on{color:var(--ink); border-color:rgba(157,92,255,.5); background:var(--acc-dim)}
+.sel.on .box{background:var(--acc); border-color:var(--acc)}
+.sel .box{width:15px;height:15px; border-radius:4px; border:1.5px solid var(--line2); display:grid; place-items:center; transition:.15s}
+.sel .box svg{width:11px;height:11px; color:#fff}
+
+.gallery{display:grid; grid-template-columns:repeat(auto-fill,minmax(120px,1fr)); gap:10px}
+.gitem{position:relative; border-radius:10px; overflow:hidden; border:1px solid var(--line); aspect-ratio:1; cursor:pointer; transition:.2s}
+.gitem img{width:100%; height:100%; object-fit:cover; display:block}
+.gitem:hover{border-color:var(--acc)}
+.gitem .gtick{position:absolute; top:8px; right:8px; width:20px;height:20px; border-radius:6px;
+  background:rgba(0,0,0,.55); backdrop-filter:blur(6px); border:1px solid rgba(255,255,255,.25);
+  display:grid; place-items:center; color:#fff}
+.gitem.sel2 .gtick{background:var(--acc); border-color:var(--acc)}
+.gitem .gtick svg{width:13px;height:13px}
+.gitem .gnum{position:absolute; left:8px; bottom:8px; font-family:var(--fm); font-size:10px;
+  background:rgba(0,0,0,.6); padding:2px 7px; border-radius:5px; color:#ddd}
+.mc-note{display:flex; gap:10px; padding:12px 14px; border-radius:var(--r-sm); border:1px solid rgba(251,191,36,.25);
+  background:rgba(251,191,36,.06); color:#e8d9a8; font-size:12.5px; margin-top:18px; line-height:1.5}
+.mc-note svg{width:15px;height:15px; flex:none; margin-top:2px; color:var(--warn)}
+
+/* error box */
+.errbox{display:none; max-width:680px; margin:30px auto 0; text-align:left; gap:12px; align-items:flex-start;
+  border:1px solid rgba(248,113,113,.3); background:rgba(248,113,113,.06); border-radius:var(--r);
+  padding:16px 18px; color:#f3c2c2; font-size:14px}
+.errbox.on{display:flex; animation:pageIn .4s ease}
+.errbox svg{width:18px;height:18px; color:var(--err); flex:none; margin-top:2px}
+.errbox b{color:#fff}
+
+/* ============ Sections ============ */
+.section{padding:88px 0}
+.section-head{margin-bottom:52px}
+.section-head .kick{font-family:var(--fm); font-size:11px; letter-spacing:.24em; text-transform:uppercase; color:var(--acc-hi); margin-bottom:14px}
+.section-head h2{font-size:clamp(1.7rem,3.4vw,2.5rem)}
+.section-head p{color:var(--mut); max-width:560px; margin-top:12px}
+
+.steps{display:flex; flex-direction:column}
+.step{display:grid; grid-template-columns:110px 1fr; gap:30px; padding:30px 6px; border-top:1px solid var(--line); transition:.25s}
+.step:last-child{border-bottom:1px solid var(--line)}
+.step:hover{background:var(--glass)}
+.step .num{font-family:var(--fm); font-size:44px; color:rgba(255,255,255,.14); font-weight:500; line-height:1; transition:.25s}
+.step:hover .num{color:var(--acc-hi)}
+.step h3{font-size:19px; margin-bottom:8px}
+.step p{color:var(--mut); font-size:14.5px; max-width:640px}
+.step .code{font-family:var(--fm); font-size:12px; color:var(--dim); margin-top:10px}
+
+.feat-list{display:grid; grid-template-columns:1fr 1fr; border-top:1px solid var(--line)}
+.feat{display:flex; gap:18px; padding:26px 22px; border-bottom:1px solid var(--line); transition:.25s}
+.feat:nth-child(odd){border-right:1px solid var(--line)}
+.feat:hover{background:var(--glass)}
+.feat .fi{width:38px;height:38px; flex:none; border-radius:10px; border:1px solid var(--line);
+  background:var(--glass); display:grid; place-items:center; color:var(--acc-hi)}
+.feat h4{font-size:15.5px; margin-bottom:5px}
+.feat p{color:var(--mut); font-size:13.5px}
+
+.faq{max-width:780px}
+.faq details{border-bottom:1px solid var(--line); padding:4px 6px}
+.faq summary{list-style:none; cursor:pointer; display:flex; justify-content:space-between; align-items:center;
+  gap:20px; padding:20px 4px; font-family:var(--fh); font-weight:500; font-size:16.5px; transition:.2s}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:hover{color:var(--acc-hi)}
+.faq summary svg{width:17px;height:17px; color:var(--dim); flex:none; transition:transform .3s}
+.faq details[open] summary svg{transform:rotate(45deg); color:var(--acc-hi)}
+.faq .fa-a{color:var(--mut); font-size:14.5px; padding:0 4px 22px; max-width:660px}
+
+/* ============ Page header ============ */
+.phead{padding:70px 0 44px; border-bottom:1px solid var(--line)}
+.phead .kick{font-family:var(--fm); font-size:11px; letter-spacing:.24em; text-transform:uppercase; color:var(--acc-hi); margin-bottom:14px}
+.phead h1{font-size:clamp(2rem,4.4vw,3.1rem)}
+.phead p{color:var(--mut); max-width:600px; margin-top:14px}
+
+/* ============ Platforms page ============ */
+.plist{display:flex; flex-direction:column; margin:44px 0}
+.prow{display:grid; grid-template-columns:56px 1.2fr 1fr 170px; gap:20px; align-items:center;
+  padding:20px 18px; border-bottom:1px solid var(--line); transition:.2s; border-radius:12px}
+.prow:hover{background:var(--glass)}
+.prow .pic{width:46px;height:46px; border-radius:12px; border:1px solid var(--line); background:var(--glass);
+  display:grid; place-items:center; color:var(--acc-hi)}
+.prow .pname{font-family:var(--fh); font-weight:600; font-size:16px}
+.prow .pdom{font-family:var(--fm); font-size:11.5px; color:var(--dim); margin-top:2px}
+.caps{display:flex; gap:16px; flex-wrap:wrap}
+.cap{display:flex; align-items:center; gap:6px; font-size:12.5px; color:var(--mut)}
+.cap svg{width:14px;height:14px}
+.cap.y svg{color:var(--ok)} .cap.n svg{color:var(--dim); opacity:.45}
+.mode-tag{justify-self:end; font-family:var(--fm); font-size:10.5px; padding:5px 11px; border-radius:99px; letter-spacing:.04em}
+.mode-tag.live{color:var(--ok); border:1px solid rgba(74,222,128,.3); background:rgba(74,222,128,.07)}
+.mode-tag.be{color:var(--cyan); border:1px solid rgba(76,201,240,.3); background:rgba(76,201,240,.07)}
+
+/* ============ History page ============ */
+.hist-actions{display:flex; justify-content:space-between; align-items:center; margin:36px 0 14px}
+.hist-actions h2{font-size:19px}
+.btn-danger{padding:8px 15px; border-radius:9px; border:1px solid rgba(248,113,113,.35); color:#f3a8a8;
+  font-size:12.5px; font-weight:500; display:inline-flex; gap:7px; align-items:center; transition:.2s}
+.btn-danger:hover{background:rgba(248,113,113,.1)}
+.btn-danger svg{width:14px;height:14px}
+.hrow{display:grid; grid-template-columns:64px 1fr 110px 130px 130px; gap:18px; align-items:center;
+  padding:14px 12px; border-bottom:1px solid var(--line); border-radius:12px; transition:.2s}
+.hrow:hover{background:var(--glass)}
+.hrow .hthumb{width:64px;height:44px; border-radius:8px; object-fit:cover; border:1px solid var(--line); background:#111}
+.hrow .hthumb.ph{display:grid; place-items:center; color:var(--dim)}
+.hrow .ht{font-weight:500; font-size:14px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.hrow .hm{font-family:var(--fm); font-size:11px; color:var(--dim); margin-top:2px}
+.hbadge{font-family:var(--fm); font-size:10.5px; padding:4px 9px; border-radius:6px; background:var(--acc-dim);
+  color:var(--acc-hi); border:1px solid rgba(157,92,255,.3); justify-self:start}
+.hdate{font-family:var(--fm); font-size:11.5px; color:var(--dim)}
+.hacts{display:flex; gap:7px; justify-self:end}
+.icon-btn{width:32px;height:32px; border-radius:8px; border:1px solid var(--line); display:grid; place-items:center;
+  color:var(--mut); transition:.2s}
+.icon-btn:hover{color:var(--ink); border-color:var(--line2)}
+.icon-btn.red:hover{color:var(--err); border-color:rgba(248,113,113,.4)}
+.icon-btn svg{width:14px;height:14px}
+.empty{padding:80px 20px; text-align:center; color:var(--dim)}
+.empty .ei{width:60px;height:60px; margin:0 auto 20px; border-radius:16px; border:1px solid var(--line);
+  display:grid; place-items:center; color:var(--dim)}
+.empty h3{color:var(--mut); margin-bottom:8px}
+.empty p{font-size:13.5px; max-width:340px; margin:0 auto 22px}
+
+/* ============ About ============ */
+.about-body{max-width:720px; padding:56px 0}
+.about-body p{color:var(--mut); margin-bottom:20px; font-size:15.5px}
+.principle{display:flex; gap:16px; padding:20px 4px; border-bottom:1px solid var(--line)}
+.principle:first-of-type{border-top:1px solid var(--line)}
+.principle svg{width:18px;height:18px; color:var(--acc-hi); flex:none; margin-top:3px}
+.principle h4{font-size:15px; margin-bottom:4px}
+.principle p{color:var(--mut); font-size:13.5px; margin:0}
+
+/* ============ API docs ============ */
+.api-layout{display:grid; grid-template-columns:220px 1fr; gap:48px; padding:52px 0 80px}
+.api-side{position:sticky; top:96px; align-self:start; display:flex; flex-direction:column; gap:2px}
+.api-side a{padding:7px 12px; border-radius:8px; font-size:13px; color:var(--mut); border-left:2px solid transparent; transition:.2s}
+.api-side a:hover{color:var(--ink); background:var(--glass)}
+.api-side .grp{font-family:var(--fm); font-size:10px; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--dim); margin:18px 0 8px 12px}
+.api-block{margin-bottom:54px; scroll-margin-top:100px}
+.api-block .ep-head{display:flex; align-items:center; gap:12px; margin-bottom:8px}
+.method{font-family:var(--fm); font-size:11px; font-weight:600; padding:4px 10px; border-radius:6px; letter-spacing:.05em}
+.method.post{color:#c9a4ff; background:rgba(157,92,255,.14); border:1px solid rgba(157,92,255,.35)}
+.method.get{color:#7ee2a8; background:rgba(74,222,128,.1); border:1px solid rgba(74,222,128,.3)}
+.method.del{color:#f3a8a8; background:rgba(248,113,113,.1); border:1px solid rgba(248,113,113,.3)}
+.api-block .path{font-family:var(--fm); font-size:15px; font-weight:500}
+.api-block>p{color:var(--mut); font-size:14px; margin-bottom:18px; max-width:640px}
+.codebox{border:1px solid var(--line); border-radius:12px; overflow:hidden; background:rgba(10,10,17,.75); margin-bottom:16px}
+.codebox .cb-head{display:flex; justify-content:space-between; align-items:center; padding:9px 15px;
+  border-bottom:1px solid var(--line); font-family:var(--fm); font-size:10.5px; letter-spacing:.15em;
+  text-transform:uppercase; color:var(--dim); background:rgba(255,255,255,.02)}
+.copy-btn{display:inline-flex; gap:6px; align-items:center; font-size:11px; color:var(--mut); transition:.2s; font-family:var(--fm)}
+.copy-btn:hover{color:var(--acc-hi)}
+.copy-btn svg{width:13px;height:13px}
+.codebox pre{padding:16px 18px; overflow-x:auto; font-family:var(--fm); font-size:12.5px; line-height:1.7; color:#c9c9da}
+.err-table{width:100%; border-collapse:collapse; font-size:13px}
+.err-table th{text-align:left; font-family:var(--fm); font-size:10.5px; letter-spacing:.15em; text-transform:uppercase;
+  color:var(--dim); padding:10px 14px; border-bottom:1px solid var(--line); font-weight:500}
+.err-table td{padding:12px 14px; border-bottom:1px solid var(--line); color:var(--mut)}
+.err-table td:first-child{font-family:var(--fm); font-size:12px; color:var(--ink); white-space:nowrap}
+
+/* ============ Footer ============ */
+footer{border-top:1px solid var(--line); margin-top:60px; background:rgba(10,10,16,.5)}
+.f-grid{display:grid; grid-template-columns:1.6fr 1fr 1fr; gap:40px; padding:56px 0 40px}
+.f-brand p{color:var(--dim); font-size:13px; margin-top:14px; max-width:300px}
+.f-col h5{font-family:var(--fm); font-size:10.5px; letter-spacing:.2em; text-transform:uppercase; color:var(--dim); margin-bottom:16px; font-weight:500}
+.f-col a{display:block; color:var(--mut); font-size:13.5px; padding:4.5px 0; transition:.2s}
+.f-col a:hover{color:var(--acc-hi)}
+.f-legal{border-top:1px solid var(--line); padding:22px 0; display:flex; gap:14px; align-items:center;
+  flex-wrap:wrap; color:var(--dim); font-size:12.5px}
+.f-legal a{color:var(--mut)} .f-legal a:hover{color:var(--acc-hi)}
+.f-legal .cp{margin-left:auto; font-family:var(--fm); font-size:11.5px}
+.f-disclaimer{border-top:1px solid var(--line); padding:18px 0 26px; color:var(--dim); font-size:12px; line-height:1.7; max-width:840px}
+
+/* ============ Queue drawer ============ */
+#queueDrawer{position:fixed; right:20px; bottom:20px; width:370px; max-width:calc(100vw - 32px); z-index:80;
+  border-radius:var(--r); background:rgba(13,13,21,.88); border:1px solid var(--line2);
+  backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px);
+  box-shadow:0 30px 80px rgba(0,0,0,.6); transform:translateY(20px); opacity:0; pointer-events:none; transition:.35s cubic-bezier(.2,.7,.2,1)}
+#queueDrawer.open{transform:none; opacity:1; pointer-events:auto}
+.q-head{display:flex; align-items:center; gap:10px; padding:15px 18px; border-bottom:1px solid var(--line)}
+.q-head h4{font-size:14.5px; flex:1; display:flex; gap:9px; align-items:center}
+.q-head h4 svg{width:15px;height:15px; color:var(--acc-hi)}
+.q-list{max-height:340px; overflow-y:auto; padding:10px 18px 16px}
+.q-item{padding:11px 0; border-bottom:1px solid var(--line)}
+.q-item:last-child{border:none}
+.q-item .qn{display:flex; justify-content:space-between; gap:12px; font-size:13px; font-weight:500; margin-bottom:7px}
+.q-item .qn span{font-family:var(--fm); font-size:11px; color:var(--dim); white-space:nowrap}
+.q-track{height:5px; border-radius:99px; background:rgba(255,255,255,.08); overflow:hidden}
+.q-track i{display:block; height:100%; width:0%; background:linear-gradient(90deg,var(--acc),var(--acc-hi)); border-radius:99px; transition:width .3s}
+.q-item.done .q-track i{background:var(--ok)}
+.q-item.fail .q-track i{background:var(--err)}
+.q-item .qs{font-family:var(--fm); font-size:10.5px; color:var(--dim); margin-top:6px}
+.q-item.done .qs{color:var(--ok)} .q-item.fail .qs{color:var(--err)}
+
+/* ============ Modal & toast ============ */
+.modal-back{position:fixed; inset:0; z-index:90; background:rgba(4,4,8,.7); backdrop-filter:blur(8px);
+  display:grid; place-items:center; padding:20px; animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0}}
+.modal{width:100%; max-width:440px; border-radius:20px; background:rgba(16,16,26,.92); border:1px solid var(--line2);
+  backdrop-filter:blur(24px); padding:28px; box-shadow:0 40px 100px rgba(0,0,0,.7);
+  animation:modalIn .35s cubic-bezier(.2,.9,.3,1.2); max-height:82vh; overflow-y:auto}
+@keyframes modalIn{from{opacity:0; transform:scale(.94) translateY(14px)}}
+.modal h3{font-size:19px; margin-bottom:6px}
+.modal .msub{color:var(--mut); font-size:13.5px; margin-bottom:22px}
+.oauth{display:flex; align-items:center; justify-content:center; gap:10px; width:100%; padding:12px;
+  border-radius:11px; border:1px solid var(--line2); background:var(--glass); font-weight:500; font-size:14px; transition:.2s; margin-bottom:10px}
+.oauth:hover{background:var(--glass2); border-color:var(--acc)}
+.oauth svg{width:17px;height:17px}
+.mdiv{display:flex; align-items:center; gap:14px; color:var(--dim); font-family:var(--fm); font-size:10.5px;
+  letter-spacing:.15em; margin:18px 0}
+.mdiv::before,.mdiv::after{content:""; flex:1; height:1px; background:var(--line)}
+.legal-body{color:var(--mut); font-size:13.5px; line-height:1.75}
+.legal-body h4{color:var(--ink); margin:18px 0 8px; font-size:15px}
+.legal-body p{margin-bottom:12px}
+
+#toasts{position:fixed; top:76px; right:20px; z-index:100; display:flex; flex-direction:column; gap:10px; pointer-events:none}
+.toast{display:flex; gap:11px; align-items:flex-start; padding:13px 16px; border-radius:12px; min-width:260px; max-width:360px;
+  background:rgba(16,16,26,.92); border:1px solid var(--line2); backdrop-filter:blur(20px);
+  box-shadow:0 20px 50px rgba(0,0,0,.5); font-size:13.5px; animation:toastIn .35s cubic-bezier(.2,.9,.3,1.15)}
+@keyframes toastIn{from{opacity:0; transform:translateX(30px)}}
+.toast.out{opacity:0; transform:translateX(30px); transition:.3s}
+.toast svg{width:16px;height:16px; flex:none; margin-top:2px}
+.toast.ok svg{color:var(--ok)} .toast.err svg{color:var(--err)} .toast.info svg{color:var(--acc-hi)}
+
+/* ============ Responsive ============ */
+@media (max-width:960px){
+  .media-card{grid-template-columns:1fr}
+  .mc-preview{border-right:none; border-bottom:1px solid var(--line); min-height:240px}
+  .api-layout{grid-template-columns:1fr}
+  .api-side{position:static; flex-direction:row; flex-wrap:wrap; gap:6px}
+  .api-side a{border-left:none; border:1px solid var(--line); border-radius:8px}
+  .api-side .grp{display:none}
+  .f-grid{grid-template-columns:1fr 1fr}
+}
+@media (max-width:760px){
+  .nav-links,.guest-btn span.txt{display:none}
+  .menu-btn{display:grid}
+  .m-nav{display:none; position:absolute; top:64px; left:0; right:0; padding:10px 18px 16px;
+    background:rgba(10,10,16,.95); border-bottom:1px solid var(--line); backdrop-filter:blur(20px)}
+  .m-nav.open{display:flex; flex-direction:column}
+  .m-nav a{padding:12px 8px; color:var(--mut); border-bottom:1px solid var(--line); font-size:14.5px}
+  .hero{padding:64px 0 40px}
+  .urlbox{flex-direction:column}
+  .urlbox .licon{display:none}
+  .urlbox input{padding:10px 14px 4px}
+  .btn-accent,.paste-btn{justify-content:center}
+  .dt form{flex-direction:column}
+  .dt form .btn-ghost{justify-content:center}
+  .feat-list{grid-template-columns:1fr}
+  .feat:nth-child(odd){border-right:none}
+  .step{grid-template-columns:1fr; gap:12px}
+  .step .num{font-size:32px}
+  .prow{grid-template-columns:48px 1fr; row-gap:12px}
+  .prow .mode-tag{justify-self:start; grid-column:2}
+  .hrow{grid-template-columns:56px 1fr; row-gap:8px}
+  .hbadge,.hdate{grid-column:2}
+  .hacts{grid-column:1 / -1; justify-self:start}
+  .f-grid{grid-template-columns:1fr; gap:28px}
+  .f-legal .cp{margin-left:0}
+  .section{padding:60px 0}
+}
+</style>
+</head>
+<body>
+
+<div class="aurora"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
+<div class="dotgrid"></div>
+
+<!-- ================= NAV ================= -->
+<header>
+  <div class="wrap nav">
+    <a href="#/" class="brand">
+      <span class="mark"><i data-lucide="download"></i></span>
+      <span>MediaHub<small>MEDIA DOWNLOADER</small></span>
+    </a>
+    <nav class="nav-links" id="navLinks">
+      <a href="#/" data-r="/">Home</a>
+      <a href="#/platforms" data-r="/platforms">Platforms</a>
+      <a href="#/history" data-r="/history">History</a>
+      <a href="#/api-docs" data-r="/api-docs">API Docs</a>
+      <a href="#/about" data-r="/about">About</a>
+    </nav>
+    <div class="nav-right">
+      <button class="qbtn" id="qToggle" title="Download queue">
+        <i data-lucide="archive"></i><span class="badge" id="qBadge" style="display:none">0</span>
+      </button>
+      <button class="guest-btn" id="authBtn"><i data-lucide="user" width="14"></i><span class="txt" id="authTxt">Guest</span></button>
+      <button class="qbtn menu-btn" id="menuBtn"><i data-lucide="menu"></i></button>
+    </div>
+  </div>
+  <div class="m-nav" id="mNav">
+    <a href="#/">Home</a><a href="#/platforms">Platforms</a><a href="#/history">History</a>
+    <a href="#/api-docs">API Docs</a><a href="#/about">About</a>
+  </div>
+</header>
+
+<main id="app">
+<!-- ================= HOME ================= -->
+<section class="page on" id="page-home">
+  <div class="wrap hero">
+    <div class="eyebrow"><i></i>Public &amp; authorized content only — no DRM circumvention</div>
+    <h1>Download Media.<span class="row2"><span class="accent">Simple. Fast.</span></span></h1>
+    <p class="desc">Paste a link and download available videos, images, or audio in supported formats.</p>
+
+    <form class="urlbox" id="urlForm">
+      <span class="licon"><i data-lucide="link-2"></i></span>
+      <input id="urlInput" type="text" placeholder="Paste your video or media link here..." autocomplete="off" spellcheck="false"/>
+      <button type="button" class="paste-btn" id="pasteBtn" title="Paste from clipboard"><i data-lucide="clipboard" width="16"></i></button>
+      <button type="submit" class="btn-accent" id="analyzeBtn"><i data-lucide="zap" width="16"></i>Analyze</button>
+    </form>
+
+    <!-- Console phân tích -->
+    <div class="analyze-zone" id="analyzeZone">
+      <div class="console">
+        <div class="chead"><span class="dots"><i></i><i></i><i></i></span>mediahub · analyze</div>
+        <div id="consoleLines"></div>
+        <div class="pbar"><i id="analyzeBar"></i></div>
+      </div>
+    </div>
+
+    <div class="errbox" id="errBox">
+      <i data-lucide="alert-triangle"></i>
+      <div><b>Unsupported or invalid URL.</b><br/>Please check the link and try again.</div>
+    </div>
+
+    <div class="result-zone" id="resultZone"></div>
+
+    <div class="chips" id="heroChips"></div>
+    <div class="tagline">Supported platforms<span class="sep">•</span>Fast processing<span class="sep">•</span>High-quality downloads where available</div>
+
+    <!-- Quick type detector: ảnh hay video? -->
+    <div class="dt glass reveal" id="detectTool">
+      <div class="dt-top">
+        <span class="dt-ic"><i data-lucide="scan-search"></i></span>
+        <div><b>Quick type detector</b><small>Paste a direct media URL — is it an image or a video?</small></div>
+      </div>
+      <form id="detectForm">
+        <input id="detectInput" placeholder="https://example.com/photo.jpg  ·  https://example.com/clip.mp4" spellcheck="false" autocomplete="off"/>
+        <button class="btn-ghost" type="submit"><i data-lucide="search" width="14"></i>Detect</button>
+      </form>
+      <div class="dt-out" id="detectOut"></div>
+    </div>
+  </div>
+
+  <!-- How it works -->
+  <div class="wrap section">
+    <div class="section-head reveal">
+      <div class="kick">How it works</div>
+      <h2>Three steps. Zero friction.</h2>
+      <p>A provider-based pipeline resolves your link against the matching platform adapter — or sniffs the file type directly — and lists every format the source legitimately exposes.</p>
+    </div>
+    <div class="steps">
+      <div class="step reveal"><div class="num">01</div><div>
+        <h3>Paste the link</h3>
+        <p>Copy any public post, video, track, or direct media URL from a supported platform. Smart detection parses the URL structure before anything is requested.</p>
+        <div class="code">→ POST /api/analyze · { "url": "..." }</div>
+      </div></div>
+      <div class="step reveal"><div class="num">02</div><div>
+        <h3>Analyze the media</h3>
+        <p>Platform links go to their provider adapter. Direct links go through a four-layer sniff: extension, HTTP headers, magic bytes, and the browser's own decoders.</p>
+        <div class="code">→ canHandle(url) · analyze(url) · detectMedia(url)</div>
+      </div></div>
+      <div class="step reveal"><div class="num">03</div><div>
+        <h3>Download what you need</h3>
+        <p>Pick individual formats or bundle video, images, and audio together. Multiple files are packed into a single ZIP through the download queue.</p>
+        <div class="code">→ POST /api/download · queue · zip-bundling</div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Features -->
+  <div class="wrap section">
+    <div class="section-head reveal">
+      <div class="kick">Features</div>
+      <h2>Built like a proper tool.</h2>
+    </div>
+    <div class="feat-list reveal">
+      <div class="feat"><div class="fi"><i data-lucide="scan-line"></i></div><div>
+        <h4>Smart URL detection</h4><p>Every link is parsed for platform and content type — video, image, album, or audio — before any request is made.</p></div></div>
+      <div class="feat"><div class="fi"><i data-lucide="binary"></i></div><div>
+        <h4>4-layer type sniffing</h4><p>Extension, HTTP Content-Type, magic bytes, and the browser's native decoders vote on what a link really is. Strongest evidence wins.</p></div></div>
+      <div class="feat"><div class="fi"><i data-lucide="play-circle"></i></div><div>
+        <h4>Native in-page preview</h4><p>Sniffed videos play in a real player, audio gets an inline player, images render directly — all before you download.</p></div></div>
+      <div class="feat"><div class="fi"><i data-lucide="layers"></i></div><div>
+        <h4>Provider architecture</h4><p>Each platform runs through an isolated adapter implementing one shared interface. Adding a new platform means adding one file.</p></div></div>
+      <div class="feat"><div class="fi"><i data-lucide="archive"></i></div><div>
+        <h4>Download queue</h4><p>Multiple files queue up with live progress. Batch selections are bundled into a single ZIP automatically.</p></div></div>
+      <div class="feat"><div class="fi"><i data-lucide="history"></i></div><div>
+        <h4>Local history</h4><p>Recent downloads are stored on your device — re-download, remove single entries, or clear everything at once.</p></div></div>
+      <div class="feat"><div class="fi"><i data-lucide="shield-check"></i></div><div>
+        <h4>Content-respecting by design</h4><p>Only public or authorized content is processed. DRM, paywalls, and platform protections are never bypassed.</p></div></div>
+      <div class="feat"><div class="fi"><i data-lucide="zap"></i></div><div>
+        <h4>Original quality first</h4><p>Formats are sorted so the best quality the source officially exposes is always offered first — no re-encoding.</p></div></div>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="wrap section">
+    <div class="section-head reveal">
+      <div class="kick">FAQ</div>
+      <h2>Questions, answered.</h2>
+    </div>
+    <div class="faq reveal">
+      <details><summary>Is it legal to download media from these platforms?<i data-lucide="plus"></i></summary>
+        <div class="fa-a">It depends on the content and the platform's terms. This tool is intended for public content that you are authorized to access and download — your own uploads, content licensed for reuse, or material the platform explicitly permits saving. Always check the source platform's terms of use and applicable copyright law.</div></details>
+      <details><summary>Does MediaHub bypass DRM or paywalls?<i data-lucide="plus"></i></summary>
+        <div class="fa-a">No. Providers never circumvent DRM, encryption, paywalls, login requirements, or any technical protection measure. If a source is protected, the provider reports it as unavailable instead.</div></details>
+      <details><summary>How does MediaHub know if a link is an image or a video?<i data-lucide="plus"></i></summary>
+        <div class="fa-a">Direct links go through a four-layer check: the URL extension, the server's declared Content-Type, the file's magic bytes (binary signature), and finally the browser's own image/video decoders. The strongest evidence wins, and the verdict — with its confidence level — is shown on the media card and in the Quick Detector.</div></details>
+      <details><summary>What happens to watermarks?<i data-lucide="plus"></i></summary>
+        <div class="fa-a">Media is delivered exactly as the source exposes it. The service does not alter, crop, or remove watermarks — that would misattribute the original creator.</div></details>
+      <details><summary>Where are the files processed?<i data-lucide="plus"></i></summary>
+        <div class="fa-a">In this build, analysis metadata comes from public oEmbed endpoints and files are assembled in your browser. In the full architecture, a backend worker resolves media streams per provider — nothing is stored on our servers beyond the processing window.</div></details>
+      <details><summary>Do I need an account?<i data-lucide="plus"></i></summary>
+        <div class="fa-a">No. Guest mode keeps your download history in local storage on this device. Signing in (Google or GitHub) syncs history and favorite links across devices.</div></details>
+      <details><summary>Which formats are supported?<i data-lucide="plus"></i></summary>
+        <div class="fa-a">Whatever the source legitimately offers — typically MP4 for video at several qualities, MP3/M4A for audio, and JPG/PNG/WebP for images. Available formats are listed on the media card after analysis.</div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ================= HISTORY ================= -->
+<section class="page" id="page-history">
+  <div class="wrap">
+    <div class="phead">
+      <div class="kick">History</div>
+      <h1>Recent Downloads</h1>
+      <p>Your downloads from this device, stored locally. Nothing is synced unless you sign in.</p>
+    </div>
+    <div id="historyBody"></div>
+  </div>
+</section>
+
+<!-- ================= PLATFORMS ================= -->
+<section class="page" id="page-platforms">
+  <div class="wrap">
+    <div class="phead">
+      <div class="kick">Supported platforms</div>
+      <h1>Providers &amp; capabilities</h1>
+      <p>Each platform runs through an isolated provider adapter. "Live metadata" resolves directly from public oEmbed endpoints; "Backend provider" routes through the server-side worker; direct links are type-sniffed in the browser.</p>
+    </div>
+    <div class="plist" id="platformList"></div>
+  </div>
+</section>
+
+<!-- ================= ABOUT ================= -->
+<section class="page" id="page-about">
+  <div class="wrap">
+    <div class="phead">
+      <div class="kick">About</div>
+      <h1>MediaHub Downloader</h1>
+      <p>A focused tool for saving media you are entitled to save.</p>
+    </div>
+    <div class="about-body">
+      <p>MediaHub Downloader exists because saving media should be simple — and honest. Creators publish videos, images, and audio across a dozen platforms, and retrieving your own uploads, licensed assets, or publicly shared media often means fighting with screenshots and screen recorders. MediaHub centralizes that into one clean pipeline: paste a link, see what is available, download what you need.</p>
+      <p>Under the hood it is a provider architecture. Every platform is an isolated adapter implementing one shared interface — URL matching, metadata analysis, and format resolution — so new sources can be added without touching the core. Direct media links bypass providers entirely and are classified by a four-layer content-type sniffer.</p>
+      <h4 class="accent" style="margin:34px 0 6px; font-family:var(--fm); font-size:11px; letter-spacing:.2em; text-transform:uppercase">Content principles</h4>
+      <div class="principle"><i data-lucide="globe"></i><div><h4>Public &amp; authorized content only</h4><p>Providers only process content that is publicly accessible or that the requesting user is authorized to download — never private, gated, or paywalled material.</p></div></div>
+      <div class="principle"><i data-lucide="lock"></i><div><h4>No DRM circumvention</h4><p>Encrypted, DRM-protected, or technically restricted media is reported as unavailable. The service never attempts to break protection mechanisms.</p></div></div>
+      <div class="principle"><i data-lucide="file-text"></i><div><h4>Respect platform terms</h4><p>Each provider operates within the source platform's public APIs and terms of use, honoring rate limits and robots directives.</p></div></div>
+      <div class="principle"><i data-lucide="droplets"></i><div><h4>No watermark tampering</h4><p>Media is delivered as the source exposes it. Watermarks and attribution are never altered or removed.</p></div></div>
+      <div class="principle"><i data-lucide="scale"></i><div><h4>Copyright first</h4><p>Users are responsible for respecting copyright law. When in doubt, ask the creator for permission.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= API DOCS ================= -->
+<section class="page" id="page-api-docs">
+  <div class="wrap">
+    <div class="phead">
+      <div class="kick">Developer reference</div>
+      <h1>API Documentation</h1>
+      <p>REST endpoints behind MediaHub. All request and response bodies are JSON. Versioned under <span class="mono accent">/v1</span>.</p>
+    </div>
+    <div class="api-layout">
+      <aside class="api-side">
+        <div class="grp">Endpoints</div>
+        <a href="#ep-analyze">POST /api/analyze</a>
+        <a href="#ep-download">POST /api/download</a>
+        <a href="#ep-history">GET /api/history</a>
+        <a href="#ep-delhist">DELETE /api/history/:id</a>
+        <a href="#ep-providers">GET /api/providers</a>
+        <a href="#ep-sniff">POST /api/sniff</a>
+        <div class="grp">Resources</div>
+        <a href="#ep-provider-iface">Provider interface</a>
+        <a href="#ep-errors">Error codes</a>
+      </aside>
+      <div>
+        <div class="api-block" id="ep-analyze">
+          <div class="ep-head"><span class="method post">POST</span><span class="path">/api/analyze</span></div>
+          <p>Resolves a URL against the provider registry. Returns platform, content type, preview metadata, and all available formats.</p>
+          <div class="codebox"><div class="cb-head">Request<button class="copy-btn" data-copy><i data-lucide="copy"></i>Copy</button></div><pre>{
+  "url": "https://example.com/video"
+}</pre></div>
+          <div class="codebox"><div class="cb-head">200 Response<button class="copy-btn" data-copy><i data-lucide="copy"></i>Copy</button></div><pre>{
+  "platform": "example",
+  "type": "video",
+  "title": "Example Video",
+  "thumbnail": "...",
+  "formats": [
+    {
+      "quality": "1080p",
+      "format": "mp4"
+    }
+  ]
+}</pre></div>
+        </div>
+
+        <div class="api-block" id="ep-download">
+          <div class="ep-head"><span class="method post">POST</span><span class="path">/api/download</span></div>
+          <p>Queues a download job for one or more format IDs. Batch jobs are bundled as ZIP by the worker. Returns a job handle for progress polling.</p>
+          <div class="codebox"><div class="cb-head">Request<button class="copy-btn" data-copy><i data-lucide="copy"></i>Copy</button></div><pre>{
+  "url": "https://example.com/video",
+  "format_ids": ["1080p-mp4", "audio-mp3"],
+  "bundle": "zip"
+}</pre></div>
+          <div class="codebox"><div class="cb-head">202 Response<button class="copy-btn" data-copy><i data-lucide="copy"></i>Copy</button></div><pre>{
+  "job_id": "job_8fk2ma",
+  "status": "queued",
+  "files": 2
+}</pre></div>
+        </div>
+
+        <div class="api-block" id="ep-sniff">
+          <div class="ep-head"><span class="method post">POST</span><span class="path">/api/sniff</span></div>
+          <p>Content-type detection for direct media URLs. Checks extension, performs a ranged GET for magic bytes, and returns the verdict with per-layer evidence.</p>
+          <div class="codebox"><div class="cb-head">200 Response<button class="copy-btn" data-copy><i data-lucide="copy"></i>Copy</button></div><pre>{
+  "type": "video",
+  "mime": "video/mp4",
+  "method": "Magic bytes",
+  "confidence": "high",
+  "evidence": {
+    "extension": "mp4",
+    "http_content_type": "video/mp4",
+    "magic_bytes": "ftypisom"
+  }
+}</pre></div>
+        </div>
+
+        <div class="api-block" id="ep-history">
+          <div class="ep-head"><span class="method get">GET</span><span class="path">/api/history</span></div>
+          <p>Returns the authenticated user's download history, newest first. Guests use local storage instead of this endpoint.</p>
+          <div class="codebox"><div class="cb-head">200 Response<button class="copy-btn" data-copy><i data-lucide="copy"></i>Copy</button></div><pre>[
+  {
+    "id": "dl_01",
+    "title": "Example Video",
+    "platform": "example",
+    "format": "mp4-1080p",
+    "url": "https://example.com/video",
+    "created_at": "2025-01-14T09:32:00Z"
+  }
+]</pre></div>
+        </div>
+
+        <div class="api-block" id="ep-delhist">
+          <div class="ep-head"><span class="method del">DELETE</span><span class="path">/api/history/:id</span></div>
+          <p>Removes a single history entry. Returns <span class="mono">204 No Content</span> on success. Use <span class="mono">DELETE /api/history</span> without an ID to clear all entries.</p>
+        </div>
+
+        <div class="api-block" id="ep-providers">
+          <div class="ep-head"><span class="method get">GET</span><span class="path">/api/providers</span></div>
+          <p>Lists registered providers and their capabilities — useful for rendering UI dynamically instead of hard-coding supported platforms.</p>
+          <div class="codebox"><div class="cb-head">200 Response<button class="copy-btn" data-copy><i data-lucide="copy"></i>Copy</button></div><pre>[
+  {
+    "id": "youtube",
+    "name": "YouTube",
+    "capabilities": { "video": true, "images": false, "audio": true }
+  }
+]</pre></div>
+        </div>
+
+        <div class="api-block" id="ep-provider-iface">
+          <div class="ep-head"><span class="method get">TS</span><span class="path">Provider interface</span></div>
+          <p>Every platform adapter implements the same contract. The registry picks the first provider whose <span class="mono">canHandle</span> returns true.</p>
+          <div class="codebox"><div class="cb-head">providers/provider.interface.ts<button class="copy-btn" data-copy><i data-lucide="copy"></i>Copy</button></div><pre>interface MediaProvider {
+  canHandle(url: string): boolean;
+  analyze(url: string): Promise&lt;MediaInfo&gt;;
+  getFormats(media: MediaInfo): Promise&lt;MediaFormat[]&gt;;
+}</pre></div>
+        </div>
+
+        <div class="api-block" id="ep-errors">
+          <div class="ep-head"><span class="method get">REF</span><span class="path">Error codes</span></div>
+          <table class="err-table">
+            <tr><th>Code</th><th>Meaning</th></tr>
+            <tr><td>400 invalid_url</td><td>The URL is malformed or uses an unsupported scheme.</td></tr>
+            <tr><td>415 unsupported_platform</td><td>No registered provider can handle this link.</td></tr>
+            <tr><td>422 not_media</td><td>The URL is reachable but contains no decodable media.</td></tr>
+            <tr><td>403 private_content</td><td>Content is private or requires authentication — not processed.</td></tr>
+            <tr><td>451 drm_protected</td><td>Source is DRM-protected or technically restricted; refused by policy.</td></tr>
+            <tr><td>429 rate_limited</td><td>Too many requests. Honor <span class="mono">Retry-After</span>.</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+  <div class="wrap">
+    <div class="f-grid">
+      <div class="f-brand">
+        <a href="#/" class="brand"><span class="mark"><i data-lucide="download"></i></span><span>MediaHub<small>MEDIA DOWNLOADER</small></span></a>
+        <p>One pipeline for saving the media you are entitled to save — across every supported platform.</p>
+      </div>
+      <div class="f-col">
+        <h5>Quick links</h5>
+        <a href="#/">Home</a><a href="#/platforms">Platforms</a><a href="#/history">History</a>
+        <a href="#/api-docs">API</a><a href="#/about">About</a>
+      </div>
+      <div class="f-col">
+        <h5>Legal</h5>
+        <a href="#" data-legal="terms">Terms of Service</a>
+        <a href="#" data-legal="privacy">Privacy Policy</a>
+        <a href="#" data-legal="copyright">Copyright Policy</a>
+      </div>
+    </div>
+    <div class="f-legal">
+      <a href="#" data-legal="terms">Terms of Service</a><span>·</span>
+      <a href="#" data-legal="privacy">Privacy Policy</a><span>·</span>
+      <a href="#" data-legal="copyright">Copyright Policy</a>
+      <span class="cp">© 2025 MediaHub Downloader</span>
+    </div>
+    <p class="f-disclaimer">This service is intended for downloading content that users are authorized to access and download. The service must respect platform restrictions, copyright, DRM, and applicable terms of use.</p>
+  </div>
+</footer>
+
+<!-- ================= QUEUE DRAWER ================= -->
+<aside id="queueDrawer">
+  <div class="q-head">
+    <h4><i data-lucide="archive"></i>Download Queue</h4>
+    <button class="icon-btn" id="qClose" title="Close"><i data-lucide="x"></i></button>
+  </div>
+  <div class="q-list" id="qList"></div>
+</aside>
+
+<div id="modalRoot"></div>
+<div id="toasts"></div>
+
+<script>
+/* ============================================================
+   MediaHub Downloader — bản full chạy client-side.
+   Kiến trúc provider mô phỏng đúng hợp đồng backend:
+   { canHandle, analyze, formats } — khi lên Node/Next.js chỉ cần
+   chuyển mỗi provider thành providers/<id>.provider.ts
+   Module Content-Type Sniffer (4 lớp) nhận diện ảnh/video/audio.
+   ============================================================ */
+
+const $  = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const slug = s => String(s).normalize('NFKD').replace(/[^\w\s-]/g,'').trim().replace(/\s+/g,'-').slice(0,60) || 'media';
+const uid = () => Math.random().toString(36).slice(2,9);
+const icons = () => { try{ lucide.createIcons(); }catch(e){} };
+
+/* ---------- Provider registry ---------- */
+const PROVIDERS = [
+  { id:'youtube', name:'YouTube', icon:'youtube', dom:'youtube.com · youtu.be',
+    caps:{video:true, images:false, audio:true}, mode:'live', ext:'youtube.com|youtu.be',
+    type:()=> 'video',
+    formats:()=>[
+      {id:'1080', label:'MP4 1080p', kind:'video', note:'Best available — original stream'},
+      {id:'720',  label:'MP4 720p',  kind:'video', note:'Adaptive stream'},
+      {id:'360',  label:'MP4 360p',  kind:'video', note:'Compact size'},
+      {id:'mp3',  label:'MP3 Audio', kind:'audio', note:'Audio track only'}] },
+  { id:'tiktok', name:'TikTok', icon:'music-2', dom:'tiktok.com',
+    caps:{video:true, images:true, audio:true}, mode:'live', ext:'tiktok.com',
+    type:u => /\/photo\//.test(u) ? 'album' : 'video',
+    formats:()=>[
+      {id:'src',  label:'MP4 Source', kind:'video', note:'Delivered as exposed by source — watermark preserved'},
+      {id:'720',  label:'MP4 720p',   kind:'video', note:'Standard quality'},
+      {id:'mp3',  label:'MP3 Audio',  kind:'audio', note:'Original sound track'}] },
+  { id:'instagram', name:'Instagram', icon:'instagram', dom:'instagram.com',
+    caps:{video:true, images:true, audio:false}, mode:'backend', ext:'instagram.com',
+    type:()=>'album',
+    formats:()=>[
+      {id:'img',  label:'JPG Images', kind:'image', note:'All media in the post'},
+      {id:'src',  label:'MP4 Source', kind:'video', note:'When the post contains video'}] },
+  { id:'facebook', name:'Facebook', icon:'facebook', dom:'facebook.com · fb.watch',
+    caps:{video:true, images:true, audio:false}, mode:'backend', ext:'facebook.com|fb.watch',
+    type:()=>'video',
+    formats:()=>[
+      {id:'hd',   label:'MP4 HD',   kind:'video', note:'Highest publicly exposed rendition'},
+      {id:'sd',   label:'MP4 SD',   kind:'video', note:'Standard rendition'}] },
+  { id:'twitter', name:'Twitter / X', icon:'twitter', dom:'x.com · twitter.com',
+    caps:{video:true, images:true, audio:false}, mode:'live', ext:'(x|twitter).com',
+    type:u => /\/photo\//.test(u) ? 'image' : 'video',
+    formats:()=>[
+      {id:'src',  label:'MP4 Source', kind:'video', note:'Original bitrate rendition'},
+      {id:'jpg',  label:'JPG Images', kind:'image', note:'All photos in the post'}] },
+  { id:'reddit', name:'Reddit', icon:'message-square', dom:'reddit.com · redd.it',
+    caps:{video:true, images:true, audio:false}, mode:'live', ext:'reddit.com|redd.it',
+    type:u => /\/comments\//.test(u) ? 'album' : 'video',
+    formats:()=>[
+      {id:'src',  label:'MP4 Source', kind:'video', note:'Hosted rendition (v.redd.it)'},
+      {id:'img',  label:'JPG Images', kind:'image', note:'Gallery items'}] },
+  { id:'pinterest', name:'Pinterest', icon:'pin', dom:'pinterest.com · pin.it',
+    caps:{video:false, images:true, audio:false}, mode:'live', ext:'pinterest.',
+    type:()=>'image',
+    formats:()=>[
+      {id:'orig', label:'JPG Original', kind:'image', note:'Largest publicly exposed size'},
+      {id:'736',  label:'JPG 736px',    kind:'image', note:'Standard pin size'}] },
+  { id:'vimeo', name:'Vimeo', icon:'video', dom:'vimeo.com',
+    caps:{video:true, images:false, audio:false}, mode:'live', ext:'vimeo.com',
+    type:()=>'video',
+    formats:()=>[
+      {id:'1080', label:'MP4 1080p', kind:'video', note:'Best available'},
+      {id:'720',  label:'MP4 720p',  kind:'video', note:'HD stream'},
+      {id:'540',  label:'MP4 540p',  kind:'video', note:'Compact'}] },
+  { id:'twitch', name:'Twitch', icon:'twitch', dom:'twitch.tv',
+    caps:{video:true, images:false, audio:false}, mode:'backend', ext:'twitch.tv',
+    type:()=>'video',
+    formats:()=>[
+      {id:'src',  label:'MP4 Source', kind:'video', note:'Public clip / VOD rendition'},
+      {id:'720',  label:'MP4 720p',   kind:'video', note:'Transcoded quality'}] },
+  { id:'soundcloud', name:'SoundCloud', icon:'cloud', dom:'soundcloud.com',
+    caps:{video:false, images:false, audio:true}, mode:'live', ext:'soundcloud.com',
+    type:()=>'audio',
+    formats:()=>[
+      {id:'mp3h', label:'MP3 128kbps', kind:'audio', note:'Public progressive stream'},
+      {id:'mp3s', label:'MP3 64kbps',  kind:'audio', note:'Compact stream'},
+      {id:'art',  label:'JPG Artwork', kind:'image', note:'Cover art — original size'}] },
+];
+/* Generic provider: mọi URL trỏ thẳng tới file media công khai → type-sniffed */
+const GENERIC = { id:'web', name:'Direct media link', icon:'globe',
+  dom:'any direct media URL · type-sniffed',
+  caps:{video:true, images:true, audio:true}, mode:'backend',
+  type:u => /\.(mp4|webm|mov)(\?|$)/i.test(u) ? 'video'
+        : /\.(mp3|wav|ogg|m4a)(\?|$)/i.test(u) ? 'audio' : 'image',
+  formats:m => m.type==='audio' ? [{id:'src',label:'Original file',kind:'audio',note:'Direct public URL — sniffed as audio'}]
+        : m.type==='video' ? [{id:'src',label:'Original file',kind:'video',note:'Direct public URL — sniffed as video'}]
+        : [{id:'src',label:'Original file',kind:'image',note:'Direct public URL — sniffed as image'}] };
+
+function findProvider(url){
+  try{
+    const u = new URL(url);
+    if(!/^https?:$/.test(u.protocol)) return null;
+    const host = u.hostname.replace(/^www\./,'');
+    return PROVIDERS.find(p => p.ext.split('|').some(d => host === d || host.endsWith('.' + d))) || null;
+  }catch(e){ return null; }
+}
+function tryGeneric(url){
+  try{
+    const u = new URL(url);
+    if(!/^https?:$/.test(u.protocol)) return null;
+    return GENERIC;   // sniff sẽ quyết định thật/false bên dưới
+  }catch(e){ return null; }
+}
+
+/* ---------- Public metadata qua oEmbed (noembed.com, CORS mở) ---------- */
+async function fetchOEmbed(url, timeout=5000){
+  const ctl = new AbortController();
+  const t = setTimeout(()=>ctl.abort(), timeout);
+  try{
+    const r = await fetch('https://noembed.com/embed?url=' + encodeURIComponent(url), {signal:ctl.signal});
+    const j = await r.json();
+    if(j.error) throw new Error(j.error);
+    return j;
+  } finally { clearTimeout(t); }
+}
+function ytId(url){
+  const m = url.match(/(?:youtu\.be\/|v=|shorts\/|embed\/)([\w-]{11})/);
+  return m ? m[1] : null;
+}
+function picsum(seed, w=800, h=800){ return `https://picsum.photos/seed/${encodeURIComponent(seed)}/${w}/${h}.jpg`; }
+function fmtDuration(sec){
+  if(!sec || sec < 0) return null;
+  sec = Math.round(sec);
+  const m = Math.floor(sec/60), s = sec%60;
+  return `${m}:${String(s).padStart(2,'0')}`;
+}
+
+/* ============================================================
+   CONTENT-TYPE SNIFFER — nhận diện ảnh / video / audio từ URL
+   4 lớp song song, lấy bằng chứng mạnh nhất:
+     L1 Extension → L2 HTTP HEAD → L3 Magic bytes → L4 Decoder
+   Mẹo: media elements không chịu CORS (khi không đặt crossorigin)
+   nên L4 gần như luôn chạy được với file công khai.
+   ============================================================ */
+const EXT_TYPES = {
+  image: ['jpg','jpeg','png','gif','webp','avif','bmp','svg','ico','jfif','heic'],
+  video: ['mp4','webm','mov','m4v','mkv','avi','ogv','3gp','ts','flv'],
+  audio: ['mp3','wav','ogg','oga','m4a','aac','flac','opus','wma','aiff'],
+};
+function extOf(url){
+  try{
+    const m = new URL(url).pathname.match(/\.([a-z0-9]{1,5})$/i);
+    return m ? m[1].toLowerCase() : null;
+  }catch(e){ return null; }
+}
+const sniffTimeout = (p, ms) => Promise.race([p, new Promise(r=>setTimeout(()=>r(null), ms))]);
+
+/* L2 — Content-Type từ HTTP HEAD */
+async function probeHead(url){
+  try{
+    const ctl = new AbortController(); const t = setTimeout(()=>ctl.abort(), 3500);
+    const r = await fetch(url, {method:'HEAD', mode:'cors', signal:ctl.signal, redirect:'follow'});
+    clearTimeout(t);
+    const mime = (r.headers.get('content-type')||'').split(';')[0].trim().toLowerCase();
+    if(/^image\//.test(mime)) return {type:'image', mime};
+    if(/^video\//.test(mime)) return {type:'video', mime};
+    if(/^audio\//.test(mime)) return {type:'audio', mime};
+    return null;
+  }catch(e){ return null; }
+}
+
+/* L3 — Magic bytes: chữ ký nhị phân thật (cần CORS; dùng Range cho nhẹ) */
+async function probeMagic(url){
+  try{
+    const ctl = new AbortController(); const t = setTimeout(()=>ctl.abort(), 3500);
+    const r = await fetch(url, {headers:{Range:'bytes=0-63'}, mode:'cors', signal:ctl.signal});
+    clearTimeout(t);
+    const b = new Uint8Array(await r.arrayBuffer());
+    if(b.length < 8) return null;
+    const u8  = (...s)=>s.every((x,i)=>b[i]===x);
+    const txt = (s,off=0)=>[...s].every((c,i)=>b[off+i]===c.charCodeAt(0));
+    if(u8(0xFF,0xD8,0xFF)) return {type:'image', mime:'image/jpeg'};
+    if(u8(0x89,0x50,0x4E,0x47)) return {type:'image', mime:'image/png'};
+    if(txt('GIF8')) return {type:'image', mime:'image/gif'};
+    if(txt('RIFF') && txt('WEBP',8)) return {type:'image', mime:'image/webp'};
+    if(txt('RIFF') && txt('WAVE',8)) return {type:'audio', mime:'audio/wav'};
+    if(txt('OggS')) return {type:'audio', mime:'audio/ogg'};
+    if(txt('ftyp',4)){
+      const brand = String.fromCharCode(b[8],b[9],b[10],b[11]);
+      if(/^(avif|avis|heic|mif1|msf1)/.test(brand)) return {type:'image', mime:'image/avif'};
+      if(/^M4A/.test(brand)) return {type:'audio', mime:'audio/mp4'};
+      return {type:'video', mime:'video/mp4'};
+    }
+    if(u8(0x1A,0x45,0xDF,0xA3)) return {type:'video', mime:'video/webm'};
+    if(txt('ID3') || (b[0]===0xFF && (b[1]&0xE0)===0xE0)) return {type:'audio', mime:'audio/mpeg'};
+    return null;
+  }catch(e){ return null; }
+}
+
+/* L4a — trình duyệt giải mã được như ảnh không? */
+function probeImage(url){
+  return new Promise(res=>{
+    const img = new Image();
+    const done = r => { img.onload = img.onerror = null; res(r); };
+    const t = setTimeout(()=>{ img.src=''; done(null); }, 5000);
+    img.onload  = ()=>{ clearTimeout(t); done(img.naturalWidth>0 ? {type:'image', width:img.naturalWidth, height:img.naturalHeight} : null); };
+    img.onerror = ()=>{ clearTimeout(t); done(null); };
+    img.src = url;
+  });
+}
+
+/* L4b — giải mã được như video không? videoWidth=0 + có duration ⇒ audio */
+function probeVideo(url){
+  return new Promise(res=>{
+    const v = document.createElement('video');
+    v.preload = 'metadata'; v.muted = true;
+    const done = r => { v.onloadedmetadata = v.onerror = null; v.removeAttribute('src'); try{v.load();}catch(e){} res(r); };
+    const t = setTimeout(()=>done(null), 5000);
+    v.onloadedmetadata = ()=>{
+      clearTimeout(t);
+      if(v.videoWidth > 0) done({type:'video', width:v.videoWidth, height:v.videoHeight, duration:v.duration});
+      else if(!isNaN(v.duration) && v.duration > 0) done({type:'audio', duration:v.duration});
+      else done(null);
+    };
+    v.onerror = ()=>{ clearTimeout(t); done(null); };
+    v.src = url;
+  });
+}
+
+/* Orchestrator — trả về { type, mime, method, confidence, width, height, duration, chain } */
+async function detectMedia(url, onStep){
+  const step = (k,v,c)=> onStep && onStep(k,v,c);
+  const ext = extOf(url);
+  const extType = ext ? (EXT_TYPES.image.includes(ext)?'image':EXT_TYPES.video.includes(ext)?'video':EXT_TYPES.audio.includes(ext)?'audio':null) : null;
+  step('sniff · extension', ext ? `${ext} → ${extType||'?'}` : 'no extension', extType?'ok':'warn');
+
+  const [head, magic, img, vid] = await Promise.all([
+    sniffTimeout(probeHead(url), 4200),  sniffTimeout(probeMagic(url), 4200),
+    sniffTimeout(probeImage(url), 6000), sniffTimeout(probeVideo(url), 6000),
+  ]);
+
+  const chain = [
+    {k:'file extension',    v: ext,  ok: !!extType},
+    {k:'HTTP content-type', v: head  ? head.mime : null,               ok: !!head},
+    {k:'magic bytes',       v: magic ? magic.mime : null,              ok: !!magic},
+    {k:'decoder <img>',     v: img   ? `${img.width}×${img.height}` : null, ok: !!img},
+    {k:'decoder <video>',   v: vid   ? (vid.width ? `${vid.width}×${vid.height}` : 'audio track') : null, ok: !!vid},
+  ];
+  chain.forEach(c => step('sniff · '+c.k, c.v || '—', c.ok ? 'ok' : 'warn'));
+
+  const first = head || magic || img || vid;
+  const type = first ? first.type : extType;   // header > magic > decoder > extension
+  const method = head ? 'HTTP Content-Type' : magic ? 'Magic bytes'
+    : img ? 'Decoder <img>' : vid ? 'Decoder <video>' : extType ? 'File extension' : '—';
+  const confidence = (head||magic) ? 'high' : (img||vid) ? 'confirmed' : extType ? 'low' : 'none';
+
+  step('sniff · verdict', type ? `${type.toUpperCase()} — ${method}` : 'UNKNOWN', type ? 'ok' : 'err');
+  return {
+    type, method, confidence,
+    mime: (head||magic) ? (head||magic).mime : null,
+    width:  img ? img.width  : vid ? vid.width  : undefined,
+    height: img ? img.height : vid ? vid.height : undefined,
+    duration: vid ? vid.duration : undefined,
+    chain,
+  };
+}
+
+/* Poster frame cho video direct link (thumbnail nhỏ, an toàn localStorage) */
+function videoPoster(url, at=1.0){
+  return new Promise(res=>{
+    const v = document.createElement('video');
+    v.crossOrigin = 'anonymous'; v.muted = true; v.preload = 'metadata';
+    const done = r => { clearTimeout(t); v.onloadeddata=v.onseeked=v.onerror=null; v.removeAttribute('src'); try{v.load();}catch(e){} res(r); };
+    const t = setTimeout(()=>done(null), 7000);
+    v.onloadeddata = ()=>{ try{ v.currentTime = Math.min(at, Math.max(0.1,(v.duration||2)/3)); }catch(e){ done(null); } };
+    v.onseeked = ()=>{
+      try{
+        const scale = Math.min(1, 480 / (v.videoWidth || 480));
+        const c = document.createElement('canvas');
+        c.width = Math.round((v.videoWidth||480)*scale); c.height = Math.round((v.videoHeight||270)*scale);
+        c.getContext('2d').drawImage(v, 0, 0, c.width, c.height);
+        done(c.toDataURL('image/jpeg', 0.6));
+      }catch(e){ done(null); }   // canvas tainted → server không cho CORS
+    };
+    v.onerror = ()=>done(null);
+    v.src = url;
+  });
+}
+
+/* ---------- Analyze pipeline ---------- */
+let CURRENT = null; // media info đang hiển thị
+
+async function analyze(rawUrl){
+  const url = rawUrl.trim();
+  const zone = $('#analyzeZone'), lines = $('#consoleLines'), bar = $('#analyzeBar');
+  const btn = $('#analyzeBtn');
+  $('#errBox').classList.remove('on');
+  $('#resultZone').classList.remove('on');
+  if(!url){ toast('Paste a link first.', 'info'); return; }
+
+  let info = null, host = '', provider = null;
+  try{ host = new URL(url).hostname.replace(/^www\./,''); }catch(e){}
+  provider = findProvider(url);
+
+  lines.innerHTML = ''; bar.style.width = '4%';
+  zone.classList.add('on'); btn.disabled = true;
+  btn.innerHTML = '<span class="spin" style="display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:rot .7s linear infinite"></span>Analyzing';
+
+  const line = (txt, val, cls='') => {
+    const d = document.createElement('div');
+    d.className = 'cline ' + cls;
+    d.innerHTML = `<span class="p">›</span><span>${esc(txt)}</span><span class="v">${esc(val||'')}</span>`;
+    lines.appendChild(d); icons();
+  };
+  const wait = ms => new Promise(r=>setTimeout(r,ms));
+
+  line('parsing url', host || 'invalid', host ? 'ok' : 'err');
+  bar.style.width = '18%';
+  await wait(320);
+
+  if(!provider && !(provider = tryGeneric(url))){
+    line('matching provider', 'no handler', 'err');
+    bar.style.width = '100%';
+    await wait(500);
+    finishFail(); return;
+  }
+  line('matching provider', provider.name, 'ok');
+  bar.style.width = '36%';
+
+  const generic = provider.id === 'web';
+  let type, sniff = null;
+
+  if(generic){
+    /* Direct link → sniff thật: ảnh, video hay audio? (4 lớp kiểm chứng) */
+    line('sniffing content type', 'extension → header → magic bytes → decoder', 'warn');
+    sniff = await detectMedia(url, (k,v,c)=>line(k,v,c));
+    type = sniff && sniff.type;
+    bar.style.width = '58%';
+    if(!type){
+      line('sniff · verdict', 'no decodable media found', 'err');
+      bar.style.width = '100%';
+      await wait(500);
+      finishFail(); return;   /* URL trỏ tới trang web, không phải media */
+    }
+  } else {
+    type = provider.type ? provider.type(url) : 'video';
+  }
+
+  /* Metadata công khai qua oEmbed (bỏ qua với direct link) */
+  const metaP = generic ? Promise.resolve(null) : fetchOEmbed(url).catch(()=>null);
+  const [meta] = await Promise.all([metaP, wait(650)]);
+  bar.style.width = '66%';
+
+  if(!generic){
+    line('fetching public metadata (oEmbed)', meta && meta.title ? 'ok' : 'unavailable → backend',
+      meta && meta.title ? 'ok' : 'warn');
+  }
+  await wait(380);
+  bar.style.width = '84%';
+
+  const formats = provider.formats ? provider.formats({url, type}) : [];
+  line('resolving formats', `${formats.length} available`, 'ok');
+  bar.style.width = '100%';
+  await wait(480);
+
+  /* Dựng MediaInfo */
+  let title = meta && meta.title ? meta.title : null;
+  let author = meta && meta.author_name ? meta.author_name : null;
+  let thumb = meta && (meta.thumbnail_url || meta.url) ? (meta.thumbnail_url || meta.url) : null;
+  let duration = null;
+
+  if(generic && sniff){
+    if(sniff.type === 'image'){
+      thumb = url;
+    } else if(sniff.type === 'video'){
+      const p = await videoPoster(url);
+      thumb = p || picsum('video-' + url, 800, 640);
+      line('capturing poster frame', p ? 'ok' : 'unavailable', p ? 'ok' : 'warn');
+    } else {
+      thumb = picsum('audio-' + url, 800, 640);          // artwork cho audio
+    }
+    if(sniff.duration && isFinite(sniff.duration)) duration = sniff.duration;
+    try{ const fn = new URL(url).pathname.split('/').filter(Boolean).pop(); if(fn) title = decodeURIComponent(fn); }catch(e){}
+  }
+
+  if(provider.id === 'youtube'){
+    const id = ytId(url);
+    if(id && !thumb) thumb = `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
+  }
+  if(!thumb){ thumb = picsum(provider.id + '-' + url, 800, 640); }
+  if(!title){ title = `${provider.name} ${type === 'album' ? 'post' : type} · ${host}`; }
+  if(meta && meta.duration) duration = meta.duration > 5000 ? meta.duration/1000 : meta.duration;
+
+  const live = !!meta;
+  info = {
+    id: uid(), url, provider, host, type, title, author, thumb,
+    duration: fmtDuration(duration), formats, live, generic,
+    embed: provider.id === 'youtube' ? (ytId(url) ? `https://www.youtube.com/embed/${ytId(url)}?autoplay=1` : null)
+         : provider.id === 'vimeo'  ? (url.match(/vimeo\.com\/(\d+)/) ? `https://player.vimeo.com/video/${url.match(/vimeo\.com\/(\d+)/)[1]}?autoplay=1` : null)
+         : null,
+    gallery: type === 'album' ? [1,2,3,4].map(n => ({ n, thumb: picsum(provider.id+'-'+url+'-'+n, 400, 400) })) : null,
+    backendNote: !live || provider.mode === 'backend',
+    sniff
+  };
+
+  await wait(300);
+  zone.classList.remove('on');
+  btn.disabled = false;
+  btn.innerHTML = '<i data-lucide="zap" width="16"></i>Analyze'; icons();
+  renderResult(info);
+}
+function finishFail(){
+  const btn = $('#analyzeBtn');
+  setTimeout(()=>{
+    $('#analyzeZone').classList.remove('on');
+    btn.disabled = false;
+    btn.innerHTML = '<i data-lucide="zap" width="16"></i>Analyze'; icons();
+    $('#errBox').classList.add('on');
+  }, 600);
+}
+
+/* ---------- Preview theo loại media thật ---------- */
+function previewHTML(m){
+  const tags = `<div class="mc-tags">
+      <span class="mtag"><i data-lucide="${m.provider.icon}"></i>${esc(m.provider.name)}</span>
+      ${m.duration ? `<span class="mtag"><i data-lucide="clock"></i>${esc(m.duration)}</span>` : ''}
+      ${m.sniff ? `<span class="mtag"><i data-lucide="scan-line"></i>${esc(String(m.sniff.type).toUpperCase())} · ${esc(m.sniff.confidence)}</span>` : ''}
+      ${m.generic ? `<span class="mtag"><i data-lucide="globe"></i>Direct link</span>` : ''}
+    </div>`;
+  if(m.sniff && m.sniff.type === 'video'){
+    return `<video class="mcvid" src="${esc(m.url)}" controls autoplay muted playsinline></video>${tags}`;
+  }
+  if(m.sniff && m.sniff.type === 'audio'){
+    return `<div class="mc-audio">
+      <i data-lucide="disc-3" style="width:54px;height:54px;color:var(--acc-hi)"></i>
+      <audio src="${esc(m.url)}" controls style="width:min(320px,85%)"></audio>
+    </div>${tags}`;
+  }
+  return `<img src="${esc(m.thumb || m.url)}" alt="preview" onerror="this.src='${picsum(m.provider.id+'-x',800,640)}'"/>
+    ${m.embed ? `<button class="mc-play" data-play><span class="pl"><i data-lucide="play" width="26"></i></span></button>` : ''}${tags}`;
+}
+
+/* ---------- Media card ---------- */
+function renderResult(m){
+  CURRENT = m;
+  const z = $('#resultZone');
+  const typeLabel = {video:'Video', image:'Image', album:'Album', audio:'Audio'}[m.type];
+  const fmtKindIcon = k => k==='audio' ? 'file-audio' : k==='image' ? 'image' : 'file-video';
+
+  let html = `
+  <div class="media-card glass">
+    <div class="mc-preview" id="mcPreview">${previewHTML(m)}</div>
+    <div class="mc-info">
+      <div class="mc-meta">
+        <span class="pill hl"><i data-lucide="${fmtKindIcon(m.type)}" width="12"></i>${typeLabel}</span>
+        <span class="pill">${esc(m.provider.name)}</span>
+        ${m.author ? `<span class="pill"><i data-lucide="user" width="12"></i>${esc(m.author)}</span>` : ''}
+        ${m.live ? `<span class="pill" style="color:var(--ok)"><i data-lucide="check" width="12"></i>live metadata</span>` : ''}
+        ${m.sniff ? `<span class="pill" style="color:var(--cyan)"><i data-lucide="scan-line" width="12"></i>${esc(m.sniff.confidence)} · via ${esc(m.sniff.method)}</span>` : ''}
+      </div>
+      <h3>${esc(m.title)}</h3>
+      <a class="mc-url" href="${esc(m.url)}" target="_blank" rel="noopener"><i data-lucide="external-link" width="12"></i>${esc(m.url.length>64?m.url.slice(0,64)+'…':m.url)}</a>
+
+      <div class="sec-label">Available formats</div>
+      ${m.formats.map(f => `
+        <div class="fmt-row">
+          <span class="fmt-badge">${esc(f.label)}</span>
+          <span class="fmt-note">${esc(f.note)}</span>
+          <button class="btn-ghost" data-fmt="${f.id}">
+            <i data-lucide="download"></i>Download
+          </button>
+        </div>`).join('')}
+
+      <div class="sec-label">Select &amp; batch download</div>
+      <div class="sel-row" id="selRow">
+        ${m.formats.some(f=>f.kind!=='image') ? `<button class="sel on" data-k="media"><span class="box"><i data-lucide="check"></i></span>${m.type==='audio'?'Audio':'Video'}</button>` : ''}
+        <button class="sel" data-k="thumb"><span class="box"></span>Thumbnail</button>
+        ${m.gallery ? `<button class="sel on" data-k="images"><span class="box"><i data-lucide="check"></i></span>Images</button>` : ''}
+        ${m.formats.some(f=>f.kind==='audio' && m.type!=='audio') ? `<button class="sel" data-k="audio"><span class="box"></span>Audio</button>` : ''}
+      </div>
+      <button class="btn-accent" data-batch><i data-lucide="archive" width="15"></i>Download Selected</button>
+
+      ${m.gallery ? `
+      <div class="sec-label">Gallery preview</div>
+      <div class="gallery" id="gallery">
+        ${m.gallery.map(g => `
+          <div class="gitem sel2" data-g="${g.n}">
+            <img src="${esc(g.thumb)}" alt="image ${g.n}" loading="lazy"/>
+            <span class="gtick"><i data-lucide="check"></i></span>
+            <span class="gnum">0${g.n}</span>
+          </div>`).join('')}
+      </div>` : ''}
+
+      ${m.backendNote && !m.sniff ? `
+      <div class="mc-note">
+        <i data-lucide="info"></i>
+        <div>${m.live
+          ? 'Full media resolution for this platform runs through the backend provider worker. Files saved in this demo are public assets and a metadata manifest for the requested stream.'
+          : 'Public metadata is limited for this platform — the backend provider handles full resolution. Previews shown are placeholders.'}</div>
+      </div>` : ''}
+    </div>
+  </div>`;
+  z.innerHTML = html;
+  z.classList.add('on'); icons();
+  z.scrollIntoView({behavior:'smooth', block:'nearest'});
+
+  /* play → nhúng player chính thức của nền tảng */
+  const play = z.querySelector('[data-play]');
+  if(play) play.addEventListener('click', ()=>{
+    $('#mcPreview').innerHTML = `<iframe src="${esc(m.embed)}" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+      <div class="mc-tags"><span class="mtag"><i data-lucide="${m.provider.icon}"></i>${esc(m.provider.name)}</span></div>`;
+    icons();
+  });
+
+  /* format đơn lẻ */
+  z.querySelectorAll('[data-fmt]').forEach(b => b.addEventListener('click', ()=>{
+    const f = m.formats.find(x=>x.id===b.dataset.fmt);
+    const ext = f.kind==='audio'?'mp3':f.kind==='image'?'jpg':'mp4';
+    const nm = m.sniff
+      ? (/\.[a-z0-9]{2,5}$/i.test(m.title) ? m.title : slug(m.title)+'.'+ext)
+      : `${slug(m.title)}-${b.dataset.fmt}.${ext}`;
+    enqueueForMedia(m, [f], nm);
+  }));
+
+  /* chọn loại media */
+  z.querySelectorAll('#selRow .sel').forEach(s => s.addEventListener('click', ()=> s.classList.toggle('on')));
+
+  /* chọn ảnh gallery */
+  z.querySelectorAll('.gitem').forEach(g => g.addEventListener('click', ()=> g.classList.toggle('sel2')));
+
+  /* batch */
+  const batchBtn = z.querySelector('[data-batch]');
+  batchBtn.addEventListener('click', ()=>{
+    const want = k => z.querySelector(`#selRow .sel[data-k="${k}"]`)?.classList.contains('on');
+    const fmts = [];
+    if(want('media')) fmts.push(m.formats.find(f => f.kind !== 'image'));
+    if(want('audio')) fmts.push(m.formats.find(f => f.kind === 'audio'));
+    const withThumb = want('thumb'), withImages = want('images');
+    const imgSel = withImages && m.gallery ? [...z.querySelectorAll('.gitem.sel2')].map(g=>+g.dataset.g) : [];
+
+    if(!fmts.length && !withThumb && !imgSel.length){ toast('Select at least one item to download.', 'info'); return; }
+
+    const srcUrl = m.sniff ? m.url : null;   /* direct link → chính URL đó là file */
+    const deliverables = [];
+    fmts.forEach(f => deliverables.push({
+      name: `${slug(m.title)}-${f.id}.${f.kind==='audio'?'mp3':f.kind==='image'?'jpg':'mp4'}`,
+      url: srcUrl || (f.kind === 'image' ? m.thumb : null), fmt: f
+    }));
+    if(withThumb && (!m.sniff || m.sniff.type !== 'audio'))
+      deliverables.push({name:`${slug(m.title)}-thumbnail.jpg`, url:m.thumb, fmt:{label:'JPG Thumbnail', kind:'image'}});
+    imgSel.forEach(n => deliverables.push({name:`image_${String(n).padStart(2,'0')}.jpg`, url:m.gallery[n-1].thumb, fmt:{label:'JPG Image', kind:'image'}}));
+
+    if(deliverables.length === 1){
+      enqueueForMedia(m, [deliverables[0].fmt || {label:'file'}], deliverables[0].name, deliverables);
+    } else {
+      addJob({
+        name: `${slug(m.title)}-bundle.zip`,
+        zipName: `${slug(m.title)}-bundle.zip`,
+        deliverables,
+        meta: { title:m.title, platform:m.provider.name, url:m.url, format:'ZIP bundle ('+deliverables.length+' files)', type:'zip', thumb:m.thumb }
+      });
+      toast(`${deliverables.length} files bundled into one ZIP.`, 'ok');
+    }
+  });
+}
+
+/* ---------- Download queue ---------- */
+/* Progress mô phỏng pipeline processing; khi xong, mọi file khả dụng
+   từ trình duyệt (ảnh công khai, dataURL) được tải thật; direct
+   video/audio bị chặn CORS được giao cho downloader của trình duyệt;
+   phần còn lại nhận manifest JSON để backend stream. */
+const jobs = [];
+function enqueueForMedia(m, fmts, singleName, preDeliv){
+  const f = fmts[0] || {label:'file', kind:'file'};
+  const srcUrl = m.sniff ? m.url : null;
+  const d = preDeliv || [{name:singleName, url: srcUrl || (f.kind==='image' ? m.thumb : null), fmt:f}];
+  addJob({
+    name: singleName,
+    deliverables: d,
+    meta: { title:m.title, platform:m.provider.name, url:m.url, format:f.label, type:f.kind, thumb:m.thumb }
+  });
+}
+function addJob(job){
+  job.id = uid(); job.progress = 0; job.status = 'active';
+  jobs.unshift(job);
+  $('#qBadge').style.display = 'grid';
+  renderQueue(); openQueue();
+  runJob(job);
+}
+function runJob(job){
+  const tick = setInterval(()=>{
+    job.progress = Math.min(100, job.progress + 4 + Math.random()*9);
+    renderQueue();
+    if(job.progress >= 100){
+      clearInterval(tick);
+      deliver(job);
+    }
+  }, 130);
+}
+async function tryFetch(url){
+  if(!url) return null;
+  try{
+    const ctl = new AbortController(); const t = setTimeout(()=>ctl.abort(), 9000);
+    const r = await fetch(url, {mode:'cors', signal:ctl.signal});
+    clearTimeout(t);
+    if(!r.ok) return null;
+    return await r.blob();
+  }catch(e){ return null; }
+}
+function saveBlob(blob, name){
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = name;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 4000);
+}
+function anchorDownload(url, name){
+  const a = document.createElement('a');
+  a.href = url; a.download = name; a.target = '_blank'; a.rel = 'noopener';
+  document.body.appendChild(a); a.click(); a.remove();
+}
+function manifestText(job, d){
+  return JSON.stringify({
+    mediahub_manifest: '1.0',
+    notice: 'Demo build: this manifest describes the requested media. Wire the matching provider to your backend to stream the actual file.',
+    requested_file: d.name,
+    source_url: job.meta.url,
+    platform: job.meta.platform,
+    format: d.fmt ? d.fmt.label : job.meta.format,
+    content_type: d.fmt ? d.fmt.kind : job.meta.type,
+    title: job.meta.title,
+    generated_at: new Date().toISOString()
+  }, null, 2);
+}
+async function deliver(job){
+  const files = [];
+  let i = 0;
+  for(const d of job.deliverables){
+    const blob = await tryFetch(d.url);
+    if(blob){ files.push({name:d.name, blob}); continue; }
+    /* Server chặn CORS → file direct đơn lẻ: giao cho trình duyệt tải native */
+    if(d.url && /^https?:/i.test(d.url) && job.deliverables.length === 1 && !job.zipName){
+      anchorDownload(d.url, d.name);
+      job.status = 'done';
+      addHistory(job.meta, 1);
+      toast('Server blocked direct fetch — handed off to your browser downloader.', 'info');
+      renderQueue();
+      return;
+    }
+    files.push({name:d.name.replace(/\.[a-z0-9]+$/i,'') + `.manifest-${++i}.json`, blob:new Blob([manifestText(job,d)],{type:'application/json'})});
+  }
+  try{
+    if(files.length === 1){
+      saveBlob(files[0].blob, files[0].name);
+    } else {
+      const zip = new JSZip();
+      for(const f of files) zip.file(f.name, f.blob);
+      zip.file('_NOTICE.txt',
+`MediaHub Downloader — bundle notice
+Files ending in .manifest.json describe media that requires the
+backend provider to stream (video/audio streams are not fetchable
+from the browser). Public images were embedded directly.
+Source: ${job.meta.url}`);
+      const blob = await zip.generateAsync({type:'blob'});
+      saveBlob(blob, job.zipName || 'mediahub-download.zip');
+    }
+    job.status = 'done';
+    addHistory(job.meta, files.length);
+    toast(`Saved: ${job.name}`, 'ok');
+  }catch(e){
+    job.status = 'fail';
+    toast('Download failed — please try again.', 'err');
+  }
+  renderQueue();
+}
+
+/* ---------- History (localStorage) ---------- */
+const HKEY = 'mh_history_v1';
+const getHistory = () => { try{ return JSON.parse(localStorage.getItem(HKEY)) || []; }catch(e){ return []; } };
+const setHistory = h => localStorage.setItem(HKEY, JSON.stringify(h.slice(0,60)));
+function addHistory(meta, nFiles){
+  const h = getHistory();
+  h.unshift({ id:uid(), title:meta.title, platform:meta.platform, format:meta.format,
+    url:meta.url, type:meta.type, thumb:meta.thumb, date:Date.now(), files:nFiles });
+  setHistory(h);
+  if(location.hash.includes('history')) renderHistory();
+}
+function renderHistory(){
+  const h = getHistory(), body = $('#historyBody');
+  if(!h.length){
+    body.innerHTML = `<div class="empty glass reveal in" style="margin:44px 0">
+      <div class="ei"><i data-lucide="history"></i></div>
+      <h3>No downloads yet</h3>
+      <p>Your recent downloads will appear here, stored locally on this device.</p>
+      <a href="#/" class="btn-accent" style="text-decoration:none"><i data-lucide="arrow-right" width="15"></i>Download something</a>
+    </div>`; icons(); return;
+  }
+  body.innerHTML = `
+    <div class="hist-actions">
+      <h2>${h.length} item${h.length>1?'s':''}</h2>
+      <button class="btn-danger" id="clearAll"><i data-lucide="trash-2"></i>Clear All</button>
+    </div>
+    <div class="glass" style="padding:8px 14px; margin-bottom:60px">
+      ${h.map(e => `
+      <div class="hrow" data-id="${e.id}">
+        ${e.thumb ? `<img class="hthumb" src="${esc(e.thumb)}" loading="lazy" onerror="this.outerHTML='<div class=\\'hthumb ph\\'><i data-lucide=\\'image\\'></i></div>'"/>`
+                  : `<div class="hthumb ph"><i data-lucide="file-video"></i></div>`}
+        <div><div class="ht">${esc(e.title)}</div><div class="hm">${esc(e.platform)}${e.files>1?` · ${e.files} files`:''}</div></div>
+        <span class="hbadge">${esc(e.format)}</span>
+        <span class="hdate">${new Date(e.date).toLocaleDateString(undefined,{month:'short',day:'numeric'})} ${new Date(e.date).toLocaleTimeString(undefined,{hour:'2-digit',minute:'2-digit'})}</span>
+        <div class="hacts">
+          <button class="icon-btn" data-again title="Download again"><i data-lucide="rotate-ccw"></i></button>
+          <button class="icon-btn red" data-del title="Remove"><i data-lucide="trash-2"></i></button>
+        </div>
+      </div>`).join('')}
+    </div>`;
+  icons();
+  $('#clearAll').addEventListener('click', ()=>{
+    setHistory([]); renderHistory(); toast('History cleared.', 'ok');
+  });
+  body.querySelectorAll('[data-del]').forEach(b => b.addEventListener('click', ()=>{
+    const row = b.closest('.hrow');
+    setHistory(getHistory().filter(x => x.id !== row.dataset.id));
+    renderHistory(); toast('Entry removed.', 'info');
+  }));
+  body.querySelectorAll('[data-again]').forEach(b => b.addEventListener('click', ()=>{
+    const e = getHistory().find(x => x.id === b.closest('.hrow').dataset.id);
+    if(!e) return;
+    const ext = e.type==='audio'?'mp3':e.type==='image'?'jpg':'mp4';
+    const direct = e.platform === GENERIC.name;   /* direct link → tải lại đúng URL gốc */
+    addJob({
+      name: `${slug(e.title)}.${ext}`,
+      deliverables:[{name:`${slug(e.title)}.${ext}`, url: direct ? e.url : e.thumb, fmt:{label:e.format, kind:e.type}}],
+      meta:{...e, files:1}
+    });
+    toast('Re-queued for download.', 'ok');
+  }));
+}
+
+/* ---------- Queue drawer UI ---------- */
+function renderQueue(){
+  const list = $('#qList');
+  const active = jobs.filter(j=>j.status==='active').length;
+  $('#qBadge').textContent = active || jobs.length;
+  if(!jobs.length){
+    list.innerHTML = `<div class="empty" style="padding:40px 10px"><p>Queue is empty. Analyze a link and pick your downloads.</p></div>`;
+    return;
+  }
+  list.innerHTML = jobs.map(j => `
+    <div class="q-item ${j.status}">
+      <div class="qn"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(j.name)}</span>
+        <span>${j.status==='done'?'Done':j.status==='fail'?'Failed':Math.round(j.progress)+'%'}</span></div>
+      <div class="q-track"><i style="width:${j.progress}%"></i></div>
+      <div class="qs">${j.status==='done'?'Saved to your device':j.status==='fail'?'Something went wrong':j.progress<5?'Preparing…':'Processing'}</div>
+    </div>`).join('');
+}
+const openQueue = () => $('#queueDrawer').classList.add('open');
+const closeQueue = () => $('#queueDrawer').classList.remove('open');
+ $('#qToggle').addEventListener('click', ()=> $('#queueDrawer').classList.contains('open') ? closeQueue() : openQueue());
+ $('#qClose').addEventListener('click', closeQueue);
+
+/* ---------- Toast & modal ---------- */
+function toast(msg, type='info'){
+  const t = document.createElement('div');
+  t.className = 'toast ' + type;
+  const ic = type==='ok' ? 'check' : type==='err' ? 'alert-triangle' : 'info';
+  t.innerHTML = `<i data-lucide="${ic}"></i><div>${esc(msg)}</div>`;
+  $('#toasts').appendChild(t); icons();
+  setTimeout(()=>{ t.classList.add('out'); setTimeout(()=>t.remove(), 320); }, 4200);
+}
+function openModal(html){
+  const root = $('#modalRoot');
+  root.innerHTML = `<div class="modal-back"><div class="modal">${html}</div></div>`;
+  root.querySelector('.modal-back').addEventListener('click', e => { if(e.target === e.currentTarget) closeModal(); });
+  icons();
+}
+const closeModal = () => $('#modalRoot').innerHTML = '';
+document.addEventListener('keydown', e => { if(e.key === 'Escape'){ closeModal(); closeQueue(); } });
+
+const LEGAL = {
+  terms: `<h3>Terms of Service</h3><p class="msub">Last updated: January 2025</p><div class="legal-body">
+    <h4>1. Scope</h4><p>MediaHub Downloader is a tool for retrieving media that is publicly accessible or that you are authorized to download. By using the service you confirm you hold the right to download the content you request.</p>
+    <h4>2. Prohibited use</h4><p>You may not use MediaHub to circumvent DRM, paywalls, authentication, or any technical protection measure; to infringe copyright; or to violate any platform's terms of use.</p>
+    <h4>3. No warranty</h4><p>The service is provided "as is". Availability of formats depends entirely on what each source platform publicly exposes and may change without notice.</p></div>`,
+  privacy: `<h3>Privacy Policy</h3><p class="msub">Last updated: January 2025</p><div class="legal-body">
+    <h4>Local-first</h4><p>In this build your download history, preferences, and guest session are stored only in your browser's local storage. Nothing leaves your device except the analysis request itself.</p>
+    <h4>Guest mode</h4><p>No account is required. If you later sign in, history and favorites sync through your account provider and can be deleted at any time.</p>
+    <h4>No tracking</h4><p>We do not sell data or embed third-party ad trackers.</p></div>`,
+  copyright: `<h3>Copyright Policy</h3><p class="msub">Last updated: January 2025</p><div class="legal-body">
+    <h4>Respect creators</h4><p>Media is delivered exactly as the source exposes it — watermarks and attribution are never altered or removed.</p>
+    <h4>Takedown requests</h4><p>Rights holders can request the blocking of specific sources by contacting our copyright team. Verified requests are actioned promptly and affected providers are disabled while under review.</p>
+    <h4>DRM &amp; protected media</h4><p>Providers are architecturally unable to process DRM-protected or technically restricted content, and we treat attempts to do so as a violation of these terms.</p></div>`
+};
+document.addEventListener('click', e => {
+  const l = e.target.closest('[data-legal]');
+  if(l){ e.preventDefault(); openModal(LEGAL[l.dataset.legal]); }
+});
+
+/* ---------- Auth ---------- */
+function renderAuth(){
+  openModal(`
+    <h3>${localStorage.getItem('mh_guest') ? 'You are browsing as Guest' : 'Welcome to MediaHub'}</h3>
+    <p class="msub">Guests keep history in local storage on this device. Signed-in users sync history and favorite links across devices.</p>
+    <button class="oauth" data-oauth="Google"><i data-lucide="chrome"></i>Continue with Google</button>
+    <button class="oauth" data-oauth="GitHub"><i data-lucide="github"></i>Continue with GitHub</button>
+    <div class="mdiv">or</div>
+    <button class="oauth" id="guestGo" style="border-color:rgba(157,92,255,.5); color:var(--acc-hi)"><i data-lucide="user"></i>Continue as Guest</button>`);
+  $('#guestGo').addEventListener('click', ()=>{
+    localStorage.setItem('mh_guest','1');
+    $('#authTxt').textContent = 'Guest';
+    closeModal(); toast('Continuing as Guest — history stays on this device.', 'ok');
+  });
+  document.querySelectorAll('[data-oauth]').forEach(b => b.addEventListener('click', ()=>{
+    toast(`${b.dataset.oauth} OAuth requires your backend auth config (client ID + callback).`, 'info');
+  }));
+}
+ $('#authBtn').addEventListener('click', renderAuth);
+
+/* ---------- Router ---------- */
+const ROUTES = {'':'home','/':'home','/history':'history','/platforms':'platforms','/about':'about','/api-docs':'api-docs'};
+function route(){
+  let h = location.hash.replace(/^#/,'') || '/';
+  const page = ROUTES[h] || ROUTES[h.replace(/\/$/,'')] || null;
+  $$('.page').forEach(p => p.classList.remove('on'));
+  if(page){
+    $('#page-' + page).classList.add('on');
+    $$('#navLinks a').forEach(a => a.classList.toggle('on', a.dataset.r === (h==='/'?'/':h.replace(/\/$/,''))));
+    if(page === 'history') renderHistory();
+    if(page === 'platforms') renderPlatforms();
+    window.scrollTo({top:0});
+  } else {
+    $('#page-home').classList.add('on');
+  }
+  $('#mNav').classList.remove('open');
+  requestAnimationFrame(scanReveal);
+}
+window.addEventListener('hashchange', route);
+ $('#menuBtn').addEventListener('click', ()=> $('#mNav').classList.toggle('open'));
+
+/* ---------- Platforms page (sinh từ registry) ---------- */
+function renderPlatforms(){
+  const all = [...PROVIDERS, GENERIC];
+  $('#platformList').innerHTML = all.map(p => `
+    <div class="prow reveal">
+      <div class="pic"><i data-lucide="${p.icon}"></i></div>
+      <div><div class="pname">${esc(p.name)}</div><div class="pdom">${esc(p.dom)}</div></div>
+      <div class="caps">
+        <span class="cap ${p.caps.video?'y':'n'}"><i data-lucide="${p.caps.video?'check':'x'}"></i>Video</span>
+        <span class="cap ${p.caps.images?'y':'n'}"><i data-lucide="${p.caps.images?'check':'x'}"></i>Images</span>
+        <span class="cap ${p.caps.audio?'y':'n'}"><i data-lucide="${p.caps.audio?'check':'x'}"></i>Audio</span>
+      </div>
+      <span class="mode-tag ${p.mode==='live'?'live':'be'}">${p.mode==='live'?'● live metadata (oEmbed)':'● backend provider'}</span>
+    </div>`).join('');
+  icons(); scanReveal();
+}
+
+/* ---------- Home: chips + hero events ---------- */
+ $('#heroChips').innerHTML = PROVIDERS.map(p =>
+  `<a class="chip" href="#/platforms"><i data-lucide="${p.icon}"></i>${esc(p.name)}</a>`).join('');
+ $('#urlForm').addEventListener('submit', e => { e.preventDefault(); analyze($('#urlInput').value); });
+ $('#pasteBtn').addEventListener('click', async ()=>{
+  try{
+    const txt = await navigator.clipboard.readText();
+    if(txt){ $('#urlInput').value = txt; toast('Link pasted from clipboard.', 'ok'); }
+  }catch(e){ toast('Clipboard access denied — paste manually with Ctrl+V.', 'info'); $('#urlInput').focus(); }
+});
+
+/* ---------- Quick type detector ---------- */
+ $('#detectForm').addEventListener('submit', async e=>{
+  e.preventDefault();
+  const url = $('#detectInput').value.trim();
+  const out = $('#detectOut');
+  if(!url){ toast('Paste a URL to detect.', 'info'); return; }
+  out.classList.add('on');
+  out.innerHTML = `<div class="pbar"><i style="width:35%"></i></div>
+    <div class="mono" style="color:var(--dim);font-size:11px;margin-top:10px">probing: extension → header → magic bytes → decoder…</div>`;
+  const r = await detectMedia(url);
+  const t = r.type || 'unknown';
+  const dims = r.width ? ` ${r.width}×${r.height}` : '';
+  const dur  = (r.duration && isFinite(r.duration)) ? ` · ${fmtDuration(r.duration)}` : '';
+  const label = t==='image' ? 'IMG' : t==='video' ? 'VID' : t==='audio' ? 'AUD' : '?';
+  out.innerHTML = `
+    <div class="dt-verdict ${t}">
+      <span class="dv">${label}</span>
+      <div style="min-width:0">
+        <h4>${t==='unknown' ? 'Unknown media type' : esc(t.toUpperCase()) + esc(dims) + esc(dur)}</h4>
+        <p>${esc(r.method)} · confidence: ${esc(r.confidence)}${r.mime ? ' · ' + esc(r.mime) : ''}</p>
+      </div>
+    </div>
+    <div class="dt-chain">
+      ${r.chain.map(c=>`<div class="dc ${c.ok?'y':'n'}"><b>${esc(c.k)}</b><b>${esc(c.v || (c.ok ? '✓' : '✗ / blocked'))}</b></div>`).join('')}
+    </div>`;
+});
+
+/* ---------- Copy buttons (API docs) ---------- */
+document.addEventListener('click', e => {
+  const c = e.target.closest('[data-copy]');
+  if(c){
+    const txt = c.closest('.codebox').querySelector('pre').innerText;
+    navigator.clipboard.writeText(txt).then(()=> toast('Copied to clipboard.', 'ok'))
+      .catch(()=> toast('Could not access clipboard.', 'err'));
+  }
+});
+
+/* ---------- Reveal on scroll ---------- */
+const io = new IntersectionObserver(es => es.forEach(x => { if(x.isIntersecting){ x.target.classList.add('in'); io.unobserve(x.target); } }), {threshold:.12});
+function scanReveal(){ $$('.reveal:not(.in)').forEach(el => io.observe(el)); }
+
+/* ---------- Init ---------- */
+if(localStorage.getItem('mh_guest')) $('#authTxt').textContent = 'Guest';
+icons(); route(); renderQueue(); scanReveal();
+</script>
+</body>
+</html>
