@@ -1,8 +1,18 @@
-﻿{
+{
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "myweb",
   "compatibility_date": "2026-09-14",
   "assets": {
     "directory": "."
-  }
+  },
+  "routes": [
+    {
+      "pattern": "ducmanh.xyz",
+      "custom_domain": true
+    },
+    {
+      "pattern": "www.ducmanh.xyz",
+      "custom_domain": true
+    }
+  ]
 }
