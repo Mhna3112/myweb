@@ -1095,6 +1095,57 @@ body {
   box-shadow: 0 2px 8px rgba(108,99,255,0.3);
 }
 
+.repos-header-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.gh-sync-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--fg2);
+  font-size: 0.78rem;
+  font-family: var(--font-mono);
+  padding: 5px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all var(--trans);
+  user-select: none;
+}
+.gh-sync-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(108, 99, 255, 0.08);
+}
+.gh-sync-btn:active {
+  transform: scale(0.96);
+}
+.gh-sync-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+.gh-sync-btn.synced {
+  border-color: var(--green);
+  color: var(--green);
+  background: rgba(0, 230, 118, 0.08);
+}
+.gh-sync-icon {
+  display: inline-block;
+  vertical-align: middle;
+  transition: transform 0.2s ease;
+}
+.gh-sync-icon.spinning {
+  animation: ghSpin 0.75s linear infinite;
+}
+@keyframes ghSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
 /* Repos grid & cards */
 .repos-grid {
   display: grid;

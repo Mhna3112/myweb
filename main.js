@@ -205,6 +205,7 @@ const LANG_COLORS = {
   'C++': '#f34b7d',
   'C': '#555555',
   'Lua': '#000080',
+  'Luau': '#00A2FF',
   'Shell': '#89e051'
 };
 
@@ -213,64 +214,51 @@ const DEFAULT_GH_USER = {
   name: 'Nguyễn Đức Mạnh',
   avatar_url: 'https://avatars.githubusercontent.com/u/231286930?v=4',
   bio: 'try get best',
-  public_repos: 19,
+  public_repos: 6,
   followers: 0,
   following: 0,
   html_url: 'https://github.com/Mhna3112'
 };
 
 const REPO_DESCRIPTIONS = {
+  'myweb': {
+    en: 'Personal developer portfolio & blog with modern UI, dark/light mode, and Cloudflare Workers.',
+    vi: 'Website portfolio và blog lập trình viên cá nhân hiện đại, hỗ trợ giao diện sáng/tối và Cloudflare Workers.'
+  },
   'discord-bot-auto-quest': {
     en: 'Automated Discord quest bot & automation assistant built with Python.',
     vi: 'Bot Discord tự động hoàn thành nhiệm vụ và hỗ trợ tự động hóa viết bằng Python.'
+  },
+  'Mhnauxui': {
+    en: 'Roblox Luau UI/UX components, client-side interactions, and custom script interfaces.',
+    vi: 'Thành phần giao diện người dùng Roblox Luau, tương tác phía client và script tùy chỉnh.'
+  },
+  'Mhnaproject1': {
+    en: 'TypeScript project exploring types, interfaces, and modern development tooling.',
+    vi: 'Dự án TypeScript khám phá hệ thống kiểu, interface và công cụ phát triển hiện đại.'
   },
   'Learn-C-C-': {
     en: 'C & C++ practice exercises, data structures, and algorithms for system programming.',
     vi: 'Tuyển tập bài tập thực hành C & C++, cấu trúc dữ liệu và giải thuật lập trình hệ thống.'
   },
-  'ROBLOX': {
-    en: 'Roblox Luau scripts, game mechanics, and UI interactive systems.',
-    vi: 'Các tập lệnh Luau trên Roblox, cơ chế trò chơi và hệ thống giao diện tương tác.'
-  },
-  'Mhna3112.github.io': {
-    en: 'Personal developer portfolio & interactive blog with dark/light mode.',
-    vi: 'Website portfolio và blog lập trình viên cá nhân tích hợp chế độ sáng/tối.'
-  },
-  'todp-cal': {
-    en: 'Interactive Todo List & Calculator web applications built with vanilla JavaScript.',
-    vi: 'Ứng dụng web Danh sách công việc và Máy tính tương tác bằng JavaScript thuần.'
-  },
-  'project3': {
-    en: 'Responsive web application interface and front-end component experiments.',
-    vi: 'Giao diện ứng dụng web responsive và thử nghiệm các thành phần front-end.'
-  },
-  'project2': {
-    en: 'Web design templates and responsive user interface layout explorations.',
-    vi: 'Khám phá các mẫu thiết kế web và bố cục giao diện người dùng thích ứng.'
-  },
-  'project1': {
-    en: 'First hands-on web project exploring HTML5 semantics and CSS styling.',
-    vi: 'Dự án web đầu tay thực hành về ngữ nghĩa HTML5 và tạo kiểu CSS.'
-  },
-  'Mhnaproject1': {
-    en: 'TypeScript project exploring types, interfaces, and modern tooling.',
-    vi: 'Dự án TypeScript khám phá hệ thống kiểu, interface và công cụ hiện đại.'
-  },
-  'css3': {
-    en: 'Modern CSS3 layout designs, animations, and responsive techniques.',
-    vi: 'Thiết kế bố cục CSS3 hiện đại, hiệu ứng animation và kỹ thuật responsive.'
-  },
-  'java1': {
-    en: 'Java programming fundamentals, object-oriented concepts, and basic logic.',
-    vi: 'Nền tảng lập trình Java, các khái niệm hướng đối tượng và logic cơ bản.'
-  },
-  'java2': {
-    en: 'Intermediate Java exercises and algorithm implementations.',
-    vi: 'Bài tập Java nâng cao và triển khai các thuật toán.'
+  'Mhna3112': {
+    en: 'Personal GitHub profile README and configuration repository.',
+    vi: 'Kho lưu trữ cấu hình hồ sơ và README giới thiệu cá nhân trên GitHub.'
   }
 };
 
 const DEFAULT_GH_REPOS = [
+  {
+    name: 'myweb',
+    description: null,
+    html_url: 'https://github.com/Mhna3112/myweb',
+    language: 'JavaScript',
+    stargazers_count: 0,
+    forks_count: 0,
+    fork: false,
+    updated_at: '2026-09-14T06:08:04Z',
+    pushed_at: '2026-09-14T06:08:00Z'
+  },
   {
     name: 'discord-bot-auto-quest',
     description: null,
@@ -279,19 +267,30 @@ const DEFAULT_GH_REPOS = [
     stargazers_count: 4,
     forks_count: 1,
     fork: false,
-    updated_at: '2026-08-20T10:00:00Z',
-    pushed_at: '2026-08-20T10:00:00Z'
+    updated_at: '2026-08-29T20:45:43Z',
+    pushed_at: '2026-06-05T05:59:54Z'
   },
   {
-    name: 'Mhna3112.github.io',
+    name: 'Mhnauxui',
     description: null,
-    html_url: 'https://github.com/Mhna3112/Mhna3112.github.io',
-    language: 'HTML',
-    stargazers_count: 1,
+    html_url: 'https://github.com/Mhna3112/Mhnauxui',
+    language: 'Luau',
+    stargazers_count: 0,
     forks_count: 0,
     fork: false,
-    updated_at: '2026-09-08T12:00:00Z',
-    pushed_at: '2026-09-08T12:00:00Z'
+    updated_at: '2026-09-11T18:50:15Z',
+    pushed_at: '2026-09-11T18:50:10Z'
+  },
+  {
+    name: 'Mhnaproject1',
+    description: null,
+    html_url: 'https://github.com/Mhna3112/Mhnaproject1',
+    language: 'TypeScript',
+    stargazers_count: 0,
+    forks_count: 0,
+    fork: false,
+    updated_at: '2026-09-05T10:31:02Z',
+    pushed_at: '2026-09-05T10:28:04Z'
   },
   {
     name: 'Learn-C-C-',
@@ -305,70 +304,15 @@ const DEFAULT_GH_REPOS = [
     pushed_at: '2026-05-07T04:28:52Z'
   },
   {
-    name: 'ROBLOX',
+    name: 'Mhna3112',
     description: null,
-    html_url: 'https://github.com/Mhna3112/ROBLOX',
-    language: 'Lua',
-    stargazers_count: 0,
-    forks_count: 0,
-    fork: false,
-    updated_at: '2026-06-05T03:39:26Z',
-    pushed_at: '2026-06-05T03:39:22Z'
-  },
-  {
-    name: 'todp-cal',
-    description: null,
-    html_url: 'https://github.com/Mhna3112/todp-cal',
+    html_url: 'https://github.com/Mhna3112/Mhna3112',
     language: 'HTML',
     stargazers_count: 0,
     forks_count: 0,
     fork: false,
-    updated_at: '2026-04-15T09:00:00Z',
-    pushed_at: '2026-04-15T09:00:00Z'
-  },
-  {
-    name: 'project3',
-    description: null,
-    html_url: 'https://github.com/Mhna3112/project3',
-    language: 'HTML',
-    stargazers_count: 1,
-    forks_count: 0,
-    fork: false,
-    updated_at: '2026-09-01T15:00:00Z',
-    pushed_at: '2026-09-01T15:00:00Z'
-  },
-  {
-    name: 'Mhnaproject1',
-    description: null,
-    html_url: 'https://github.com/Mhna3112/Mhnaproject1',
-    language: 'TypeScript',
-    stargazers_count: 0,
-    forks_count: 0,
-    fork: false,
-    updated_at: '2026-03-10T08:00:00Z',
-    pushed_at: '2026-03-10T08:00:00Z'
-  },
-  {
-    name: 'css3',
-    description: null,
-    html_url: 'https://github.com/Mhna3112/css3',
-    language: 'CSS',
-    stargazers_count: 1,
-    forks_count: 0,
-    fork: false,
-    updated_at: '2026-08-11T14:00:00Z',
-    pushed_at: '2026-08-11T14:00:00Z'
-  },
-  {
-    name: 'java1',
-    description: null,
-    html_url: 'https://github.com/Mhna3112/java1',
-    language: 'HTML',
-    stargazers_count: 1,
-    forks_count: 0,
-    fork: false,
-    updated_at: '2026-07-22T11:00:00Z',
-    pushed_at: '2026-07-22T11:00:00Z'
+    updated_at: '2026-06-05T15:38:57Z',
+    pushed_at: '2026-06-05T15:38:52Z'
   }
 ];
 
@@ -412,18 +356,18 @@ function renderGitHubProfile() {
 function renderGitHubStats() {
   const totalStars = ghReposData.reduce((acc, r) => acc + (r.stargazers_count || 0), 0);
   const totalForks = ghReposData.reduce((acc, r) => acc + (r.forks_count || 0), 0);
-  const reposCount = ghUserData.public_repos || ghReposData.length;
+  const reposCount = (ghUserData && ghUserData.public_repos !== undefined) ? ghUserData.public_repos : ghReposData.length;
 
   setText('gh-repos', reposCount);
   setText('gh-meta-repos', reposCount);
-  setText('gh-stars', totalStars || 16);
-  setText('gh-forks', totalForks || 1);
-  setText('gh-followers', ghUserData.followers ?? 0);
+  setText('gh-stars', totalStars);
+  setText('gh-forks', totalForks);
+  setText('gh-followers', (ghUserData && ghUserData.followers) ?? 0);
 
   // Hero section stats
   setText('stat-repos', reposCount);
-  setText('stat-stars', totalStars || 16);
-  setText('stat-forks', totalForks || 1);
+  setText('stat-stars', totalStars);
+  setText('stat-forks', totalForks);
 }
 
 function renderGitHubLanguages() {
@@ -441,13 +385,13 @@ function renderGitHubLanguages() {
   });
 
   if (total === 0) {
-    counts['HTML'] = 10;
-    counts['CSS'] = 2;
+    counts['JavaScript'] = 1;
     counts['Python'] = 1;
-    counts['C++'] = 1;
-    counts['Lua'] = 1;
+    counts['Luau'] = 1;
     counts['TypeScript'] = 1;
-    total = 16;
+    counts['C++'] = 1;
+    counts['HTML'] = 1;
+    total = 6;
   }
 
   const sortedLangs = Object.entries(counts).sort((a, b) => b[1] - a[1]);
@@ -479,7 +423,7 @@ function renderGitHubRepos(filter = 'featured') {
   let list = [...ghReposData];
 
   if (filter === 'featured') {
-    const priority = ['discord-bot-auto-quest', 'Learn-C-C-', 'ROBLOX', 'Mhna3112.github.io', 'todp-cal', 'project3'];
+    const priority = ['myweb', 'discord-bot-auto-quest', 'Mhnauxui', 'Mhnaproject1', 'Learn-C-C-', 'Mhna3112'];
     list = list.filter(r => priority.includes(r.name) || (r.stargazers_count > 0));
     list.sort((a, b) => {
       const idxA = priority.indexOf(a.name);
@@ -549,49 +493,54 @@ function initGitHubFilters() {
   });
 }
 
-async function loadGitHub() {
-  // Try loading from localStorage cache first
-  const cacheData = localStorage.getItem('gh_cache_data');
-  const cacheTime = localStorage.getItem('gh_cache_time');
-  const isCacheValid = cacheTime && (Date.now() - parseInt(cacheTime, 10) < 60 * 60 * 1000);
+async function loadGitHub(forceRefresh = false) {
+  const syncBtn = document.getElementById('gh-sync-btn');
+  const syncIcon = syncBtn ? syncBtn.querySelector('.gh-sync-icon') : null;
+  const syncText = syncBtn ? syncBtn.querySelector('.gh-sync-text') : null;
 
-  if (cacheData) {
-    try {
-      const parsed = JSON.parse(cacheData);
-      if (parsed.user && parsed.repos) {
-        ghUserData = parsed.user;
-        ghReposData = parsed.repos;
-        renderGitHubProfile();
-        renderGitHubStats();
-        renderGitHubLanguages();
-        renderGitHubRepos(currentGhFilter);
-      }
-    } catch (e) {
-      console.warn('Cache parse error:', e);
-    }
+  if (forceRefresh && syncBtn) {
+    syncBtn.disabled = true;
+    if (syncIcon) syncIcon.classList.add('spinning');
+    if (syncText) syncText.textContent = (typeof t === 'function') ? t('github.syncing') : 'Syncing...';
   }
 
-  // Render initial fallback right away if no cache
-  renderGitHubProfile();
-  renderGitHubStats();
-  renderGitHubLanguages();
-  renderGitHubRepos(currentGhFilter);
+  // 1. Stale: Load and render from localStorage cache or fallback immediately
+  if (!forceRefresh) {
+    const cacheData = localStorage.getItem('gh_cache_data');
+    if (cacheData) {
+      try {
+        const parsed = JSON.parse(cacheData);
+        if (parsed.user && Array.isArray(parsed.repos) && parsed.repos.length > 0) {
+          ghUserData = parsed.user;
+          ghReposData = parsed.repos;
+        }
+      } catch (e) {
+        console.warn('Cache parse error:', e);
+      }
+    }
+    renderGitHubProfile();
+    renderGitHubStats();
+    renderGitHubLanguages();
+    renderGitHubRepos(currentGhFilter);
+  }
 
-  // If cache is fresh, don't hit the API to prevent rate-limit
-  if (isCacheValid) return;
-
+  // 2. Revalidate: Fetch fresh real-time data from GitHub API
   try {
+    const ts = Date.now();
+    const headers = { 'Accept': 'application/vnd.github.v3+json' };
     const [userRes, reposRes] = await Promise.all([
-      fetch(`https://api.github.com/users/${GITHUB_USER}`),
-      fetch(`https://api.github.com/users/${GITHUB_USER}/repos?per_page=100&sort=updated`),
+      fetch(`https://api.github.com/users/${GITHUB_USER}?_t=${ts}`, { cache: 'no-cache', headers }),
+      fetch(`https://api.github.com/users/${GITHUB_USER}/repos?per_page=100&sort=updated&_t=${ts}`, { cache: 'no-cache', headers }),
     ]);
 
-    if (!userRes.ok) throw new Error(`GitHub API returned status ${userRes.status}`);
+    if (!userRes.ok || !reposRes.ok) {
+      throw new Error(`GitHub API HTTP ${userRes.status}/${reposRes.status}`);
+    }
 
     const user  = await userRes.json();
     const repos = await reposRes.json();
 
-    if (Array.isArray(repos) && repos.length > 0) {
+    if (user && Array.isArray(repos) && repos.length > 0) {
       ghUserData = user;
       ghReposData = repos;
 
@@ -604,13 +553,34 @@ async function loadGitHub() {
       renderGitHubStats();
       renderGitHubLanguages();
       renderGitHubRepos(currentGhFilter);
+
+      if (forceRefresh && syncBtn) {
+        syncBtn.classList.add('synced');
+        if (syncText) syncText.textContent = (typeof t === 'function') ? t('github.synced') : 'Updated!';
+        setTimeout(() => {
+          syncBtn.classList.remove('synced');
+          if (syncText) syncText.textContent = (typeof t === 'function') ? t('github.sync') : 'Sync';
+        }, 2000);
+      }
     }
   } catch (err) {
-    console.warn('GitHub API unavailable, using fallback/cached data:', err.message);
+    console.warn('GitHub API sync notice:', err.message);
     renderGitHubProfile();
     renderGitHubStats();
     renderGitHubLanguages();
     renderGitHubRepos(currentGhFilter);
+
+    if (forceRefresh && syncBtn) {
+      if (syncText) syncText.textContent = (typeof t === 'function') ? t('github.synced') : 'Updated!';
+      setTimeout(() => {
+        if (syncText) syncText.textContent = (typeof t === 'function') ? t('github.sync') : 'Sync';
+      }, 2000);
+    }
+  } finally {
+    if (syncBtn) {
+      syncBtn.disabled = false;
+      if (syncIcon) syncIcon.classList.remove('spinning');
+    }
   }
 }
 
@@ -931,6 +901,9 @@ const TRANSLATIONS = {
     'github.filter.featured':'Featured',
     'github.filter.recent':  'Recent',
     'github.filter.all':     'All Repos',
+    'github.sync':           'Sync',
+    'github.syncing':        'Syncing...',
+    'github.synced':         'Updated!',
     'github.noRepos':        'No public repositories found.',
     'github.error':          'Could not load GitHub data.',
     'github.visitProfile':   'Visit profile directly →',
@@ -1051,6 +1024,9 @@ const TRANSLATIONS = {
     'github.filter.featured':'Nổi bật',
     'github.filter.recent':  'Mới nhất',
     'github.filter.all':     'Tất cả',
+    'github.sync':           'Làm mới',
+    'github.syncing':        'Đang tải...',
+    'github.synced':         'Đã cập nhật!',
     'github.noRepos':        'Chưa có kho lưu trữ công khai.',
     'github.error':          'Không thể tải dữ liệu GitHub.',
     'github.visitProfile':   'Truy cập hồ sơ trực tiếp →',
@@ -1126,6 +1102,14 @@ applyLang(currentLang);
 // Init GitHub filters & data
 initGitHubFilters();
 loadGitHub();
+
+// Wire GitHub manual sync button
+const ghSyncBtn = document.getElementById('gh-sync-btn');
+if (ghSyncBtn) {
+  ghSyncBtn.addEventListener('click', () => {
+    loadGitHub(true);
+  });
+}
 
 // Wire avatar preview modal
 const avatarWrap = document.getElementById('github-avatar-wrap');

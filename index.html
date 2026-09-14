@@ -71,11 +71,11 @@
             <a href="#blog"     class="btn btn-ghost"    data-i18n="hero.cta.blog">Read My Blog</a>
           </div>
           <div class="hero-stats">
-            <div class="stat-item"><span class="stat-num" id="stat-repos">--</span><span class="stat-label" data-i18n="hero.stats.repos">Repos</span></div>
+            <div class="stat-item"><span class="stat-num" id="stat-repos">6</span><span class="stat-label" data-i18n="hero.stats.repos">Repos</span></div>
             <div class="stat-divider"></div>
-            <div class="stat-item"><span class="stat-num" id="stat-stars">--</span><span class="stat-label" data-i18n="hero.stats.stars">Stars</span></div>
+            <div class="stat-item"><span class="stat-num" id="stat-stars">4</span><span class="stat-label" data-i18n="hero.stats.stars">Stars</span></div>
             <div class="stat-divider"></div>
-            <div class="stat-item"><span class="stat-num" id="stat-forks">--</span><span class="stat-label" data-i18n="hero.stats.forks">Forks</span></div>
+            <div class="stat-item"><span class="stat-num" id="stat-forks">1</span><span class="stat-label" data-i18n="hero.stats.forks">Forks</span></div>
           </div>
         </div>
         <div class="hero-visual" aria-hidden="true">
@@ -293,13 +293,13 @@ int main() {
               <div class="gh-meta-tags">
                 <span class="gh-meta-item">📍 <span data-i18n="github.location">Vietnam</span></span>
                 <span class="gh-meta-item">📅 <span data-i18n="github.joined">Joined Sep 2025</span></span>
-                <span class="gh-meta-item">📦 <span id="gh-meta-repos">19</span> <span data-i18n="github.stat.repos">Public Repos</span></span>
+                <span class="gh-meta-item">📦 <span id="gh-meta-repos">6</span> <span data-i18n="github.stat.repos">Public Repos</span></span>
               </div>
             </div>
           </div>
           <div class="github-stats-grid">
-            <div class="gh-stat-card"><div class="gh-stat-icon">📁</div><div class="gh-stat-num" id="gh-repos">19</div><div class="gh-stat-label" data-i18n="github.stat.repos">Public Repos</div></div>
-            <div class="gh-stat-card"><div class="gh-stat-icon">⭐</div><div class="gh-stat-num" id="gh-stars">16</div><div class="gh-stat-label" data-i18n="github.stat.stars">Total Stars</div></div>
+            <div class="gh-stat-card"><div class="gh-stat-icon">📁</div><div class="gh-stat-num" id="gh-repos">6</div><div class="gh-stat-label" data-i18n="github.stat.repos">Public Repos</div></div>
+            <div class="gh-stat-card"><div class="gh-stat-icon">⭐</div><div class="gh-stat-num" id="gh-stars">4</div><div class="gh-stat-label" data-i18n="github.stat.stars">Total Stars</div></div>
             <div class="gh-stat-card"><div class="gh-stat-icon">🍴</div><div class="gh-stat-num" id="gh-forks">1</div><div class="gh-stat-label" data-i18n="github.stat.forks">Total Forks</div></div>
             <div class="gh-stat-card"><div class="gh-stat-icon">👥</div><div class="gh-stat-num" id="gh-followers">0</div><div class="gh-stat-label" data-i18n="github.stat.followers">Followers</div></div>
           </div>
@@ -314,10 +314,18 @@ int main() {
           <div class="github-repos">
             <div class="repos-header-row">
               <h4 class="repos-heading" data-i18n="github.recentRepos">Repositories</h4>
-              <div class="gh-filter-tabs" role="tablist">
-                <button class="gh-filter-btn active" data-filter="featured" data-i18n="github.filter.featured">Featured</button>
-                <button class="gh-filter-btn" data-filter="recent" data-i18n="github.filter.recent">Recent</button>
-                <button class="gh-filter-btn" data-filter="all" data-i18n="github.filter.all">All</button>
+              <div class="repos-header-actions">
+                <div class="gh-filter-tabs" role="tablist">
+                  <button class="gh-filter-btn active" data-filter="featured" data-i18n="github.filter.featured">Featured</button>
+                  <button class="gh-filter-btn" data-filter="recent" data-i18n="github.filter.recent">Recent</button>
+                  <button class="gh-filter-btn" data-filter="all" data-i18n="github.filter.all">All</button>
+                </div>
+                <button id="gh-sync-btn" class="gh-sync-btn" title="Cập nhật dữ liệu từ GitHub" aria-label="Làm mới GitHub">
+                  <svg class="gh-sync-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+                  </svg>
+                  <span class="gh-sync-text" data-i18n="github.sync">Sync</span>
+                </button>
               </div>
             </div>
             <div class="repos-grid" id="repos-grid">
