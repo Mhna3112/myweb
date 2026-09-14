@@ -1,5 +1,23 @@
 /* ===== main.js ===== */
 
+// ── GLOBAL STATE & PHRASES ──────────────────────────────────────────
+let currentLang = localStorage.getItem('lang') || 'en';
+
+const PHRASES = {
+  en: [
+    "Hi, I'm Duc Manh.",
+    "I'm learning to code.",
+    "I love building things.",
+    "Aspiring Developer.",
+  ],
+  vi: [
+    "Xin chào, tôi là Đức Mạnh.",
+    "Tôi đang học lập trình.",
+    "Tôi thích xây dựng ứng dụng.",
+    "Lập trình viên tương lai.",
+  ]
+};
+
 // ── THEME ──────────────────────────────────────────────────────────
 const THEMES = ['light', 'dark', 'system'];
 const html   = document.documentElement;
@@ -107,43 +125,51 @@ const io = new IntersectionObserver((entries) => {
 sections.forEach(s => io.observe(s));
 
 // ── TYPEWRITER ─────────────────────────────────────────────────────
-// phrases are defined after PHRASES object is created; keep reference lazy
 let phraseIdx = 0;
 let charIdx   = 0;
 let deleting  = false;
+let twTimeout = null;
 const tw      = document.getElementById('typewriter');
 
 function getCurrentPhrases() {
-  try {
-    if (typeof PHRASES !== 'undefined' && typeof currentLang !== 'undefined' && PHRASES[currentLang]) {
-      return PHRASES[currentLang];
-    }
-  } catch (e) {}
-  return ["Hi, I'm Duc Manh.", "I'm learning to code.", "I love building things.", "Aspiring Developer."];
+  return (typeof PHRASES !== 'undefined' && PHRASES[currentLang]) ? PHRASES[currentLang] : PHRASES.en;
 }
 
 function typeWriter() {
-  const phrase = getCurrentPhrases()[phraseIdx];
+  if (!tw) return;
+  const phrases = getCurrentPhrases();
+  const phrase  = phrases[phraseIdx % phrases.length];
   if (!deleting) {
     tw.textContent = phrase.slice(0, ++charIdx);
-    if (charIdx === phrase.length) {
+    if (charIdx >= phrase.length) {
       deleting = true;
-      setTimeout(typeWriter, 1800);
+      twTimeout = setTimeout(typeWriter, 1800);
       return;
     }
-    setTimeout(typeWriter, 80);
+    twTimeout = setTimeout(typeWriter, 80);
   } else {
     tw.textContent = phrase.slice(0, --charIdx);
-    if (charIdx === 0) {
-      deleting = false;
-      phraseIdx = (phraseIdx + 1) % getCurrentPhrases().length;
-      setTimeout(typeWriter, 400);
+    if (charIdx <= 0) {
+      deleting  = false;
+      charIdx   = 0;
+      phraseIdx = (phraseIdx + 1) % phrases.length;
+      twTimeout = setTimeout(typeWriter, 400);
       return;
     }
-    setTimeout(typeWriter, 40);
+    twTimeout = setTimeout(typeWriter, 40);
   }
 }
-typeWriter();
+
+function resetTypewriter() {
+  if (twTimeout) clearTimeout(twTimeout);
+  phraseIdx = 0;
+  charIdx   = 0;
+  deleting  = false;
+  if (tw) tw.textContent = '';
+  typeWriter();
+}
+
+resetTypewriter();
 
 // ── REVEAL ON SCROLL ───────────────────────────────────────────────
 const revealObserver = new IntersectionObserver((entries) => {
@@ -782,21 +808,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
 });
 
 
-// ── LANGUAGE (VN / EN) ─────────────────────────────────────────────
-const PHRASES = {
-  en: [
-    "Hi, I'm Duc Manh.",
-    "I'm learning to code.",
-    "I love building things.",
-    "Aspiring Developer.",
-  ],
-  vi: [
-    "Xin chào, tôi là Đức Mạnh.",
-    "Tôi đang học lập trình.",
-    "Tôi thích xây dựng ứng dụng.",
-    "Lập trình viên tương lai.",
-  ]
-};
+// ── LANGUAGE & TRANSLATIONS ─────────────────────────────────────────
 
 // Full translation dictionary keyed by data-i18n attribute value
 const TRANSLATIONS = {
@@ -1047,8 +1059,6 @@ const TRANSLATIONS = {
   }
 };
 
-let currentLang = localStorage.getItem('lang') || 'en';
-
 function t(key) {
   return (TRANSLATIONS[currentLang] && TRANSLATIONS[currentLang][key]) ||
          (TRANSLATIONS['en'] && TRANSLATIONS['en'][key]) || key;
@@ -1087,9 +1097,9 @@ function applyLang(lang) {
   if (typeof renderGitHubLanguages === 'function') renderGitHubLanguages();
 
   // Restart typewriter with new language
-  phraseIdx = 0;
-  charIdx   = 0;
-  deleting  = false;
+  if (typeof resetTypewriter === 'function') {
+    resetTypewriter();
+  }
 }
 
 // Wire lang button
