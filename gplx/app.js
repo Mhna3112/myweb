@@ -559,9 +559,9 @@ function initExam() {
     if (showToastFlag) {
       showToast(
         enabled 
-          ? '💡 Đã BẬT: Hiện đáp án & giải thích ngay sau khi chọn!' 
-          : '⏱️ Đã TẮT: Chế độ thi chuẩn (kết quả chấm khi nộp bài)', 
-        enabled ? '✅' : '🎯'
+          ? 'Đã BẬT: Hiện đáp án & giải thích ngay sau khi chọn!' 
+          : 'Đã TẮT: Chế độ thi chuẩn (kết quả chấm khi nộp bài)', 
+        enabled ? '✓' : '⏱'
       );
     }
   }
@@ -581,7 +581,7 @@ function initExam() {
       state.examRevealed.add(state.examIndex);
       renderExamQuestion(state.examIndex);
       updatePaletteTile(state.examIndex);
-      showToast('Đã mở đáp án & giải thích chi tiết!', '💡');
+      showToast('Đã mở đáp án & giải thích chi tiết!', '✓');
     });
   }
 
@@ -741,7 +741,7 @@ function beginExamCountdown() {
     }
   }, 1000);
 
-  showToast('⏱️ Bắt đầu tính giờ làm bài: 20:00 phút. Chúc bạn thi tốt!', '🚀');
+  showToast('Bắt đầu tính giờ làm bài: 20:00 phút. Chúc bạn thi tốt!', '⏱');
 }
 
 function updateTimerUI() {

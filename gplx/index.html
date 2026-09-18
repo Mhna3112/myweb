@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=2.5" />
+  <link rel="stylesheet" href="style.css?v=2.6" />
 </head>
 <body>
 
@@ -209,7 +209,7 @@
         <div class="exam-select-group">
           <label for="select-exam" style="font-size: 0.9rem; font-weight: 700;">Bộ đề:</label>
           <select id="select-exam" class="custom-select" style="max-width: 220px;">
-            <option value="random">🎲 Đề Ngẫu Nhiên 30 Câu</option>
+            <option value="random">Đề Ngẫu Nhiên (30 Câu)</option>
             <!-- 20 Preset exams will be dynamically loaded -->
           </select>
           <button class="btn-ctrl" id="btn-start-new-exam" title="Tạo đề thi mới">Làm đề mới</button>
@@ -223,7 +223,9 @@
 
         <!-- Instant feedback mode toggle in top bar -->
         <div class="exam-toggle-bar-item" id="exam-instant-toggle-container" title="Bật/Tắt chế độ hiện đáp án và giải thích ngay khi chọn phương án">
-          <span class="exam-toggle-icon">💡</span>
+          <span class="exam-toggle-icon">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7z"/><line x1="10" y1="21" x2="14" y2="21"/></svg>
+          </span>
           <span class="exam-toggle-title">Hiện đáp án:</span>
           <label class="switch-toggle switch-sm" for="exam-instant-checkbox">
             <input type="checkbox" id="exam-instant-checkbox" class="switch-input" checked />
@@ -247,46 +249,64 @@
       <div class="exam-layout">
         <!-- Màn Hình Sẵn Sàng (Trước khi bấm Bắt Đầu) -->
         <div class="exam-ready-card" id="exam-ready-card">
-          <div class="ready-badge-icon">🚦</div>
+          <div class="ready-badge-pill">HỆ THỐNG SÁT HẠCH LÝ THUYẾT QUỐC GIA</div>
           <h2 class="ready-title" id="ready-exam-title">Sát Hạch Lý Thuyết Lái Xe Ô Tô</h2>
-          <p class="ready-subtitle" id="ready-exam-subtitle">Đề thi 30 câu hỏi chuẩn theo quy định của Tổng cục Đường bộ Việt Nam</p>
+          <p class="ready-subtitle" id="ready-exam-subtitle">30 câu hỏi chuẩn theo quy định của Tổng cục Đường bộ Việt Nam</p>
 
           <div class="ready-specs-grid">
             <div class="ready-spec-item">
-              <span class="ready-spec-icon">⏱️</span>
               <div class="ready-spec-info">
-                <strong>20:00 Phút</strong>
-                <span>Thời gian làm bài</span>
+                <span class="ready-spec-label">Thời Gian Làm Bài</span>
+                <div class="ready-spec-val">
+                  <span>20:00</span>
+                  <span class="unit">Phút</span>
+                </div>
+                <span class="ready-spec-sub">Đếm ngược tự động</span>
               </div>
             </div>
+
             <div class="ready-spec-item">
-              <span class="ready-spec-icon">📋</span>
               <div class="ready-spec-info">
-                <strong>30 Câu Hỏi</strong>
-                <span>Tổng số câu</span>
+                <span class="ready-spec-label">Tổng Số Câu Hỏi</span>
+                <div class="ready-spec-val">
+                  <span>30</span>
+                  <span class="unit">Câu</span>
+                </div>
+                <span class="ready-spec-sub">Bộ GTVT ban hành</span>
               </div>
             </div>
-            <div class="ready-spec-item">
-              <span class="ready-spec-icon">🎯</span>
+
+            <div class="ready-spec-item pass">
               <div class="ready-spec-info">
-                <strong>&ge; 27 / 30 Câu</strong>
-                <span>Điểm đạt</span>
+                <span class="ready-spec-label">Yêu Cầu Điểm Đạt</span>
+                <div class="ready-spec-val pass">
+                  <span>&ge; 27</span>
+                  <span class="unit">/ 30 Câu</span>
+                </div>
+                <span class="ready-spec-sub">Đạt tối thiểu 90%</span>
               </div>
             </div>
-            <div class="ready-spec-item">
-              <span class="ready-spec-icon">⚠️</span>
+
+            <div class="ready-spec-item danger">
               <div class="ready-spec-info">
-                <strong style="color: var(--danger);">0 Câu Điểm Liệt</strong>
-                <span>Không được làm sai</span>
+                <span class="ready-spec-label">Câu Điểm Liệt</span>
+                <div class="ready-spec-val danger">
+                  <span>0</span>
+                  <span class="unit">Lỗi sai tối đa</span>
+                </div>
+                <span class="ready-spec-sub">Sai 1 câu là Trượt ngay</span>
               </div>
             </div>
           </div>
 
           <div class="ready-notes-box">
-            <strong>📌 Quy chế sát hạch:</strong>
+            <div class="ready-notes-header">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+              <span>Quy chế sát hạch:</span>
+            </div>
             <ul>
               <li>Đồng hồ <strong>20:00 phút</strong> sẽ chỉ bắt đầu tính giờ khi bạn nhấn nút <strong>"Bắt Đầu Làm Bài"</strong> bên dưới.</li>
-              <li>Bạn có thể dùng cờ (🚩 Đánh dấu xem lại) để rà soát lại các câu phân vân trước khi nộp bài.</li>
+              <li>Bạn có thể dùng tính năng đánh dấu để rà soát lại các câu phân vân trước khi nộp bài.</li>
               <li>Nếu làm sai bất kỳ <strong>câu điểm liệt</strong> nào, bài thi sẽ bị tính <strong>TRƯỢT</strong> trực tiếp.</li>
             </ul>
           </div>
@@ -299,7 +319,9 @@
                 <span class="ready-feature-status-pill on" id="ready-switch-pill">Đang Bật Ôn Luyện</span>
               </div>
               <div class="ready-feature-title">
-                <span class="ready-feature-icon">💡</span>
+                <span class="ready-feature-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7z"/><line x1="10" y1="21" x2="14" y2="21"/></svg>
+                </span>
                 <strong>Hiển thị kết quả &amp; giải thích ngay khi chọn đáp án</strong>
               </div>
               <p class="ready-feature-desc">
@@ -336,7 +358,10 @@
                   <span class="chip-text">Hiện đáp án</span>
                 </span>
               </label>
-              <button class="btn-peek-answer" id="btn-peek-answer" type="button" title="Xem trước đáp án và giải thích câu này">💡 Xem đáp án</button>
+              <button class="btn-peek-answer" id="btn-peek-answer" type="button" title="Xem trước đáp án và giải thích câu này">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7z"/><line x1="10" y1="21" x2="14" y2="21"/></svg>
+                <span>Xem đáp án</span>
+              </button>
               <label class="flag-label" id="exam-flag-label">
                 <input type="checkbox" id="exam-flag-checkbox" class="flag-checkbox" />
                 <span>🚩 Đánh dấu</span>
@@ -388,7 +413,9 @@
           <!-- Quick switch in sidebar -->
           <div class="sidebar-mode-row" title="Bật/Tắt chế độ hiện đáp án khi làm bài">
             <div class="sidebar-mode-label-group">
-              <span class="sidebar-mode-icon">💡</span>
+              <span class="sidebar-mode-icon">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7z"/><line x1="10" y1="21" x2="14" y2="21"/></svg>
+              </span>
               <div class="sidebar-mode-texts">
                 <span class="sidebar-mode-name">Hiện đáp án ngay</span>
                 <span class="sidebar-mode-sub" id="sidebar-status-sub">Đang bật</span>
@@ -435,13 +462,15 @@
        ========================================== -->
   <div class="modal-overlay" id="modal-result" role="dialog" aria-modal="true">
     <div class="modal-card">
-      <div class="result-badge-icon pass" id="modal-result-icon">✓</div>
+      <div class="result-badge-icon pass" id="modal-result-icon">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
       <h2 class="result-verdict pass" id="modal-result-verdict">ĐẠT YÊU CẦU</h2>
       <div class="result-score-display" id="modal-result-score">28<span> / 30</span></div>
       
       <!-- Critical Failure Warning Box -->
       <div class="critical-failure-alert" id="modal-critical-alert" style="display: none">
-        ⚠️ <strong>TRƯỢT DO SAI CÂU ĐIỂM LIỆT!</strong><br />
+        <strong>TRƯỢT DO SAI CÂU ĐIỂM LIỆT!</strong><br />
         <span id="modal-critical-details">Bạn đã trả lời sai câu điểm liệt. Theo quy chế của Bộ GTVT, sai câu điểm liệt bị đình chỉ/không đạt kỳ thi.</span>
       </div>
 
@@ -465,9 +494,18 @@
       </p>
 
       <div class="modal-actions">
-        <button class="btn-modal primary" id="modal-btn-review">🔍 Xem Lại Chi Tiết Bài Thi</button>
-        <button class="btn-modal secondary" id="modal-btn-retry">🔄 Thi Lại Đề Này</button>
-        <button class="btn-modal secondary" id="modal-btn-new-exam">🎲 Thi Đề Ngẫu Nhiên Mới</button>
+        <button class="btn-modal primary" id="modal-btn-review">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <span>Xem Lại Chi Tiết Bài Thi</span>
+        </button>
+        <button class="btn-modal secondary" id="modal-btn-retry">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+          <span>Thi Lại Đề Này</span>
+        </button>
+        <button class="btn-modal secondary" id="modal-btn-new-exam">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>
+          <span>Thi Đề Ngẫu Nhiên Mới</span>
+        </button>
       </div>
     </div>
   </div>
@@ -476,6 +514,6 @@
   <div class="toast-container" id="toast-container"></div>
 
   <!-- Application Logic -->
-  <script type="module" src="app.js?v=2.5"></script>
+  <script type="module" src="app.js?v=2.6"></script>
 </body>
 </html>
