@@ -473,6 +473,7 @@ body {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
 .badge-q-number {
@@ -484,6 +485,7 @@ body {
   background: var(--bg-subtle);
   color: var(--text-main);
   border: 1px solid var(--border);
+  white-space: nowrap;
 }
 
 .badge-chapter {
@@ -494,6 +496,7 @@ body {
   background: var(--info-bg);
   color: var(--info);
   border: 1px solid var(--info-border);
+  white-space: nowrap;
 }
 
 .badge-critical {
@@ -507,6 +510,7 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
+  white-space: nowrap;
   animation: pulse-danger 2s infinite;
 }
 
@@ -1847,85 +1851,392 @@ body {
   
   .exam-palette-card {
     position: static;
-    order: -1;
+    order: 2; /* Crucial: Question card first, 30 palette below */
   }
   
   .palette-grid {
-    grid-template-columns: repeat(10, 1fr);
+    grid-template-columns: repeat(5, 1fr);
   }
 }
 
 @media (max-width: 640px) {
+  /* 1. Global Page Margins */
+  .app-container {
+    padding: 0 0.85rem;
+  }
+
+  /* 2. Top Header Navigation (Two balanced rows) */
   .header-inner {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "brand actions"
+      "nav nav";
+    gap: 0.65rem 0;
     height: auto;
-    padding: 0.75rem 0;
-    flex-direction: column;
-    align-items: stretch;
+    padding: 0.65rem 0;
+    align-items: center;
   }
 
   .brand-wrapper {
-    justify-content: space-between;
+    grid-area: brand;
+  }
+
+  .header-actions {
+    grid-area: actions;
+    justify-self: end;
   }
 
   .mode-nav {
+    grid-area: nav;
     overflow-x: auto;
-    padding-bottom: 0.4rem;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 0.25rem;
+    gap: 0.25rem;
   }
 
-  .card-face {
-    padding: 1.25rem;
-  }
-
-  .card-question-text {
-    font-size: 1.1rem;
-  }
-
-  .palette-grid {
-    grid-template-columns: repeat(6, 1fr);
-  }
-
-  .flashcard-nav-bar {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .btn-ctrl {
-    justify-content: center;
-  }
-
-  .keyboard-hints {
+  .mode-nav::-webkit-scrollbar {
     display: none;
   }
 
+  .mode-tab-btn {
+    white-space: nowrap;
+    padding: 0.45rem 0.75rem;
+    font-size: 0.8rem;
+    flex-shrink: 0;
+  }
+
+  /* 3. Exam Control Bar on Mobile */
   .exam-control-bar {
+    display: flex;
     flex-direction: column;
     align-items: stretch;
+    gap: 0.75rem;
+    padding: 0.85rem;
+    margin-bottom: 1rem;
   }
 
   .exam-select-group {
-    flex-direction: column;
-    align-items: stretch;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
   }
 
   .exam-select-group select {
-    max-width: 100% !important;
+    flex: 1;
+    max-width: none !important;
+    min-width: 0;
+    font-size: 0.85rem;
+    padding: 0.45rem 0.6rem;
+  }
+
+  .exam-select-group .btn-ctrl {
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .timer-box {
+    justify-content: center;
+    padding: 0.45rem 0.75rem;
+    font-size: 1.15rem;
   }
 
   .exam-toggle-bar-item {
+    display: flex;
     justify-content: space-between;
+    align-items: center;
+    padding: 0.45rem 0.75rem;
+  }
+
+  .btn-submit-exam, .btn-start-exam {
+    width: 100%;
+    justify-content: center;
+    padding: 0.85rem 1rem;
+    font-size: 1rem;
+  }
+
+  /* 4. Ready Briefing Card on Mobile */
+  .exam-ready-card {
+    padding: 1.5rem 1rem;
+    border-radius: var(--radius-lg);
+  }
+
+  .ready-title {
+    font-size: 1.25rem;
+  }
+
+  .ready-subtitle {
+    font-size: 0.85rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .ready-specs-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .ready-spec-item {
+    padding: 0.85rem 1rem;
+  }
+
+  .ready-spec-val {
+    font-size: 1.45rem;
+  }
+
+  .ready-notes-box {
+    padding: 1rem;
+    font-size: 0.825rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .ready-notes-box ul {
+    padding-left: 1rem;
   }
 
   .ready-feature-card {
     flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
+    align-items: stretch;
+    gap: 0.85rem;
+    padding: 1rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .ready-feature-title {
+    font-size: 0.925rem;
+  }
+
+  .ready-feature-desc {
+    font-size: 0.8rem;
   }
 
   .ready-feature-right {
     width: 100%;
     flex-direction: row;
     justify-content: space-between;
-    padding-top: 0.75rem;
+    align-items: center;
+    padding-top: 0.65rem;
     border-top: 1px solid var(--border);
+  }
+
+  .btn-start-hero {
+    max-width: 100%;
+    padding: 0.85rem 1.25rem;
+    font-size: 1rem;
+  }
+
+  /* 5. Active Question Card on Mobile (NO SQUISHING OF PILLS!) */
+  .exam-main-card {
+    padding: 1rem;
+    border-radius: var(--radius-lg);
+  }
+
+  .exam-q-header {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.65rem;
+    margin-bottom: 1rem;
+  }
+
+  .tag-cluster {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .badge-q-number,
+  .badge-chapter,
+  .badge-critical {
+    white-space: nowrap;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.55rem;
+  }
+
+  .exam-header-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.4rem;
+    width: 100%;
+    padding-top: 0.5rem;
+    border-top: 1px dashed var(--border);
+  }
+
+  .instant-action-chip {
+    flex: 1;
+  }
+
+  .instant-action-chip .chip-visual {
+    width: 100%;
+    justify-content: center;
+    white-space: nowrap;
+    font-size: 0.75rem;
+    padding: 0.35rem 0.45rem;
+  }
+
+  .btn-peek-answer {
+    flex: 1;
+    justify-content: center;
+    white-space: nowrap;
+    font-size: 0.75rem;
+    padding: 0.35rem 0.45rem;
+  }
+
+  .flag-label {
+    flex: 1;
+    justify-content: center;
+    white-space: nowrap;
+    font-size: 0.75rem;
+    padding: 0.35rem 0.45rem;
+  }
+
+  .card-question-text {
+    font-size: 1.05rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+  }
+
+  .option-item {
+    padding: 0.75rem 0.85rem;
+    gap: 0.65rem;
+    font-size: 0.9rem;
+    min-height: 48px;
+  }
+
+  .option-index {
+    width: 26px;
+    height: 26px;
+    font-size: 0.825rem;
+  }
+
+  .exam-nav-btns {
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+    gap: 0.75rem;
+  }
+
+  .exam-nav-btns .btn-ctrl {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+    justify-content: center;
+  }
+
+  /* 6. 30-Question Palette on Mobile */
+  .exam-palette-card {
+    position: static;
+    order: 2; /* Below the question card! */
+    padding: 1rem;
+    border-radius: var(--radius-lg);
+    box-sizing: border-box;
+    width: 100%;
+    margin-top: 1rem;
+  }
+
+  .palette-title {
+    font-size: 0.95rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .sidebar-mode-row {
+    padding: 0.5rem 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .palette-grid {
+    grid-template-columns: repeat(5, 1fr); /* 5 columns = 6 clean rows, never cut off! */
+    gap: 0.4rem;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 1rem;
+  }
+
+  .palette-tile {
+    aspect-ratio: 1;
+    font-size: 0.85rem;
+    min-height: 38px;
+  }
+
+  .palette-legend {
+    padding-top: 0.75rem;
+    gap: 0.4rem;
+    font-size: 0.75rem;
+  }
+
+  /* 7. Flashcard View Mobile */
+  .card-face {
+    padding: 1.25rem 1rem;
+  }
+
+  .flashcard-nav-bar {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .flashcard-nav-bar .btn-ctrl {
+    flex: 1;
+    min-width: 110px;
+    justify-content: center;
+    padding: 0.65rem 0.75rem;
+    font-size: 0.85rem;
+  }
+
+  .nav-counter {
+    order: -1;
+    width: 100%;
+    text-align: center;
+    font-size: 0.85rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .keyboard-hints {
+    display: none;
+  }
+
+  /* 8. Result Modal on Mobile */
+  .modal-overlay {
+    padding: 0.75rem;
+  }
+
+  .modal-card {
+    padding: 1.5rem 1rem;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .result-score-display {
+    font-size: 2.75rem;
+  }
+
+  .result-stats-grid {
+    gap: 0.5rem;
+  }
+
+  .result-stat-box {
+    padding: 0.65rem 0.5rem;
+  }
+
+  .stat-box-val {
+    font-size: 1.35rem;
+  }
+
+  .stat-box-label {
+    font-size: 0.725rem;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .btn-modal {
+    width: 100%;
+    justify-content: center;
   }
 }
