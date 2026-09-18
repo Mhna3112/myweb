@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css?v=2.5" />
 </head>
 <body>
 
@@ -221,11 +221,16 @@
           <span id="exam-timer-text">20:00</span>
         </div>
 
-        <!-- Instant feedback mode toggle -->
-        <label class="instant-feedback-toggle" id="exam-instant-toggle-label" title="Hiện đáp án và giải thích chi tiết ngay khi chọn phương án">
-          <input type="checkbox" id="exam-instant-checkbox" class="instant-toggle-checkbox" checked />
-          <span class="instant-toggle-label">💡 Hiện đáp án ngay</span>
-        </label>
+        <!-- Instant feedback mode toggle in top bar -->
+        <div class="exam-toggle-bar-item" id="exam-instant-toggle-container" title="Bật/Tắt chế độ hiện đáp án và giải thích ngay khi chọn phương án">
+          <span class="exam-toggle-icon">💡</span>
+          <span class="exam-toggle-title">Hiện đáp án:</span>
+          <label class="switch-toggle switch-sm" for="exam-instant-checkbox">
+            <input type="checkbox" id="exam-instant-checkbox" class="switch-input" checked />
+            <span class="switch-slider"></span>
+          </label>
+          <span class="switch-status-tag on" id="exam-toggle-status-badge">BẬT</span>
+        </div>
 
         <button class="btn-submit-exam btn-start-exam" id="btn-start-exam">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
@@ -286,14 +291,27 @@
             </ul>
           </div>
 
-          <div class="ready-mode-box">
-            <label class="ready-mode-option">
-              <input type="checkbox" id="ready-instant-checkbox" class="instant-toggle-checkbox" checked />
-              <div class="ready-mode-text">
-                <strong>💡 Bật chế độ luyện thi: Hiện đáp án &amp; giải thích ngay sau khi chọn</strong>
-                <span>Báo đúng/sai tức thì và hiển thị ngay căn cứ luật kèm mẹo nhớ</span>
+          <!-- Feature Card: Bật/tắt hiện đáp án ngay -->
+          <div class="ready-feature-card" id="ready-feature-card">
+            <div class="ready-feature-left">
+              <div class="ready-feature-badge-row">
+                <span class="ready-feature-badge">CHẾ ĐỘ THI</span>
+                <span class="ready-feature-status-pill on" id="ready-switch-pill">Đang Bật Ôn Luyện</span>
               </div>
-            </label>
+              <div class="ready-feature-title">
+                <span class="ready-feature-icon">💡</span>
+                <strong>Hiển thị kết quả &amp; giải thích ngay khi chọn đáp án</strong>
+              </div>
+              <p class="ready-feature-desc">
+                Khi bật: Chọn câu nào sẽ lập tức biết đúng hay sai, đổi màu ô tương ứng và xem ngay căn cứ luật kèm mẹo nhớ. Tắt đi nếu muốn làm bài tập trung như thi thật (chỉ biết kết quả khi nộp bài).
+              </p>
+            </div>
+            <div class="ready-feature-right">
+              <label class="switch-toggle switch-lg" for="ready-instant-checkbox" title="Bật/Tắt tính năng hiện đáp án">
+                <input type="checkbox" id="ready-instant-checkbox" class="switch-input" checked />
+                <span class="switch-slider"></span>
+              </label>
+            </div>
           </div>
 
           <button class="btn-start-hero" id="btn-start-exam-hero" type="button">
@@ -311,6 +329,13 @@
               <span class="badge-critical" id="exam-critical-tag" style="display: none">⚠️ CÂU ĐIỂM LIỆT</span>
             </div>
             <div class="exam-header-actions">
+              <label class="instant-action-chip" for="active-instant-checkbox" title="Bật/Tắt hiện đáp án ngay">
+                <input type="checkbox" id="active-instant-checkbox" class="chip-input" checked />
+                <span class="chip-visual">
+                  <span class="chip-dot"></span>
+                  <span class="chip-text">Hiện đáp án</span>
+                </span>
+              </label>
               <button class="btn-peek-answer" id="btn-peek-answer" type="button" title="Xem trước đáp án và giải thích câu này">💡 Xem đáp án</button>
               <label class="flag-label" id="exam-flag-label">
                 <input type="checkbox" id="exam-flag-checkbox" class="flag-checkbox" />
@@ -360,23 +385,27 @@
             <span style="font-size: 0.8rem; color: var(--text-muted);" id="exam-progress-counter">0/30</span>
           </div>
 
+          <!-- Quick switch in sidebar -->
+          <div class="sidebar-mode-row" title="Bật/Tắt chế độ hiện đáp án khi làm bài">
+            <div class="sidebar-mode-label-group">
+              <span class="sidebar-mode-icon">💡</span>
+              <div class="sidebar-mode-texts">
+                <span class="sidebar-mode-name">Hiện đáp án ngay</span>
+                <span class="sidebar-mode-sub" id="sidebar-status-sub">Đang bật</span>
+              </div>
+            </div>
+            <label class="switch-toggle switch-sm" for="sidebar-instant-checkbox">
+              <input type="checkbox" id="sidebar-instant-checkbox" class="switch-input" checked />
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+
           <div class="palette-grid" id="exam-palette-grid">
             <!-- 30 clickable tiles (1 to 30) -->
           </div>
 
-          <div class="palette-legend">
-            <div class="legend-item">
-              <div class="legend-swatch unanswered"></div>
-              <span>Chưa trả lời</span>
-            </div>
-            <div class="legend-item">
-              <div class="legend-swatch answered"></div>
-              <span>Đã chọn đáp án</span>
-            </div>
-            <div class="legend-item">
-              <div class="legend-swatch flagged"></div>
-              <span>Đánh dấu phân vân (🚩)</span>
-            </div>
+          <div class="palette-legend" id="exam-palette-legend">
+            <!-- Dynamic legend populated by JavaScript -->
           </div>
         </aside>
       </div>
@@ -447,6 +476,6 @@
   <div class="toast-container" id="toast-container"></div>
 
   <!-- Application Logic -->
-  <script type="module" src="app.js"></script>
+  <script type="module" src="app.js?v=2.5"></script>
 </body>
 </html>

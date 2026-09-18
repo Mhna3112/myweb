@@ -506,33 +506,74 @@ function initExam() {
   if (btnStartTop) btnStartTop.addEventListener('click', () => beginExamCountdown());
   if (btnStartHero) btnStartHero.addEventListener('click', () => beginExamCountdown());
 
-  // Instant feedback mode toggle wiring
+  // Multi-point instant feedback mode toggle wiring
   const instantCb = document.getElementById('exam-instant-checkbox');
   const readyInstantCb = document.getElementById('ready-instant-checkbox');
+  const sidebarInstantCb = document.getElementById('sidebar-instant-checkbox');
+  const activeInstantCb = document.getElementById('active-instant-checkbox');
 
-  function updateInstantFeedback(enabled) {
+  function updateInstantFeedback(enabled, showToastFlag = true) {
     state.examInstantFeedback = enabled;
     setStorage(STORAGE_KEYS.INSTANT_FEEDBACK, enabled);
+
+    // Synchronize all 4 checkboxes
     if (instantCb) instantCb.checked = enabled;
     if (readyInstantCb) readyInstantCb.checked = enabled;
-    showToast(enabled ? '💡 Chế độ luyện thi: Hiện đáp án ngay sau khi chọn' : '⏱️ Chế độ thi chuẩn: Chỉ biết kết quả khi nộp bài', '🎯');
+    if (sidebarInstantCb) sidebarInstantCb.checked = enabled;
+    if (activeInstantCb) activeInstantCb.checked = enabled;
 
+    // Synchronize top bar badge
+    const topBadge = document.getElementById('exam-toggle-status-badge');
+    if (topBadge) {
+      topBadge.textContent = enabled ? 'BẬT' : 'TẮT';
+      topBadge.className = `switch-status-tag ${enabled ? 'on' : 'off'}`;
+    }
+
+    // Synchronize ready card
+    const readyCard = document.getElementById('ready-feature-card');
+    const readyPill = document.getElementById('ready-switch-pill');
+    if (readyCard) readyCard.classList.toggle('is-off', !enabled);
+    if (readyPill) {
+      readyPill.textContent = enabled ? 'Đang Bật Ôn Luyện' : 'Đang Tắt (Thi Thật)';
+      readyPill.className = `ready-feature-status-pill ${enabled ? 'on' : 'off'}`;
+    }
+
+    // Synchronize sidebar status subtext
+    const sidebarSub = document.getElementById('sidebar-status-sub');
+    if (sidebarSub) {
+      sidebarSub.textContent = enabled ? 'Đang bật' : 'Đang tắt';
+      sidebarSub.className = `sidebar-mode-sub ${enabled ? '' : 'off'}`;
+    }
+
+    // Update legend
+    renderPaletteLegend();
+
+    // If exam has questions, re-render current question and palette tiles
     if (state.examQuestions.length > 0) {
       renderExamQuestion(state.examIndex);
       for (let i = 0; i < state.examQuestions.length; i++) {
         updatePaletteTile(i);
       }
     }
+
+    if (showToastFlag) {
+      showToast(
+        enabled 
+          ? '💡 Đã BẬT: Hiện đáp án & giải thích ngay sau khi chọn!' 
+          : '⏱️ Đã TẮT: Chế độ thi chuẩn (kết quả chấm khi nộp bài)', 
+        enabled ? '✅' : '🎯'
+      );
+    }
   }
 
-  if (instantCb) {
-    instantCb.checked = state.examInstantFeedback;
-    instantCb.addEventListener('change', (e) => updateInstantFeedback(e.target.checked));
-  }
-  if (readyInstantCb) {
-    readyInstantCb.checked = state.examInstantFeedback;
-    readyInstantCb.addEventListener('change', (e) => updateInstantFeedback(e.target.checked));
-  }
+  [instantCb, readyInstantCb, sidebarInstantCb, activeInstantCb].forEach(cb => {
+    if (cb) {
+      cb.addEventListener('change', (e) => updateInstantFeedback(e.target.checked, true));
+    }
+  });
+
+  // Initialize UI with persisted state
+  updateInstantFeedback(state.examInstantFeedback, false);
 
   const btnPeek = document.getElementById('btn-peek-answer');
   if (btnPeek) {
@@ -740,6 +781,29 @@ function buildExamPalette() {
 
     grid.appendChild(tile);
   }
+
+  renderPaletteLegend();
+}
+
+function renderPaletteLegend() {
+  const legendBox = document.getElementById('exam-palette-legend');
+  if (!legendBox) return;
+
+  if (state.examInstantFeedback || state.isReviewMode) {
+    legendBox.innerHTML = `
+      <div class="legend-item"><div class="legend-swatch correct-result"></div><span>Câu đúng</span></div>
+      <div class="legend-item"><div class="legend-swatch incorrect-result"></div><span>Câu sai</span></div>
+      <div class="legend-item"><div class="legend-swatch answered"></div><span>Đã chọn</span></div>
+      <div class="legend-item"><div class="legend-swatch unanswered"></div><span>Chưa trả lời</span></div>
+      <div class="legend-item"><div class="legend-swatch flagged"></div><span>Đánh dấu phân vân (🚩)</span></div>
+    `;
+  } else {
+    legendBox.innerHTML = `
+      <div class="legend-item"><div class="legend-swatch answered"></div><span>Đã chọn đáp án</span></div>
+      <div class="legend-item"><div class="legend-swatch unanswered"></div><span>Chưa trả lời</span></div>
+      <div class="legend-item"><div class="legend-swatch flagged"></div><span>Đánh dấu phân vân (🚩)</span></div>
+    `;
+  }
 }
 
 function updatePaletteTile(index) {
@@ -826,6 +890,12 @@ function renderExamQuestion(index) {
 
   const selectedOpt = state.examAnswers[index];
   const isRevealed = state.isReviewMode || (state.examInstantFeedback && selectedOpt !== undefined) || state.examRevealed.has(index);
+
+  // Instant toggle in question header
+  const activeInstantCb = document.getElementById('active-instant-checkbox');
+  if (activeInstantCb) {
+    activeInstantCb.checked = state.examInstantFeedback;
+  }
 
   // Peek button visibility
   const btnPeek = document.getElementById('btn-peek-answer');
