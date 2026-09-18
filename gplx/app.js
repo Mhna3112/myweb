@@ -225,7 +225,6 @@ function initFlashcard() {
   // Touch Swipe for Mobile
   let touchStartX = 0;
   let touchEndX = 0;
-  const fcCard = document.getElementById('fc-card');
   if (fcCard) {
     fcCard.addEventListener('touchstart', (e) => {
       touchStartX = e.changedTouches[0].screenX;

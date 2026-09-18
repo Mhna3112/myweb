@@ -638,9 +638,6 @@ body {
   flex: 1;
 }
 
-/* Flip Trigger Hint */
-.flip-hint-box {
-  margin-top: auto;
 /* Card Back Design */
 .answer-highlight-box {
   padding: 1rem 1.25rem;
