@@ -555,6 +555,20 @@ body {
   filter: drop-shadow(0 2px 4px rgba(0,0,0,0.08));
 }
 
+.card-media-box img,
+.question-img {
+  max-width: 100%;
+  max-height: 290px;
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.08));
+  transition: transform 0.2s ease;
+}
+
+.card-media-box img:hover {
+  transform: scale(1.02);
+}
+
 /* Options on Front */
 .options-list {
   display: flex;

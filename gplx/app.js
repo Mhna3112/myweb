@@ -329,14 +329,31 @@ function renderCurrentFlashcard() {
 
   document.getElementById('fc-q-text').textContent = q.question;
 
-  // Media box (SVG sign or sa hình)
+  // Media box (Image or SVG sign/sa hình)
   const mediaBox = document.getElementById('fc-media-box');
-  if (q.imageSvg) {
-    mediaBox.style.display = 'flex';
-    mediaBox.innerHTML = q.imageSvg;
+  const mediaBoxBack = document.getElementById('fc-back-media-box');
+  const mediaHtml = q.image
+    ? `<img src="${q.image}" alt="Minh họa câu ${q.id}" class="question-img" loading="lazy" />`
+    : (q.imageSvg || '');
+
+  if (mediaHtml) {
+    if (mediaBox) {
+      mediaBox.style.display = 'flex';
+      mediaBox.innerHTML = mediaHtml;
+    }
+    if (mediaBoxBack) {
+      mediaBoxBack.style.display = 'flex';
+      mediaBoxBack.innerHTML = mediaHtml;
+    }
   } else {
-    mediaBox.style.display = 'none';
-    mediaBox.innerHTML = '';
+    if (mediaBox) {
+      mediaBox.style.display = 'none';
+      mediaBox.innerHTML = '';
+    }
+    if (mediaBoxBack) {
+      mediaBoxBack.style.display = 'none';
+      mediaBoxBack.innerHTML = '';
+    }
   }
 
   // Options on front (Loại bỏ số thứ tự trùng lặp)
@@ -363,7 +380,7 @@ function renderCurrentFlashcard() {
   const backChap = document.getElementById('fc-back-chapter-name');
   if (backChap) backChap.textContent = `Chương ${q.chapter}`;
   document.getElementById('fc-answer-text').textContent = cleanOptionText(q.options[q.answer - 1]) || `Đáp án ${q.answer}`;
-  document.getElementById('fc-explanation-text').textContent = q.explanation || 'Không có giải thích chi tiết.';
+  document.getElementById('fc-explanation-text').innerHTML = q.explanation || 'Không có giải thích chi tiết.';
 
   const tipBox = document.getElementById('fc-tip-box');
   const tipText = document.getElementById('fc-tip-text');
@@ -749,11 +766,15 @@ function renderExamQuestion(index) {
 
   document.getElementById('exam-q-text').textContent = q.question;
 
-  // Media box
+  // Media box (Image or SVG sign/sa hình)
   const mediaBox = document.getElementById('exam-media-box');
-  if (q.imageSvg) {
+  const mediaHtml = q.image
+    ? `<img src="${q.image}" alt="Minh họa câu ${q.id}" class="question-img" loading="lazy" />`
+    : (q.imageSvg || '');
+
+  if (mediaHtml) {
     mediaBox.style.display = 'flex';
-    mediaBox.innerHTML = q.imageSvg;
+    mediaBox.innerHTML = mediaHtml;
   } else {
     mediaBox.style.display = 'none';
     mediaBox.innerHTML = '';
@@ -804,7 +825,7 @@ function renderExamQuestion(index) {
   if (state.isReviewMode) {
     reviewBox.style.display = 'block';
     document.getElementById('exam-review-answer').textContent = cleanOptionText(q.options[q.answer - 1]) || `Đáp án ${q.answer}`;
-    document.getElementById('exam-review-explanation').textContent = q.explanation || 'Không có giải thích chi tiết.';
+    document.getElementById('exam-review-explanation').innerHTML = q.explanation || 'Không có giải thích chi tiết.';
   } else {
     reviewBox.style.display = 'none';
   }
@@ -1056,7 +1077,7 @@ function renderCustomListView(type) {
         </div>
       </div>
       <div class="card-question-text" style="font-size: 1.1rem;">${q.question}</div>
-      ${q.imageSvg ? `<div class="card-media-box">${q.imageSvg}</div>` : ''}
+      ${q.image ? `<div class="card-media-box"><img src="${q.image}" alt="Minh họa câu ${q.id}" class="question-img" loading="lazy" /></div>` : (q.imageSvg ? `<div class="card-media-box">${q.imageSvg}</div>` : '')}
       <div class="options-list" style="margin-bottom: 1rem;">
         ${optionsHtml}
       </div>
