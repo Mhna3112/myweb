@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Ôn thi 600 câu hỏi sát hạch bằng lái xe ô tô (B1, B2, C, D...). Đề thi 30 câu chuẩn Bộ GTVT, thẻ Flashcard 3D thông minh, 60 câu điểm liệt." />
-  <title>GPLX Pro • 600 Câu Hỏi Thi Bằng Lái Ô Tô (Đề 30 Câu)</title>
+  <title>600 Câu Hỏi Thi Bằng Lái Xe Ô Tô (Đề 30 Câu)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet" />
@@ -16,17 +16,10 @@
   <header class="app-header">
     <div class="app-container header-inner">
       <div class="brand-wrapper">
-        <a href="../" class="back-home-link" title="Quay về trang cá nhân Duc Manh">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-          <span>ducmanh.xyz</span>
-        </a>
-        <div class="app-brand">
-          <div class="app-title">
-            <span>GPLX Pro</span>
-            <span class="badge-pill">Đề 30 Câu</span>
-          </div>
-          <span class="app-subtitle">600 Câu Hỏi Sát Hạch Bằng Lái Ô Tô</span>
-        </div>
+        <button class="back-home-link" id="btn-back" title="Quay lại" aria-label="Quay lại">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          <span>Quay lại</span>
+        </button>
       </div>
 
       <!-- Mode Switcher Tabs -->
@@ -97,73 +90,78 @@
           <div class="card-progress-fill" id="fc-progress-fill" style="width: 0%"></div>
         </div>
 
-        <!-- 3D Card Scene -->
-        <div class="card-scene" id="fc-scene">
-          <div class="flashcard" id="fc-card">
-            <!-- Mặt trước (Front) -->
-            <div class="card-face card-front">
-              <div class="card-header-bar">
-                <div class="tag-cluster">
-                  <span class="badge-q-number" id="fc-q-num">Câu 1</span>
-                  <span class="badge-chapter" id="fc-chapter-name">Chương 1</span>
-                  <span class="badge-critical" id="fc-critical-tag" style="display: none">⚠️ CÂU ĐIỂM LIỆT</span>
-                </div>
-                <button class="bookmark-btn" id="fc-btn-bookmark" title="Lưu câu hỏi này">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
-                </button>
+        <!-- Flashcard Card Container (Tự co giãn, không cuộn, nút ở cùng vị trí) -->
+        <div class="flashcard-container" id="fc-card">
+          <!-- Mặt trước (Front) -->
+          <div class="card-side card-front" id="fc-front">
+            <div class="card-header-bar">
+              <div class="tag-cluster">
+                <span class="badge-q-number" id="fc-q-num">Câu 1</span>
+                <span class="badge-chapter" id="fc-chapter-name">Chương 1</span>
+                <span class="badge-critical" id="fc-critical-tag" style="display: none">⚠️ CÂU ĐIỂM LIỆT</span>
               </div>
-
-              <div class="card-question-text" id="fc-q-text">Nội dung câu hỏi đang tải...</div>
-
-              <div class="card-media-box" id="fc-media-box" style="display: none">
-                <!-- SVG sign or sa hình will be injected here -->
-              </div>
-
-              <div class="options-list" id="fc-options-list">
-                <!-- Interactive option items -->
-              </div>
-
-              <div class="flip-hint-box">
-                <span>💡 Bấm vào đáp án để kiểm tra ngay, hoặc lật thẻ xem giải thích</span>
-                <button class="flip-btn-action" id="fc-btn-flip" type="button">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
-                  <span>Xem Đáp Án [Space]</span>
-                </button>
-              </div>
+              <button class="bookmark-btn" id="fc-btn-bookmark" title="Lưu câu hỏi này">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+              </button>
             </div>
 
-            <!-- Mặt sau (Back) -->
-            <div class="card-face card-back">
-              <div class="card-header-bar">
-                <div class="tag-cluster">
-                  <span class="badge-q-number" id="fc-back-q-num">Câu 1</span>
-                  <span class="badge-critical" id="fc-back-critical-tag" style="display: none">⚠️ CÂU ĐIỂM LIỆT</span>
-                </div>
-                <button class="flip-btn-action" id="fc-btn-flip-back" type="button">
-                  <span>↩️ Lật lại câu hỏi</span>
-                </button>
-              </div>
+            <div class="card-question-text" id="fc-q-text">Nội dung câu hỏi đang tải...</div>
 
-              <div class="answer-highlight-box">
-                <div class="answer-label">✓ ĐÁP ÁN CHÍNH XÁC:</div>
-                <div class="answer-text" id="fc-answer-text">Đáp án đúng</div>
-              </div>
+            <div class="card-media-box" id="fc-media-box" style="display: none">
+              <!-- SVG sign or sa hình will be injected here -->
+            </div>
 
-              <div class="explanation-section">
-                <div class="section-title-sm">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-                  <span>CĂN CỨ LUẬT GIAO THÔNG &amp; GIẢI THÍCH:</span>
-                </div>
-                <div class="explanation-text" id="fc-explanation-text">Nội dung giải thích chi tiết...</div>
-              </div>
+            <div class="options-list" id="fc-options-list">
+              <!-- Interactive option items -->
+            </div>
 
-              <div class="tip-box" id="fc-tip-box">
-                <div class="tip-title">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                  <span>MẸO NHỚ NHANH THI SÁT HẠCH:</span>
-                </div>
-                <div class="tip-text" id="fc-tip-text">Mẹo nhớ...</div>
+            <div class="card-bottom-action-bar">
+              <button class="flip-btn-main" id="fc-btn-flip" type="button">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                <span>Xem Đáp Án &amp; Giải Thích [Space]</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Mặt sau (Back) -->
+          <div class="card-side card-back" id="fc-back" style="display: none;">
+            <div class="card-header-bar">
+              <div class="tag-cluster">
+                <span class="badge-q-number" id="fc-back-q-num">Câu 1</span>
+                <span class="badge-chapter" id="fc-back-chapter-name">Chương 1</span>
+                <span class="badge-critical" id="fc-back-critical-tag" style="display: none">⚠️ CÂU ĐIỂM LIỆT</span>
               </div>
+              <button class="bookmark-btn" id="fc-back-btn-bookmark" title="Lưu câu hỏi này">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+              </button>
+            </div>
+
+            <div class="answer-highlight-box">
+              <div class="answer-label">✓ ĐÁP ÁN CHÍNH XÁC:</div>
+              <div class="answer-text" id="fc-answer-text">Đáp án đúng</div>
+            </div>
+
+            <div class="explanation-section">
+              <div class="section-title-sm">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                <span>CĂN CỨ LUẬT GIAO THÔNG &amp; GIẢI THÍCH:</span>
+              </div>
+              <div class="explanation-text" id="fc-explanation-text">Nội dung giải thích chi tiết...</div>
+            </div>
+
+            <div class="tip-box" id="fc-tip-box">
+              <div class="tip-title">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <span>MẸO NHỚ NHANH THI SÁT HẠCH:</span>
+              </div>
+              <div class="tip-text" id="fc-tip-text">Mẹo nhớ...</div>
+            </div>
+
+            <div class="card-bottom-action-bar">
+              <button class="flip-btn-main flip-btn-back" id="fc-btn-flip-back" type="button">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                <span>↩️ Lật Lại Câu Hỏi [Space]</span>
+              </button>
             </div>
           </div>
         </div>
@@ -220,7 +218,12 @@
           <span id="exam-timer-text">20:00</span>
         </div>
 
-        <button class="btn-submit-exam" id="btn-submit-exam">
+        <button class="btn-submit-exam btn-start-exam" id="btn-start-exam">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          <span>Bắt Đầu Làm Bài</span>
+        </button>
+
+        <button class="btn-submit-exam" id="btn-submit-exam" style="display: none;">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
           <span>Nộp Bài Sát Hạch</span>
         </button>
@@ -228,8 +231,60 @@
 
       <!-- Main Exam Layout -->
       <div class="exam-layout">
-        <!-- Question Active View -->
-        <div class="exam-main-card">
+        <!-- Màn Hình Sẵn Sàng (Trước khi bấm Bắt Đầu) -->
+        <div class="exam-ready-card" id="exam-ready-card">
+          <div class="ready-badge-icon">🚦</div>
+          <h2 class="ready-title" id="ready-exam-title">Sát Hạch Lý Thuyết Lái Xe Ô Tô</h2>
+          <p class="ready-subtitle" id="ready-exam-subtitle">Đề thi 30 câu hỏi chuẩn theo quy định của Tổng cục Đường bộ Việt Nam</p>
+
+          <div class="ready-specs-grid">
+            <div class="ready-spec-item">
+              <span class="ready-spec-icon">⏱️</span>
+              <div class="ready-spec-info">
+                <strong>20:00 Phút</strong>
+                <span>Thời gian làm bài</span>
+              </div>
+            </div>
+            <div class="ready-spec-item">
+              <span class="ready-spec-icon">📋</span>
+              <div class="ready-spec-info">
+                <strong>30 Câu Hỏi</strong>
+                <span>Tổng số câu</span>
+              </div>
+            </div>
+            <div class="ready-spec-item">
+              <span class="ready-spec-icon">🎯</span>
+              <div class="ready-spec-info">
+                <strong>&ge; 27 / 30 Câu</strong>
+                <span>Điểm đạt</span>
+              </div>
+            </div>
+            <div class="ready-spec-item">
+              <span class="ready-spec-icon">⚠️</span>
+              <div class="ready-spec-info">
+                <strong style="color: var(--danger);">0 Câu Điểm Liệt</strong>
+                <span>Không được làm sai</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="ready-notes-box">
+            <strong>📌 Quy chế sát hạch:</strong>
+            <ul>
+              <li>Đồng hồ <strong>20:00 phút</strong> sẽ chỉ bắt đầu tính giờ khi bạn nhấn nút <strong>"Bắt Đầu Làm Bài"</strong> bên dưới.</li>
+              <li>Bạn có thể dùng cờ (🚩 Đánh dấu xem lại) để rà soát lại các câu phân vân trước khi nộp bài.</li>
+              <li>Nếu làm sai bất kỳ <strong>câu điểm liệt</strong> nào, bài thi sẽ bị tính <strong>TRƯỢT</strong> trực tiếp.</li>
+            </ul>
+          </div>
+
+          <button class="btn-start-hero" id="btn-start-exam-hero" type="button">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            <span>BẮT ĐẦU TÍNH GIỜ &amp; LÀM BÀI</span>
+          </button>
+        </div>
+
+        <!-- Question Active View (Chỉ hiển thị khi đã bấm Bắt Đầu) -->
+        <div class="exam-main-card" id="exam-active-card" style="display: none;">
           <div class="exam-q-header">
             <div class="tag-cluster">
               <span class="badge-q-number" id="exam-q-counter">Câu 1 / 30</span>

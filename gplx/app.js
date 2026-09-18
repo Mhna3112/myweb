@@ -1,5 +1,5 @@
 /**
- * GPLX Pro - Web Application Logic
+ * Ôn Thi Giấy Phép Lái Xe - Web Application Logic
  * Standard Vietnamese Driver's License 600 Questions & 30-Question Exam Simulator
  */
 
@@ -57,9 +57,15 @@ const state = {
   examTimer: null,
   examSecondsRemaining: 20 * 60,
   examSubmitted: false,
+  examStarted: false,
   isReviewMode: false,
   examTotalTimeTaken: 0
 };
+
+// Helper: loại bỏ số thứ tự thừa ở đầu phương án (ví dụ "1. Hạng B1" -> "Hạng B1")
+function cleanOptionText(text) {
+  return (text || '').replace(/^\d+\.\s*/, '');
+}
 
 // ==========================================================================
 // TOAST NOTIFICATION HELPER
@@ -120,6 +126,17 @@ function applyTheme(theme) {
 // MODE NAVIGATION & VIEW SWITCHING
 // ==========================================================================
 function initNavigation() {
+  const btnBack = document.getElementById('btn-back');
+  if (btnBack) {
+    btnBack.addEventListener('click', () => {
+      if (window.history.length > 1) {
+        window.history.back();
+      } else {
+        window.location.href = '../';
+      }
+    });
+  }
+
   const tabs = document.querySelectorAll('.mode-tab-btn');
   tabs.forEach(tab => {
     tab.addEventListener('click', () => {
@@ -199,18 +216,22 @@ function initFlashcard() {
   document.getElementById('fc-btn-prev').addEventListener('click', () => prevFlashcard());
   document.getElementById('fc-btn-next').addEventListener('click', () => nextFlashcard());
   document.getElementById('fc-btn-shuffle').addEventListener('click', () => shuffleFlashcards());
-  document.getElementById('fc-btn-bookmark').addEventListener('click', () => toggleBookmarkCurrentFc());
+  
+  const btnBm = document.getElementById('fc-btn-bookmark');
+  const btnBmBack = document.getElementById('fc-back-btn-bookmark');
+  if (btnBm) btnBm.addEventListener('click', () => toggleBookmarkCurrentFc());
+  if (btnBmBack) btnBmBack.addEventListener('click', () => toggleBookmarkCurrentFc());
 
   // Touch Swipe for Mobile
   let touchStartX = 0;
   let touchEndX = 0;
-  const fcScene = document.getElementById('fc-scene');
-  if (fcScene) {
-    fcScene.addEventListener('touchstart', (e) => {
+  const fcCard = document.getElementById('fc-card');
+  if (fcCard) {
+    fcCard.addEventListener('touchstart', (e) => {
       touchStartX = e.changedTouches[0].screenX;
     }, { passive: true });
 
-    fcScene.addEventListener('touchend', (e) => {
+    fcCard.addEventListener('touchend', (e) => {
       touchEndX = e.changedTouches[0].screenX;
       handleSwipe();
     }, { passive: true });
@@ -274,8 +295,10 @@ function renderCurrentFlashcard() {
   if (!q) return;
 
   state.fcFlipped = false;
-  const fcCard = document.getElementById('fc-card');
-  if (fcCard) fcCard.classList.remove('is-flipped');
+  const fcFront = document.getElementById('fc-front');
+  const fcBack = document.getElementById('fc-back');
+  if (fcFront) fcFront.style.display = 'flex';
+  if (fcBack) fcBack.style.display = 'none';
 
   // Stats and counters
   document.getElementById('fc-total-count').textContent = state.fcQuestions.length;
@@ -298,11 +321,12 @@ function renderCurrentFlashcard() {
     backCriticalTag.style.display = 'none';
   }
 
-  // Bookmark status
+  // Bookmark status on both front and back
+  const isBm = state.bookmarks.has(q.id);
   const btnBm = document.getElementById('fc-btn-bookmark');
-  if (btnBm) {
-    btnBm.classList.toggle('active', state.bookmarks.has(q.id));
-  }
+  const btnBmBack = document.getElementById('fc-back-btn-bookmark');
+  if (btnBm) btnBm.classList.toggle('active', isBm);
+  if (btnBmBack) btnBmBack.classList.toggle('active', isBm);
 
   document.getElementById('fc-q-text').textContent = q.question;
 
@@ -316,7 +340,7 @@ function renderCurrentFlashcard() {
     mediaBox.innerHTML = '';
   }
 
-  // Options on front
+  // Options on front (Loại bỏ số thứ tự trùng lặp)
   const optionsList = document.getElementById('fc-options-list');
   optionsList.innerHTML = '';
   q.options.forEach((optText, idx) => {
@@ -326,7 +350,7 @@ function renderCurrentFlashcard() {
     item.type = 'button';
     item.innerHTML = `
       <span class="option-index">${optNum}</span>
-      <span class="option-text">${optText}</span>
+      <span class="option-text">${cleanOptionText(optText)}</span>
     `;
     item.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -337,7 +361,9 @@ function renderCurrentFlashcard() {
 
   // Back face elements
   document.getElementById('fc-back-q-num').textContent = `Câu ${q.id}`;
-  document.getElementById('fc-answer-text').textContent = q.options[q.answer - 1] || `Đáp án ${q.answer}`;
+  const backChap = document.getElementById('fc-back-chapter-name');
+  if (backChap) backChap.textContent = `Chương ${q.chapter}`;
+  document.getElementById('fc-answer-text').textContent = cleanOptionText(q.options[q.answer - 1]) || `Đáp án ${q.answer}`;
   document.getElementById('fc-explanation-text').textContent = q.explanation || 'Không có giải thích chi tiết.';
 
   const tipBox = document.getElementById('fc-tip-box');
@@ -384,9 +410,14 @@ function selectFcOption(optIndex) {
 
 function toggleFlip() {
   state.fcFlipped = !state.fcFlipped;
-  const fcCard = document.getElementById('fc-card');
-  if (fcCard) {
-    fcCard.classList.toggle('is-flipped', state.fcFlipped);
+  const fcFront = document.getElementById('fc-front');
+  const fcBack = document.getElementById('fc-back');
+  if (state.fcFlipped) {
+    if (fcFront) fcFront.style.display = 'none';
+    if (fcBack) fcBack.style.display = 'flex';
+  } else {
+    if (fcFront) fcFront.style.display = 'flex';
+    if (fcBack) fcBack.style.display = 'none';
   }
 }
 
@@ -425,8 +456,11 @@ function toggleBookmarkCurrentFc() {
 
   setStorage(STORAGE_KEYS.BOOKMARKS, Array.from(state.bookmarks));
   updateBadges();
+  const isBm = state.bookmarks.has(q.id);
   const btnBm = document.getElementById('fc-btn-bookmark');
-  if (btnBm) btnBm.classList.toggle('active', state.bookmarks.has(q.id));
+  const btnBmBack = document.getElementById('fc-back-btn-bookmark');
+  if (btnBm) btnBm.classList.toggle('active', isBm);
+  if (btnBmBack) btnBmBack.classList.toggle('active', isBm);
 }
 
 // ==========================================================================
@@ -447,6 +481,11 @@ function initExam() {
       startExam(e.target.value);
     });
   }
+
+  const btnStartTop = document.getElementById('btn-start-exam');
+  const btnStartHero = document.getElementById('btn-start-exam-hero');
+  if (btnStartTop) btnStartTop.addEventListener('click', () => beginExamCountdown());
+  if (btnStartHero) btnStartHero.addEventListener('click', () => beginExamCountdown());
 
   document.getElementById('btn-start-new-exam').addEventListener('click', () => {
     const val = document.getElementById('select-exam').value;
@@ -537,6 +576,7 @@ function startExam(presetOrRandom) {
   state.examFlags.clear();
   state.examIndex = 0;
   state.examSubmitted = false;
+  state.examStarted = false;
   state.isReviewMode = false;
   state.examSecondsRemaining = 20 * 60; // 20 minutes countdown
   state.examTotalTimeTaken = 0;
@@ -544,8 +584,51 @@ function startExam(presetOrRandom) {
   // Render 30-palette grid
   buildExamPalette();
 
-  // Reset timer UI
+  // Reset timer UI to static 20:00 (chỉ tính giờ khi bấm Bắt đầu)
   updateTimerUI();
+
+  // Update briefing card text
+  const readyTitle = document.getElementById('ready-exam-title');
+  const readySub = document.getElementById('ready-exam-subtitle');
+  if (presetOrRandom === 'random') {
+    if (readyTitle) readyTitle.textContent = 'Đề Thi Sát Hạch Ngẫu Nhiên (30 Câu)';
+    if (readySub) readySub.textContent = '30 câu hỏi chuẩn sát hạch Tổng cục Đường bộ Việt Nam';
+  } else {
+    const examId = parseInt(presetOrRandom, 10);
+    const preset = GPLX_PRESET_EXAMS.find(p => p.id === examId);
+    if (readyTitle) readyTitle.textContent = preset ? `${preset.title} (30 Câu)` : `Đề Số ${examId}`;
+    if (readySub) readySub.textContent = 'Đề thi 30 câu hỏi theo quy chuẩn Quốc gia';
+  }
+
+  // Show ready screen & hide active question card
+  const readyCard = document.getElementById('exam-ready-card');
+  const activeCard = document.getElementById('exam-active-card');
+  const btnStartExam = document.getElementById('btn-start-exam');
+  const btnSubmitExam = document.getElementById('btn-submit-exam');
+
+  if (readyCard) readyCard.style.display = 'block';
+  if (activeCard) activeCard.style.display = 'none';
+  if (btnStartExam) btnStartExam.style.display = 'inline-flex';
+  if (btnSubmitExam) btnSubmitExam.style.display = 'none';
+}
+
+function beginExamCountdown() {
+  if (state.examStarted) return;
+  state.examStarted = true;
+
+  const readyCard = document.getElementById('exam-ready-card');
+  const activeCard = document.getElementById('exam-active-card');
+  const btnStartExam = document.getElementById('btn-start-exam');
+  const btnSubmitExam = document.getElementById('btn-submit-exam');
+
+  if (readyCard) readyCard.style.display = 'none';
+  if (activeCard) activeCard.style.display = 'block';
+  if (btnStartExam) btnStartExam.style.display = 'none';
+  if (btnSubmitExam) btnSubmitExam.style.display = 'inline-flex';
+
+  renderExamQuestion(0);
+
+  if (state.examTimer) clearInterval(state.examTimer);
   state.examTimer = setInterval(() => {
     state.examSecondsRemaining--;
     state.examTotalTimeTaken++;
@@ -559,9 +642,7 @@ function startExam(presetOrRandom) {
     }
   }, 1000);
 
-  // Render first question
-  renderExamQuestion(0);
-  showToast('Bắt đầu làm bài thi sát hạch! Thời gian: 20 phút.', '⏱️');
+  showToast('⏱️ Bắt đầu tính giờ làm bài: 20:00 phút. Chúc bạn thi tốt!', '🚀');
 }
 
 function updateTimerUI() {
@@ -593,6 +674,9 @@ function buildExamPalette() {
     tile.id = `palette-tile-${i}`;
 
     tile.addEventListener('click', () => {
+      if (!state.examStarted && !state.isReviewMode) {
+        beginExamCountdown();
+      }
       renderExamQuestion(i);
     });
 
@@ -710,7 +794,7 @@ function renderExamQuestion(index) {
 
     btn.innerHTML = `
       <span class="option-index">${optNum}</span>
-      <span class="option-text">${optText}</span>
+      <span class="option-text">${cleanOptionText(optText)}</span>
     `;
 
     optionsList.appendChild(btn);
@@ -720,7 +804,7 @@ function renderExamQuestion(index) {
   const reviewBox = document.getElementById('exam-review-box');
   if (state.isReviewMode) {
     reviewBox.style.display = 'block';
-    document.getElementById('exam-review-answer').textContent = q.options[q.answer - 1] || `Đáp án ${q.answer}`;
+    document.getElementById('exam-review-answer').textContent = cleanOptionText(q.options[q.answer - 1]) || `Đáp án ${q.answer}`;
     document.getElementById('exam-review-explanation').textContent = q.explanation || 'Không có giải thích chi tiết.';
   } else {
     reviewBox.style.display = 'none';
@@ -959,7 +1043,7 @@ function renderCustomListView(type) {
       optionsHtml += `
         <div class="option-item ${isCorrect ? 'correct' : ''}" style="cursor: default;">
           <span class="option-index">${idx + 1}</span>
-          <span class="option-text">${optText} ${isCorrect ? '<strong>(Đáp án đúng)</strong>' : ''}</span>
+          <span class="option-text">${cleanOptionText(optText)} ${isCorrect ? '<strong>(Đáp án đúng)</strong>' : ''}</span>
         </div>
       `;
     });
@@ -997,5 +1081,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initNavigation();
   initFlashcard();
   initExam();
-  console.log('GPLX Pro App initialized successfully.');
+  console.log('GPLX App initialized successfully.');
 });

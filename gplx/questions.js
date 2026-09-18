@@ -1,6 +1,6 @@
 /**
  * GPLX 600 CÂU HỎI SÁT HẠCH LÁI XE Ô TÔ - DATABASE CHUẨN
- * Bản quyền dữ liệu: GPLX Pro Vietnam
+ * Bộ đề 600 câu hỏi sát hạch lý thuyết lái xe ô tô quốc gia
  * Đầy đủ 60 Câu Điểm Liệt (isCritical: true), 7 Chương, Biển Báo, Sa Hình & 20 Đề Thi 30 Câu
  */
 
@@ -205,7 +205,7 @@ export const GPLX_QUESTIONS = [
     "answer": 1,
     "explanation": "Điều 25 Luật GTĐB: Khi đèn tín hiệu đỏ đã bật sáng hoặc có chuông báo hiệu, người tham gia giao thông phải dừng lại ngay và giữ khoảng cách tối thiểu 5 mét tính từ ray gần nhất.",
     "tip": "Mẹo: Đường sắt đèn đỏ bật / chuông reo -> Dừng ngay, cách ray gần nhất tối thiểu 5 mét.",
-    "imageSvg": ""
+    "imageSvg": "<svg viewBox=\"0 0 240 160\" class=\"sahinh-svg\" width=\"240\" height=\"160\"><rect width=\"240\" height=\"160\" fill=\"#E5E7EB\" rx=\"10\"/><rect x=\"0\" y=\"50\" width=\"240\" height=\"60\" fill=\"#4B5563\"/><line x1=\"0\" y1=\"80\" x2=\"240\" y2=\"80\" stroke=\"#FFFFFF\" stroke-dasharray=\"8 6\" stroke-width=\"2\"/><line x1=\"80\" y1=\"0\" x2=\"160\" y2=\"160\" stroke=\"#9CA3AF\" stroke-width=\"6\"/><line x1=\"90\" y1=\"0\" x2=\"170\" y2=\"160\" stroke=\"#9CA3AF\" stroke-width=\"6\"/><circle cx=\"50\" cy=\"35\" r=\"14\" fill=\"#1F2937\"/><circle cx=\"50\" cy=\"35\" r=\"8\" fill=\"#DC2626\"/><text x=\"50\" y=\"40\" font-size=\"12\" fill=\"#FFFFFF\" text-anchor=\"middle\">🛑</text><rect x=\"15\" y=\"65\" width=\"40\" height=\"30\" rx=\"4\" fill=\"#EF4444\"/><text x=\"35\" y=\"83\" font-size=\"9\" fill=\"#FFFFFF\" text-anchor=\"middle\" font-weight=\"bold\">Xe Bạn</text><text x=\"75\" y=\"105\" font-size=\"9\" fill=\"#F59E0B\" font-weight=\"bold\">&ge; 5m</text></svg>"
   },
   {
     "id": 13,
@@ -333,7 +333,7 @@ export const GPLX_QUESTIONS = [
     "answer": 2,
     "explanation": "Điều 17 Luật GTĐB: Xe xuống dốc phải nhường đường cho xe đang lên dốc (vì xe lên dốc đề-pa khởi hành lại rất khó và nguy hiểm).",
     "tip": "Mẹo: Lên dốc được ưu tiên -> Xe xuống dốc PHẢI nhường đường cho xe lên dốc.",
-    "imageSvg": ""
+    "imageSvg": "<svg viewBox=\"0 0 240 160\" class=\"sahinh-svg\" width=\"240\" height=\"160\"><rect width=\"240\" height=\"160\" fill=\"#E5E7EB\" rx=\"10\"/><polygon points=\"0,140 240,40 240,160 0,160\" fill=\"#4B5563\"/><rect x=\"40\" y=\"105\" width=\"38\" height=\"24\" rx=\"4\" transform=\"rotate(-23 40 105)\" fill=\"#3B82F6\"/><text x=\"55\" y=\"112\" font-size=\"8\" fill=\"#FFFFFF\" font-weight=\"bold\">Lên dốc</text><rect x=\"170\" y=\"55\" width=\"38\" height=\"24\" rx=\"4\" transform=\"rotate(-23 170 55)\" fill=\"#EF4444\"/><text x=\"185\" y=\"62\" font-size=\"8\" fill=\"#FFFFFF\" font-weight=\"bold\">Xuống dốc</text></svg>"
   },
   {
     "id": 21,
@@ -397,7 +397,7 @@ export const GPLX_QUESTIONS = [
     "answer": 1,
     "explanation": "Điều 24 Luật GTĐB: Tại nơi đường giao nhau không có vòng xuyến: Nhường đường cho xe đến từ BÊN PHẢI. (Có vòng xuyến: Nhường BÊN TRÁI).",
     "tip": "Mẹo: KHÔNG vòng xuyến -> Nhường PHẢI. CÓ vòng xuyến -> Nhường TRÁI.",
-    "imageSvg": ""
+    "imageSvg": "<svg viewBox=\"0 0 100 100\" class=\"sign-svg\" width=\"90\" height=\"90\"><polygon points=\"50,90 10,18 90,18\" fill=\"#FFFFFF\" stroke=\"#DC2626\" stroke-width=\"8\" stroke-linejoin=\"round\"/></svg>"
   },
   {
     "id": 25,
@@ -413,7 +413,7 @@ export const GPLX_QUESTIONS = [
     "answer": 2,
     "explanation": "Khoản 2 Điều 24 Luật GTĐB: Tại nơi đường giao nhau có báo hiệu đi theo vòng xuyến, phải nhường đường cho xe đi đến từ bên trái.",
     "tip": "Mẹo: Có vòng xuyến -> Nhường bên TRÁI.",
-    "imageSvg": ""
+    "imageSvg": "<svg viewBox=\"0 0 100 100\" class=\"sign-svg\" width=\"90\" height=\"90\"><circle cx=\"50\" cy=\"50\" r=\"46\" fill=\"#2563EB\" stroke=\"#FFFFFF\" stroke-width=\"3\"/><circle cx=\"50\" cy=\"50\" r=\"18\" fill=\"none\" stroke=\"#FFFFFF\" stroke-width=\"6\" stroke-dasharray=\"24 10\"/><polygon points=\"68,50 78,40 78,60\" fill=\"#FFFFFF\" transform=\"rotate(-40 50 50)\"/><polygon points=\"32,50 22,40 22,60\" fill=\"#FFFFFF\" transform=\"rotate(140 50 50)\"/></svg>"
   },
   {
     "id": 26,
@@ -685,7 +685,7 @@ export const GPLX_QUESTIONS = [
     "answer": 2,
     "explanation": "Điều 25 Luật GTĐB: Đường sắt không rào chắn: Dừng lại cách ray gần nhất tối thiểu 5m, quan sát 2 phía, an toàn mới đi qua.",
     "tip": "Mẹo: Qua đường sắt -> Dừng lại cách ray 5m, quan sát rồi mới đi.",
-    "imageSvg": ""
+    "imageSvg": "<svg viewBox=\"0 0 240 160\" class=\"sahinh-svg\" width=\"240\" height=\"160\"><rect width=\"240\" height=\"160\" fill=\"#E5E7EB\" rx=\"10\"/><rect x=\"0\" y=\"50\" width=\"240\" height=\"60\" fill=\"#4B5563\"/><line x1=\"0\" y1=\"80\" x2=\"240\" y2=\"80\" stroke=\"#FFFFFF\" stroke-dasharray=\"8 6\" stroke-width=\"2\"/><line x1=\"80\" y1=\"0\" x2=\"160\" y2=\"160\" stroke=\"#9CA3AF\" stroke-width=\"6\"/><line x1=\"90\" y1=\"0\" x2=\"170\" y2=\"160\" stroke=\"#9CA3AF\" stroke-width=\"6\"/><circle cx=\"50\" cy=\"35\" r=\"14\" fill=\"#1F2937\"/><circle cx=\"50\" cy=\"35\" r=\"8\" fill=\"#DC2626\"/><text x=\"50\" y=\"40\" font-size=\"12\" fill=\"#FFFFFF\" text-anchor=\"middle\">🛑</text><rect x=\"15\" y=\"65\" width=\"40\" height=\"30\" rx=\"4\" fill=\"#EF4444\"/><text x=\"35\" y=\"83\" font-size=\"9\" fill=\"#FFFFFF\" text-anchor=\"middle\" font-weight=\"bold\">Xe Bạn</text><text x=\"75\" y=\"105\" font-size=\"9\" fill=\"#F59E0B\" font-weight=\"bold\">&ge; 5m</text></svg>"
   },
   {
     "id": 43,
@@ -1389,7 +1389,7 @@ export const GPLX_QUESTIONS = [
     "answer": 2,
     "explanation": "Thứ tự ưu tiên giao lộ: 1. Xe đã lọt vào ngã tư; 2. Xe ưu tiên (Cứu hỏa > Quân sự > Công an > Cứu thương); 3. Đường ưu tiên; 4. Quyền bên phải không vướng; 5. Hướng rẽ (Rẽ phải > Đi thẳng > Rẽ trái). Trong hình xe cứu hỏa được đi trước tiên.",
     "tip": "Mẹo: Thứ tự xe ưu tiên: Cứu hỏa - Quân sự - Công an - Cứu thương (Hỏa - Sự - An - Thương).",
-    "imageSvg": "<svg viewBox=\"0 0 200 150\" class=\"sahinh-svg\" width=\"180\" height=\"135\"><rect width=\"200\" height=\"150\" fill=\"#E5E7EB\" rx=\"8\"/><rect x=\"80\" y=\"0\" width=\"40\" height=\"150\" fill=\"#4B5563\"/><rect x=\"0\" y=\"55\" width=\"200\" height=\"40\" fill=\"#4B5563\"/><line x1=\"100\" y1=\"0\" x2=\"100\" y2=\"55\" stroke=\"#FFFFFF\" stroke-dasharray=\"5 5\" stroke-width=\"2\"/><line x1=\"100\" y1=\"95\" x2=\"100\" y2=\"150\" stroke=\"#FFFFFF\" stroke-dasharray=\"5 5\" stroke-width=\"2\"/><line x1=\"0\" y1=\"75\" x2=\"80\" y2=\"75\" stroke=\"#FFFFFF\" stroke-dasharray=\"5 5\" stroke-width=\"2\"/><line x1=\"120\" y1=\"75\" x2=\"200\" y2=\"75\" stroke=\"#FFFFFF\" stroke-dasharray=\"5 5\" stroke-width=\"2\"/><rect x=\"88\" y=\"110\" width=\"24\" height=\"32\" rx=\"4\" fill=\"#EF4444\"/><text x=\"100\" y=\"130\" font-size=\"10\" fill=\"#FFFFFF\" text-anchor=\"middle\" font-weight=\"bold\">Xe Bạn</text><rect x=\"15\" y=\"60\" width=\"35\" height=\"20\" rx=\"4\" fill=\"#3B82F6\"/><text x=\"32\" y=\"74\" font-size=\"9\" fill=\"#FFFFFF\" text-anchor=\"middle\" font-weight=\"bold\">Xe Con</text><rect x=\"145\" y=\"60\" width=\"40\" height=\"22\" rx=\"4\" fill=\"#DC2626\"/><text x=\"165\" y=\"75\" font-size=\"8\" fill=\"#FFFFFF\" text-anchor=\"middle\" font-weight=\"bold\">Cứu Hỏa</text><circle cx=\"165\" cy=\"55\" r=\"4\" fill=\"#EF4444\"/></svg>"
+    "imageSvg": "<svg viewBox=\"0 0 240 180\" class=\"sahinh-svg\" width=\"240\" height=\"180\"><rect width=\"240\" height=\"180\" fill=\"#E5E7EB\" rx=\"10\"/><rect x=\"95\" y=\"0\" width=\"50\" height=\"180\" fill=\"#4B5563\"/><rect x=\"0\" y=\"65\" width=\"240\" height=\"50\" fill=\"#4B5563\"/><line x1=\"120\" y1=\"0\" x2=\"120\" y2=\"65\" stroke=\"#FFFFFF\" stroke-dasharray=\"6 6\" stroke-width=\"2\"/><line x1=\"120\" y1=\"115\" x2=\"120\" y2=\"180\" stroke=\"#FFFFFF\" stroke-dasharray=\"6 6\" stroke-width=\"2\"/><line x1=\"0\" y1=\"90\" x2=\"95\" y2=\"90\" stroke=\"#FFFFFF\" stroke-dasharray=\"6 6\" stroke-width=\"2\"/><line x1=\"145\" y1=\"90\" x2=\"240\" y2=\"90\" stroke=\"#FFFFFF\" stroke-dasharray=\"6 6\" stroke-width=\"2\"/><rect x=\"105\" y=\"130\" width=\"30\" height=\"38\" rx=\"5\" fill=\"#EF4444\"/><text x=\"120\" y=\"153\" font-size=\"10\" fill=\"#FFFFFF\" text-anchor=\"middle\" font-weight=\"bold\">Xe Bạn</text><rect x=\"180\" y=\"72\" width=\"46\" height=\"26\" rx=\"5\" fill=\"#DC2626\"/><circle cx=\"203\" cy=\"67\" r=\"5\" fill=\"#EF4444\"/><text x=\"203\" y=\"88\" font-size=\"9\" fill=\"#FFFFFF\" text-anchor=\"middle\" font-weight=\"bold\">Cứu Hỏa</text><rect x=\"20\" y=\"72\" width=\"42\" height=\"26\" rx=\"5\" fill=\"#2563EB\"/><text x=\"41\" y=\"88\" font-size=\"9\" fill=\"#FFFFFF\" text-anchor=\"middle\" font-weight=\"bold\">Xe Con</text></svg>"
   },
   {
     "id": 87,
@@ -1405,7 +1405,7 @@ export const GPLX_QUESTIONS = [
     "answer": 2,
     "explanation": "Thứ tự ưu tiên theo hướng di chuyển: Xe rẽ phải được ưu tiên số 1 -> Xe đi thẳng ưu tiên số 2 -> Xe rẽ trái ưu tiên cuối cùng.",
     "tip": "Mẹo: Hướng rẽ: RẼ PHẢI > ĐI THẲNG > RẼ TRÁI (Phải - Thẳng - Trái).",
-    "imageSvg": ""
+    "imageSvg": "<svg viewBox=\"0 0 240 180\" class=\"sahinh-svg\" width=\"240\" height=\"180\"><rect width=\"240\" height=\"180\" fill=\"#E5E7EB\" rx=\"10\"/><rect x=\"95\" y=\"0\" width=\"50\" height=\"180\" fill=\"#4B5563\"/><rect x=\"0\" y=\"65\" width=\"240\" height=\"50\" fill=\"#4B5563\"/><line x1=\"120\" y1=\"0\" x2=\"120\" y2=\"65\" stroke=\"#FFFFFF\" stroke-dasharray=\"6 6\" stroke-width=\"2\"/><line x1=\"120\" y1=\"115\" x2=\"120\" y2=\"180\" stroke=\"#FFFFFF\" stroke-dasharray=\"6 6\" stroke-width=\"2\"/><rect x=\"105\" y=\"130\" width=\"30\" height=\"38\" rx=\"5\" fill=\"#10B981\"/><path d=\"M120 125 L120 90 L80 90\" fill=\"none\" stroke=\"#FBBF24\" stroke-width=\"3\" stroke-linecap=\"round\" stroke-dasharray=\"4 2\"/><polygon points=\"76,90 84,85 84,95\" fill=\"#FBBF24\"/><text x=\"120\" y=\"153\" font-size=\"9\" fill=\"#FFFFFF\" text-anchor=\"middle\" font-weight=\"bold\">Xe Con (Rẽ Trái)</text><rect x=\"105\" y=\"15\" width=\"30\" height=\"38\" rx=\"5\" fill=\"#3B82F6\"/><path d=\"M120 58 L120 120\" fill=\"none\" stroke=\"#60A5FA\" stroke-width=\"3\" stroke-linecap=\"round\"/><polygon points=\"120,125 115,117 125,117\" fill=\"#60A5FA\"/><text x=\"120\" y=\"38\" font-size=\"9\" fill=\"#FFFFFF\" text-anchor=\"middle\" font-weight=\"bold\">Xe Khách (Thẳng)</text></svg>"
   },
   {
     "id": 88,
@@ -1421,7 +1421,7 @@ export const GPLX_QUESTIONS = [
     "answer": 1,
     "explanation": "Biển tam giác ngược cắm trên đường nhánh không ưu tiên, xe gặp biển này bắt buộc phải nhường đường cho xe trên đường ưu tiên từ bất kỳ hướng nào tới.",
     "tip": "Mẹo: Thấy biển tam giác ngược trước mặt -> Xe của bạn PHẢI nhường đường.",
-    "imageSvg": ""
+    "imageSvg": "<svg viewBox=\"0 0 100 100\" class=\"sign-svg\" width=\"90\" height=\"90\"><polygon points=\"50,90 10,18 90,18\" fill=\"#FFFFFF\" stroke=\"#DC2626\" stroke-width=\"8\" stroke-linejoin=\"round\"/></svg>"
   },
   {
     "id": 89,
@@ -1437,7 +1437,7 @@ export const GPLX_QUESTIONS = [
     "answer": 4,
     "explanation": "Khoản 4 Điều 15 Luật GTĐB nghiêm cấm quay đầu xe đè lên vạch kẻ đường dành cho người đi bộ.",
     "tip": "Mẹo: Quay đầu đè vạch người đi bộ là vi phạm luật.",
-    "imageSvg": ""
+    "imageSvg": "<svg viewBox=\"0 0 240 180\" class=\"sahinh-svg\" width=\"240\" height=\"180\"><rect width=\"240\" height=\"180\" fill=\"#374151\" rx=\"10\"/><line x1=\"0\" y1=\"90\" x2=\"240\" y2=\"90\" stroke=\"#FBBF24\" stroke-width=\"3\" stroke-dasharray=\"10 8\"/><rect x=\"70\" y=\"10\" width=\"12\" height=\"160\" fill=\"#FFFFFF\" opacity=\"0.9\"/><rect x=\"92\" y=\"10\" width=\"12\" height=\"160\" fill=\"#FFFFFF\" opacity=\"0.9\"/><rect x=\"114\" y=\"10\" width=\"12\" height=\"160\" fill=\"#FFFFFF\" opacity=\"0.9\"/><rect x=\"150\" y=\"110\" width=\"40\" height=\"24\" rx=\"4\" fill=\"#3B82F6\"/><text x=\"170\" y=\"126\" font-size=\"9\" fill=\"#FFFFFF\" text-anchor=\"middle\" font-weight=\"bold\">Xe Con</text><path d=\"M 150 120 C 70 120, 70 60, 150 60\" fill=\"none\" stroke=\"#EF4444\" stroke-width=\"3\" stroke-dasharray=\"5 3\"/><polygon points=\"152,60 144,55 144,65\" fill=\"#EF4444\"/><circle cx=\"98\" cy=\"90\" r=\"22\" fill=\"#FEF2F2\" stroke=\"#DC2626\" stroke-width=\"3.5\"/><line x1=\"84\" y1=\"76\" x2=\"112\" y2=\"104\" stroke=\"#DC2626\" stroke-width=\"3.5\" stroke-linecap=\"round\"/><line x1=\"112\" y1=\"76\" x2=\"84\" y2=\"104\" stroke=\"#DC2626\" stroke-width=\"3.5\" stroke-linecap=\"round\"/><text x=\"120\" y=\"172\" font-size=\"9\" fill=\"#9CA3AF\" text-anchor=\"middle\" font-weight=\"bold\">Cấm quay đầu đè vạch người đi bộ</text></svg>"
   },
   {
     "id": 90,
@@ -1453,7 +1453,7 @@ export const GPLX_QUESTIONS = [
     "answer": 2,
     "explanation": "Quy tắc vòng xuyến: Khi đã vào vòng xuyến, phải nhường đường cho các xe đi từ BÊN TRÁI tới.",
     "tip": "Mẹo: Có vòng xuyến -> Nhường bên TRÁI.",
-    "imageSvg": ""
+    "imageSvg": "<svg viewBox=\"0 0 240 180\" class=\"sahinh-svg\" width=\"240\" height=\"180\"><rect width=\"240\" height=\"180\" fill=\"#E5E7EB\" rx=\"10\"/><circle cx=\"120\" cy=\"90\" r=\"70\" fill=\"#4B5563\"/><circle cx=\"120\" cy=\"90\" r=\"30\" fill=\"#15803D\" stroke=\"#FFFFFF\" stroke-width=\"3\"/><rect x=\"105\" y=\"140\" width=\"30\" height=\"35\" rx=\"5\" fill=\"#EF4444\"/><text x=\"120\" y=\"162\" font-size=\"9\" fill=\"#FFFFFF\" text-anchor=\"middle\" font-weight=\"bold\">Xe Bạn</text><rect x=\"60\" y=\"80\" width=\"32\" height=\"22\" rx=\"4\" fill=\"#3B82F6\"/><text x=\"76\" y=\"94\" font-size=\"8\" fill=\"#FFFFFF\" text-anchor=\"middle\" font-weight=\"bold\">Xe Trong</text><path d=\"M110 50 A 40 40 0 0 1 150 90\" fill=\"none\" stroke=\"#FBBF24\" stroke-width=\"3\" stroke-dasharray=\"5 3\"/><polygon points=\"152,95 156,87 148,87\" fill=\"#FBBF24\"/></svg>"
   },
   {
     "id": 91,
@@ -1469,7 +1469,7 @@ export const GPLX_QUESTIONS = [
     "answer": 1,
     "explanation": "Nguyên tắc an toàn cốt lõi: Luôn quan sát gương, giữ khoảng cách an toàn với xe trước và tuân thủ tốc độ cho phép.",
     "tip": "Mẹo: Lựa chọn mang tính cẩn trọng, quan sát toàn diện luôn là đáp án đúng.",
-    "imageSvg": ""
+    "imageSvg": "<svg viewBox=\"0 0 100 100\" class=\"sign-svg\" width=\"90\" height=\"90\"><circle cx=\"50\" cy=\"50\" r=\"46\" fill=\"#FFFFFF\" stroke=\"#DC2626\" stroke-width=\"8\"/><path d=\"M60 70 L60 46 Q60 26 42 26 Q26 26 26 46 L26 70\" fill=\"none\" stroke=\"#1F2937\" stroke-width=\"6\" stroke-linecap=\"round\"/><polygon points=\"26,76 18,62 34,62\" fill=\"#1F2937\"/><line x1=\"22\" y1=\"22\" x2=\"78\" y2=\"78\" stroke=\"#DC2626\" stroke-width=\"8\" stroke-linecap=\"round\"/></svg>"
   },
   {
     "id": 92,
@@ -1485,7 +1485,7 @@ export const GPLX_QUESTIONS = [
     "answer": 1,
     "explanation": "Nguyên tắc an toàn cốt lõi: Luôn quan sát gương, giữ khoảng cách an toàn với xe trước và tuân thủ tốc độ cho phép.",
     "tip": "Mẹo: Lựa chọn mang tính cẩn trọng, quan sát toàn diện luôn là đáp án đúng.",
-    "imageSvg": ""
+    "imageSvg": "<svg viewBox=\"0 0 100 100\" class=\"sign-svg\" width=\"90\" height=\"90\"><circle cx=\"50\" cy=\"50\" r=\"46\" fill=\"#2563EB\" stroke=\"#DC2626\" stroke-width=\"8\"/><line x1=\"20\" y1=\"20\" x2=\"80\" y2=\"80\" stroke=\"#DC2626\" stroke-width=\"8\" stroke-linecap=\"round\"/></svg>"
   },
   {
     "id": 93,
@@ -1501,7 +1501,7 @@ export const GPLX_QUESTIONS = [
     "answer": 1,
     "explanation": "Nguyên tắc an toàn cốt lõi: Luôn quan sát gương, giữ khoảng cách an toàn với xe trước và tuân thủ tốc độ cho phép.",
     "tip": "Mẹo: Lựa chọn mang tính cẩn trọng, quan sát toàn diện luôn là đáp án đúng.",
-    "imageSvg": ""
+    "imageSvg": "<svg viewBox=\"0 0 100 100\" class=\"sign-svg\" width=\"90\" height=\"90\"><circle cx=\"50\" cy=\"50\" r=\"46\" fill=\"#2563EB\" stroke=\"#DC2626\" stroke-width=\"8\"/><line x1=\"20\" y1=\"20\" x2=\"80\" y2=\"80\" stroke=\"#DC2626\" stroke-width=\"8\" stroke-linecap=\"round\"/><line x1=\"80\" y1=\"20\" x2=\"20\" y2=\"80\" stroke=\"#DC2626\" stroke-width=\"8\" stroke-linecap=\"round\"/></svg>"
   },
   {
     "id": 94,
@@ -1517,7 +1517,7 @@ export const GPLX_QUESTIONS = [
     "answer": 1,
     "explanation": "Nguyên tắc an toàn cốt lõi: Luôn quan sát gương, giữ khoảng cách an toàn với xe trước và tuân thủ tốc độ cho phép.",
     "tip": "Mẹo: Lựa chọn mang tính cẩn trọng, quan sát toàn diện luôn là đáp án đúng.",
-    "imageSvg": ""
+    "imageSvg": "<svg viewBox=\"0 0 100 100\" class=\"sign-svg\" width=\"90\" height=\"90\"><circle cx=\"50\" cy=\"50\" r=\"46\" fill=\"#FFFFFF\" stroke=\"#DC2626\" stroke-width=\"8\"/><rect x=\"25\" y=\"44\" width=\"50\" height=\"24\" rx=\"5\" fill=\"#1F2937\"/><circle cx=\"36\" cy=\"68\" r=\"6\" fill=\"#374151\"/><circle cx=\"64\" cy=\"68\" r=\"6\" fill=\"#374151\"/><path d=\"M30 44 L38 30 L62 30 L70 44 Z\" fill=\"#1F2937\"/><rect x=\"34\" y=\"33\" width=\"13\" height=\"9\" fill=\"#93C5FD\"/><rect x=\"53\" y=\"33\" width=\"13\" height=\"9\" fill=\"#93C5FD\"/><line x1=\"22\" y1=\"22\" x2=\"78\" y2=\"78\" stroke=\"#DC2626\" stroke-width=\"8\" stroke-linecap=\"round\"/></svg>"
   },
   {
     "id": 95,
@@ -1533,7 +1533,7 @@ export const GPLX_QUESTIONS = [
     "answer": 1,
     "explanation": "Nguyên tắc an toàn cốt lõi: Luôn quan sát gương, giữ khoảng cách an toàn với xe trước và tuân thủ tốc độ cho phép.",
     "tip": "Mẹo: Lựa chọn mang tính cẩn trọng, quan sát toàn diện luôn là đáp án đúng.",
-    "imageSvg": ""
+    "imageSvg": "<svg viewBox=\"0 0 100 100\" class=\"sign-svg\" width=\"90\" height=\"90\"><circle cx=\"50\" cy=\"50\" r=\"46\" fill=\"#2563EB\" stroke=\"#FFFFFF\" stroke-width=\"3\"/><text x=\"50\" y=\"62\" font-family=\"Inter, sans-serif\" font-weight=\"900\" font-size=\"40\" fill=\"#FFFFFF\" text-anchor=\"middle\">60</text></svg>"
   },
   {
     "id": 96,
@@ -1549,7 +1549,7 @@ export const GPLX_QUESTIONS = [
     "answer": 1,
     "explanation": "Nguyên tắc an toàn cốt lõi: Luôn quan sát gương, giữ khoảng cách an toàn với xe trước và tuân thủ tốc độ cho phép.",
     "tip": "Mẹo: Lựa chọn mang tính cẩn trọng, quan sát toàn diện luôn là đáp án đúng.",
-    "imageSvg": ""
+    "imageSvg": "<svg viewBox=\"0 0 100 100\" class=\"sign-svg\" width=\"90\" height=\"90\"><circle cx=\"50\" cy=\"50\" r=\"46\" fill=\"#FFFFFF\" stroke=\"#DC2626\" stroke-width=\"8\"/><text x=\"50\" y=\"62\" font-family=\"Inter, sans-serif\" font-weight=\"900\" font-size=\"40\" fill=\"#1F2937\" text-anchor=\"middle\">60</text></svg>"
   },
   {
     "id": 97,
@@ -1565,7 +1565,7 @@ export const GPLX_QUESTIONS = [
     "answer": 1,
     "explanation": "Nguyên tắc an toàn cốt lõi: Luôn quan sát gương, giữ khoảng cách an toàn với xe trước và tuân thủ tốc độ cho phép.",
     "tip": "Mẹo: Lựa chọn mang tính cẩn trọng, quan sát toàn diện luôn là đáp án đúng.",
-    "imageSvg": ""
+    "imageSvg": "<svg viewBox=\"0 0 100 100\" class=\"sign-svg\" width=\"90\" height=\"90\"><rect x=\"8\" y=\"8\" width=\"84\" height=\"84\" rx=\"10\" fill=\"#2563EB\" stroke=\"#FFFFFF\" stroke-width=\"3\"/><polygon points=\"20,55 35,40 50,55\" fill=\"#FFFFFF\"/><rect x=\"25\" y=\"55\" width=\"20\" height=\"30\" fill=\"#FFFFFF\"/><rect x=\"55\" y=\"30\" width=\"28\" height=\"55\" fill=\"#FFFFFF\"/><rect x=\"60\" y=\"38\" width=\"6\" height=\"8\" fill=\"#2563EB\"/><rect x=\"72\" y=\"38\" width=\"6\" height=\"8\" fill=\"#2563EB\"/><rect x=\"60\" y=\"52\" width=\"6\" height=\"8\" fill=\"#2563EB\"/><rect x=\"72\" y=\"52\" width=\"6\" height=\"8\" fill=\"#2563EB\"/></svg>"
   },
   {
     "id": 98,
@@ -1581,7 +1581,7 @@ export const GPLX_QUESTIONS = [
     "answer": 1,
     "explanation": "Nguyên tắc an toàn cốt lõi: Luôn quan sát gương, giữ khoảng cách an toàn với xe trước và tuân thủ tốc độ cho phép.",
     "tip": "Mẹo: Lựa chọn mang tính cẩn trọng, quan sát toàn diện luôn là đáp án đúng.",
-    "imageSvg": ""
+    "imageSvg": "<svg viewBox=\"0 0 100 100\" class=\"sign-svg\" width=\"90\" height=\"90\"><polygon points=\"50,12 10,84 90,84\" fill=\"#EAB308\" stroke=\"#DC2626\" stroke-width=\"6\" stroke-linejoin=\"round\"/><rect x=\"36\" y=\"48\" width=\"28\" height=\"14\" rx=\"3\" fill=\"#1F2937\"/><circle cx=\"42\" cy=\"62\" r=\"4\" fill=\"#1F2937\"/><circle cx=\"58\" cy=\"62\" r=\"4\" fill=\"#1F2937\"/><path d=\"M38 68 Q44 74 38 80\" fill=\"none\" stroke=\"#1F2937\" stroke-width=\"3\" stroke-linecap=\"round\"/><path d=\"M58 68 Q64 74 58 80\" fill=\"none\" stroke=\"#1F2937\" stroke-width=\"3\" stroke-linecap=\"round\"/></svg>"
   },
   {
     "id": 99,
@@ -1597,7 +1597,7 @@ export const GPLX_QUESTIONS = [
     "answer": 1,
     "explanation": "Nguyên tắc an toàn cốt lõi: Luôn quan sát gương, giữ khoảng cách an toàn với xe trước và tuân thủ tốc độ cho phép.",
     "tip": "Mẹo: Lựa chọn mang tính cẩn trọng, quan sát toàn diện luôn là đáp án đúng.",
-    "imageSvg": ""
+    "imageSvg": "<svg viewBox=\"0 0 100 100\" class=\"sign-svg\" width=\"90\" height=\"90\"><polygon points=\"50,12 10,84 90,84\" fill=\"#EAB308\" stroke=\"#DC2626\" stroke-width=\"6\" stroke-linejoin=\"round\"/><rect x=\"42\" y=\"36\" width=\"16\" height=\"38\" rx=\"4\" fill=\"#1F2937\"/><circle cx=\"50\" cy=\"43\" r=\"4\" fill=\"#EF4444\"/><circle cx=\"50\" cy=\"55\" r=\"4\" fill=\"#F59E0B\"/><circle cx=\"50\" cy=\"67\" r=\"4\" fill=\"#10B981\"/></svg>"
   },
   {
     "id": 100,
@@ -1613,7 +1613,7 @@ export const GPLX_QUESTIONS = [
     "answer": 1,
     "explanation": "Nguyên tắc an toàn cốt lõi: Luôn quan sát gương, giữ khoảng cách an toàn với xe trước và tuân thủ tốc độ cho phép.",
     "tip": "Mẹo: Lựa chọn mang tính cẩn trọng, quan sát toàn diện luôn là đáp án đúng.",
-    "imageSvg": ""
+    "imageSvg": "<svg viewBox=\"0 0 100 100\" class=\"sign-svg\" width=\"90\" height=\"90\"><polygon points=\"50,12 10,84 90,84\" fill=\"#EAB308\" stroke=\"#DC2626\" stroke-width=\"6\" stroke-linejoin=\"round\"/><line x1=\"28\" y1=\"56\" x2=\"72\" y2=\"56\" stroke=\"#1F2937\" stroke-width=\"4\"/><line x1=\"34\" y1=\"46\" x2=\"34\" y2=\"68\" stroke=\"#1F2937\" stroke-width=\"3\"/><line x1=\"50\" y1=\"46\" x2=\"50\" y2=\"68\" stroke=\"#1F2937\" stroke-width=\"3\"/><line x1=\"66\" y1=\"46\" x2=\"66\" y2=\"68\" stroke=\"#1F2937\" stroke-width=\"3\"/><line x1=\"30\" y1=\"50\" x2=\"70\" y2=\"64\" stroke=\"#1F2937\" stroke-width=\"2\"/></svg>"
   },
   {
     "id": 101,
@@ -1629,7 +1629,7 @@ export const GPLX_QUESTIONS = [
     "answer": 1,
     "explanation": "Nguyên tắc an toàn cốt lõi: Luôn quan sát gương, giữ khoảng cách an toàn với xe trước và tuân thủ tốc độ cho phép.",
     "tip": "Mẹo: Lựa chọn mang tính cẩn trọng, quan sát toàn diện luôn là đáp án đúng.",
-    "imageSvg": ""
+    "imageSvg": "<svg viewBox=\"0 0 100 100\" class=\"sign-svg\" width=\"90\" height=\"90\"><polygon points=\"50,12 10,84 90,84\" fill=\"#EAB308\" stroke=\"#DC2626\" stroke-width=\"6\" stroke-linejoin=\"round\"/><circle cx=\"50\" cy=\"38\" r=\"5\" fill=\"#1F2937\"/><line x1=\"50\" y1=\"44\" x2=\"50\" y2=\"62\" stroke=\"#1F2937\" stroke-width=\"4\" stroke-linecap=\"round\"/><line x1=\"50\" y1=\"62\" x2=\"42\" y2=\"76\" stroke=\"#1F2937\" stroke-width=\"4\" stroke-linecap=\"round\"/><line x1=\"50\" y1=\"62\" x2=\"58\" y2=\"76\" stroke=\"#1F2937\" stroke-width=\"4\" stroke-linecap=\"round\"/><line x1=\"42\" y1=\"50\" x2=\"58\" y2=\"54\" stroke=\"#1F2937\" stroke-width=\"3\" stroke-linecap=\"round\"/></svg>"
   },
   {
     "id": 102,
@@ -1645,7 +1645,7 @@ export const GPLX_QUESTIONS = [
     "answer": 1,
     "explanation": "Nguyên tắc an toàn cốt lõi: Luôn quan sát gương, giữ khoảng cách an toàn với xe trước và tuân thủ tốc độ cho phép.",
     "tip": "Mẹo: Lựa chọn mang tính cẩn trọng, quan sát toàn diện luôn là đáp án đúng.",
-    "imageSvg": ""
+    "imageSvg": "<svg viewBox=\"0 0 100 100\" class=\"sign-svg\" width=\"90\" height=\"90\"><circle cx=\"50\" cy=\"50\" r=\"46\" fill=\"#FFFFFF\" stroke=\"#DC2626\" stroke-width=\"8\"/><rect x=\"25\" y=\"44\" width=\"22\" height=\"16\" rx=\"3\" fill=\"#DC2626\"/><rect x=\"53\" y=\"44\" width=\"22\" height=\"16\" rx=\"3\" fill=\"#1F2937\"/><circle cx=\"31\" cy=\"60\" r=\"4\" fill=\"#374151\"/><circle cx=\"41\" cy=\"60\" r=\"4\" fill=\"#374151\"/><circle cx=\"59\" cy=\"60\" r=\"4\" fill=\"#374151\"/><circle cx=\"69\" cy=\"60\" r=\"4\" fill=\"#374151\"/></svg>"
   },
   {
     "id": 103,
@@ -1661,7 +1661,7 @@ export const GPLX_QUESTIONS = [
     "answer": 1,
     "explanation": "Nguyên tắc an toàn cốt lõi: Luôn quan sát gương, giữ khoảng cách an toàn với xe trước và tuân thủ tốc độ cho phép.",
     "tip": "Mẹo: Lựa chọn mang tính cẩn trọng, quan sát toàn diện luôn là đáp án đúng.",
-    "imageSvg": ""
+    "imageSvg": "<svg viewBox=\"0 0 240 180\" class=\"sahinh-svg\" width=\"240\" height=\"180\"><rect width=\"240\" height=\"180\" fill=\"#E5E7EB\" rx=\"10\"/><rect x=\"95\" y=\"0\" width=\"50\" height=\"180\" fill=\"#4B5563\"/><rect x=\"0\" y=\"65\" width=\"240\" height=\"50\" fill=\"#4B5563\"/><line x1=\"120\" y1=\"0\" x2=\"120\" y2=\"65\" stroke=\"#FFFFFF\" stroke-dasharray=\"6 6\" stroke-width=\"2\"/><line x1=\"120\" y1=\"115\" x2=\"120\" y2=\"180\" stroke=\"#FFFFFF\" stroke-dasharray=\"6 6\" stroke-width=\"2\"/><line x1=\"0\" y1=\"90\" x2=\"95\" y2=\"90\" stroke=\"#FFFFFF\" stroke-dasharray=\"6 6\" stroke-width=\"2\"/><line x1=\"145\" y1=\"90\" x2=\"240\" y2=\"90\" stroke=\"#FFFFFF\" stroke-dasharray=\"6 6\" stroke-width=\"2\"/><rect x=\"105\" y=\"130\" width=\"30\" height=\"38\" rx=\"5\" fill=\"#EF4444\"/><text x=\"120\" y=\"153\" font-size=\"10\" fill=\"#FFFFFF\" text-anchor=\"middle\" font-weight=\"bold\">Xe Bạn</text><rect x=\"180\" y=\"72\" width=\"46\" height=\"26\" rx=\"5\" fill=\"#DC2626\"/><circle cx=\"203\" cy=\"67\" r=\"5\" fill=\"#EF4444\"/><text x=\"203\" y=\"88\" font-size=\"9\" fill=\"#FFFFFF\" text-anchor=\"middle\" font-weight=\"bold\">Cứu Hỏa</text><rect x=\"20\" y=\"72\" width=\"42\" height=\"26\" rx=\"5\" fill=\"#2563EB\"/><text x=\"41\" y=\"88\" font-size=\"9\" fill=\"#FFFFFF\" text-anchor=\"middle\" font-weight=\"bold\">Xe Con</text></svg>"
   },
   {
     "id": 104,
@@ -1677,7 +1677,7 @@ export const GPLX_QUESTIONS = [
     "answer": 1,
     "explanation": "Nguyên tắc an toàn cốt lõi: Luôn quan sát gương, giữ khoảng cách an toàn với xe trước và tuân thủ tốc độ cho phép.",
     "tip": "Mẹo: Lựa chọn mang tính cẩn trọng, quan sát toàn diện luôn là đáp án đúng.",
-    "imageSvg": ""
+    "imageSvg": "<svg viewBox=\"0 0 240 180\" class=\"sahinh-svg\" width=\"240\" height=\"180\"><rect width=\"240\" height=\"180\" fill=\"#E5E7EB\" rx=\"10\"/><rect x=\"95\" y=\"0\" width=\"50\" height=\"180\" fill=\"#4B5563\"/><rect x=\"0\" y=\"65\" width=\"240\" height=\"50\" fill=\"#4B5563\"/><line x1=\"120\" y1=\"0\" x2=\"120\" y2=\"65\" stroke=\"#FFFFFF\" stroke-dasharray=\"6 6\" stroke-width=\"2\"/><line x1=\"120\" y1=\"115\" x2=\"120\" y2=\"180\" stroke=\"#FFFFFF\" stroke-dasharray=\"6 6\" stroke-width=\"2\"/><rect x=\"105\" y=\"130\" width=\"30\" height=\"38\" rx=\"5\" fill=\"#10B981\"/><path d=\"M120 125 L120 90 L80 90\" fill=\"none\" stroke=\"#FBBF24\" stroke-width=\"3\" stroke-linecap=\"round\" stroke-dasharray=\"4 2\"/><polygon points=\"76,90 84,85 84,95\" fill=\"#FBBF24\"/><text x=\"120\" y=\"153\" font-size=\"9\" fill=\"#FFFFFF\" text-anchor=\"middle\" font-weight=\"bold\">Xe Con (Rẽ Trái)</text><rect x=\"105\" y=\"15\" width=\"30\" height=\"38\" rx=\"5\" fill=\"#3B82F6\"/><path d=\"M120 58 L120 120\" fill=\"none\" stroke=\"#60A5FA\" stroke-width=\"3\" stroke-linecap=\"round\"/><polygon points=\"120,125 115,117 125,117\" fill=\"#60A5FA\"/><text x=\"120\" y=\"38\" font-size=\"9\" fill=\"#FFFFFF\" text-anchor=\"middle\" font-weight=\"bold\">Xe Khách (Thẳng)</text></svg>"
   },
   {
     "id": 105,
@@ -1693,7 +1693,7 @@ export const GPLX_QUESTIONS = [
     "answer": 1,
     "explanation": "Nguyên tắc an toàn cốt lõi: Luôn quan sát gương, giữ khoảng cách an toàn với xe trước và tuân thủ tốc độ cho phép.",
     "tip": "Mẹo: Lựa chọn mang tính cẩn trọng, quan sát toàn diện luôn là đáp án đúng.",
-    "imageSvg": ""
+    "imageSvg": "<svg viewBox=\"0 0 240 180\" class=\"sahinh-svg\" width=\"240\" height=\"180\"><rect width=\"240\" height=\"180\" fill=\"#E5E7EB\" rx=\"10\"/><circle cx=\"120\" cy=\"90\" r=\"70\" fill=\"#4B5563\"/><circle cx=\"120\" cy=\"90\" r=\"30\" fill=\"#15803D\" stroke=\"#FFFFFF\" stroke-width=\"3\"/><rect x=\"105\" y=\"140\" width=\"30\" height=\"35\" rx=\"5\" fill=\"#EF4444\"/><text x=\"120\" y=\"162\" font-size=\"9\" fill=\"#FFFFFF\" text-anchor=\"middle\" font-weight=\"bold\">Xe Bạn</text><rect x=\"60\" y=\"80\" width=\"32\" height=\"22\" rx=\"4\" fill=\"#3B82F6\"/><text x=\"76\" y=\"94\" font-size=\"8\" fill=\"#FFFFFF\" text-anchor=\"middle\" font-weight=\"bold\">Xe Trong</text><path d=\"M110 50 A 40 40 0 0 1 150 90\" fill=\"none\" stroke=\"#FBBF24\" stroke-width=\"3\" stroke-dasharray=\"5 3\"/><polygon points=\"152,95 156,87 148,87\" fill=\"#FBBF24\"/></svg>"
   },
   {
     "id": 106,
@@ -1709,7 +1709,7 @@ export const GPLX_QUESTIONS = [
     "answer": 1,
     "explanation": "Nguyên tắc an toàn cốt lõi: Luôn quan sát gương, giữ khoảng cách an toàn với xe trước và tuân thủ tốc độ cho phép.",
     "tip": "Mẹo: Lựa chọn mang tính cẩn trọng, quan sát toàn diện luôn là đáp án đúng.",
-    "imageSvg": ""
+    "imageSvg": "<svg viewBox=\"0 0 240 160\" class=\"sahinh-svg\" width=\"240\" height=\"160\"><rect width=\"240\" height=\"160\" fill=\"#E5E7EB\" rx=\"10\"/><polygon points=\"0,140 240,40 240,160 0,160\" fill=\"#4B5563\"/><rect x=\"40\" y=\"105\" width=\"38\" height=\"24\" rx=\"4\" transform=\"rotate(-23 40 105)\" fill=\"#3B82F6\"/><text x=\"55\" y=\"112\" font-size=\"8\" fill=\"#FFFFFF\" font-weight=\"bold\">Lên dốc</text><rect x=\"170\" y=\"55\" width=\"38\" height=\"24\" rx=\"4\" transform=\"rotate(-23 170 55)\" fill=\"#EF4444\"/><text x=\"185\" y=\"62\" font-size=\"8\" fill=\"#FFFFFF\" font-weight=\"bold\">Xuống dốc</text></svg>"
   },
   {
     "id": 107,
@@ -1725,7 +1725,7 @@ export const GPLX_QUESTIONS = [
     "answer": 1,
     "explanation": "Nguyên tắc an toàn cốt lõi: Luôn quan sát gương, giữ khoảng cách an toàn với xe trước và tuân thủ tốc độ cho phép.",
     "tip": "Mẹo: Lựa chọn mang tính cẩn trọng, quan sát toàn diện luôn là đáp án đúng.",
-    "imageSvg": ""
+    "imageSvg": "<svg viewBox=\"0 0 240 160\" class=\"sahinh-svg\" width=\"240\" height=\"160\"><rect width=\"240\" height=\"160\" fill=\"#E5E7EB\" rx=\"10\"/><rect x=\"0\" y=\"50\" width=\"240\" height=\"60\" fill=\"#4B5563\"/><line x1=\"0\" y1=\"80\" x2=\"240\" y2=\"80\" stroke=\"#FFFFFF\" stroke-dasharray=\"8 6\" stroke-width=\"2\"/><line x1=\"80\" y1=\"0\" x2=\"160\" y2=\"160\" stroke=\"#9CA3AF\" stroke-width=\"6\"/><line x1=\"90\" y1=\"0\" x2=\"170\" y2=\"160\" stroke=\"#9CA3AF\" stroke-width=\"6\"/><circle cx=\"50\" cy=\"35\" r=\"14\" fill=\"#1F2937\"/><circle cx=\"50\" cy=\"35\" r=\"8\" fill=\"#DC2626\"/><text x=\"50\" y=\"40\" font-size=\"12\" fill=\"#FFFFFF\" text-anchor=\"middle\">🛑</text><rect x=\"15\" y=\"65\" width=\"40\" height=\"30\" rx=\"4\" fill=\"#EF4444\"/><text x=\"35\" y=\"83\" font-size=\"9\" fill=\"#FFFFFF\" text-anchor=\"middle\" font-weight=\"bold\">Xe Bạn</text><text x=\"75\" y=\"105\" font-size=\"9\" fill=\"#F59E0B\" font-weight=\"bold\">&ge; 5m</text></svg>"
   },
   {
     "id": 108,
@@ -1741,7 +1741,7 @@ export const GPLX_QUESTIONS = [
     "answer": 1,
     "explanation": "Nguyên tắc an toàn cốt lõi: Luôn quan sát gương, giữ khoảng cách an toàn với xe trước và tuân thủ tốc độ cho phép.",
     "tip": "Mẹo: Lựa chọn mang tính cẩn trọng, quan sát toàn diện luôn là đáp án đúng.",
-    "imageSvg": ""
+    "imageSvg": "<svg viewBox=\"0 0 100 100\" class=\"sign-svg\" width=\"90\" height=\"90\"><rect x=\"8\" y=\"8\" width=\"84\" height=\"84\" rx=\"10\" fill=\"#15803D\" stroke=\"#FFFFFF\" stroke-width=\"3\"/><line x1=\"28\" y1=\"84\" x2=\"42\" y2=\"16\" stroke=\"#FFFFFF\" stroke-width=\"6\"/><line x1=\"72\" y1=\"84\" x2=\"58\" y2=\"16\" stroke=\"#FFFFFF\" stroke-width=\"6\"/><rect x=\"22\" y=\"44\" width=\"56\" height=\"12\" fill=\"#15803D\" stroke=\"#FFFFFF\" stroke-width=\"3\"/></svg>"
   },
   {
     "id": 109,
@@ -1757,7 +1757,7 @@ export const GPLX_QUESTIONS = [
     "answer": 1,
     "explanation": "Nguyên tắc an toàn cốt lõi: Luôn quan sát gương, giữ khoảng cách an toàn với xe trước và tuân thủ tốc độ cho phép.",
     "tip": "Mẹo: Lựa chọn mang tính cẩn trọng, quan sát toàn diện luôn là đáp án đúng.",
-    "imageSvg": ""
+    "imageSvg": "<svg viewBox=\"0 0 100 100\" class=\"sign-svg\" width=\"90\" height=\"90\"><polygon points=\"30,8 70,8 92,30 92,70 70,92 30,92 8,70 8,30\" fill=\"#DC2626\" stroke=\"#FFFFFF\" stroke-width=\"3\"/><text x=\"50\" y=\"58\" font-family=\"Arial, sans-serif\" font-weight=\"900\" font-size=\"24\" fill=\"#FFFFFF\" text-anchor=\"middle\" letter-spacing=\"1\">STOP</text></svg>"
   },
   {
     "id": 110,
@@ -1773,7 +1773,7 @@ export const GPLX_QUESTIONS = [
     "answer": 1,
     "explanation": "Nguyên tắc an toàn cốt lõi: Luôn quan sát gương, giữ khoảng cách an toàn với xe trước và tuân thủ tốc độ cho phép.",
     "tip": "Mẹo: Lựa chọn mang tính cẩn trọng, quan sát toàn diện luôn là đáp án đúng.",
-    "imageSvg": ""
+    "imageSvg": "<svg viewBox=\"0 0 100 100\" class=\"sign-svg\" width=\"90\" height=\"90\"><rect x=\"50\" y=\"8\" width=\"58\" height=\"58\" rx=\"4\" transform=\"rotate(45 50 8)\" fill=\"#EAB308\" stroke=\"#FFFFFF\" stroke-width=\"6\"/><rect x=\"50\" y=\"16\" width=\"46\" height=\"46\" rx=\"2\" transform=\"rotate(45 50 16)\" fill=\"#FFFFFF\"/></svg>"
   },
   {
     "id": 111,
@@ -1789,7 +1789,7 @@ export const GPLX_QUESTIONS = [
     "answer": 1,
     "explanation": "Nguyên tắc an toàn cốt lõi: Luôn quan sát gương, giữ khoảng cách an toàn với xe trước và tuân thủ tốc độ cho phép.",
     "tip": "Mẹo: Lựa chọn mang tính cẩn trọng, quan sát toàn diện luôn là đáp án đúng.",
-    "imageSvg": ""
+    "imageSvg": "<svg viewBox=\"0 0 100 100\" class=\"sign-svg\" width=\"90\" height=\"90\"><circle cx=\"50\" cy=\"50\" r=\"46\" fill=\"#DC2626\" stroke=\"#FFFFFF\" stroke-width=\"3\"/><rect x=\"18\" y=\"42\" width=\"64\" height=\"16\" fill=\"#FFFFFF\" rx=\"2\"/></svg>"
   },
   {
     "id": 112,
@@ -1805,7 +1805,7 @@ export const GPLX_QUESTIONS = [
     "answer": 1,
     "explanation": "Nguyên tắc an toàn cốt lõi: Luôn quan sát gương, giữ khoảng cách an toàn với xe trước và tuân thủ tốc độ cho phép.",
     "tip": "Mẹo: Lựa chọn mang tính cẩn trọng, quan sát toàn diện luôn là đáp án đúng.",
-    "imageSvg": ""
+    "imageSvg": "<svg viewBox=\"0 0 100 100\" class=\"sign-svg\" width=\"90\" height=\"90\"><circle cx=\"50\" cy=\"50\" r=\"46\" fill=\"#FFFFFF\" stroke=\"#DC2626\" stroke-width=\"8\"/><path d=\"M52 28 L52 56 Q52 64 42 64 L30 64\" fill=\"none\" stroke=\"#1F2937\" stroke-width=\"7\" stroke-linecap=\"round\"/><polygon points=\"24,64 36,56 36,72\" fill=\"#1F2937\"/><line x1=\"22\" y1=\"22\" x2=\"78\" y2=\"78\" stroke=\"#DC2626\" stroke-width=\"8\" stroke-linecap=\"round\"/></svg>"
   },
   {
     "id": 113,
@@ -1821,7 +1821,7 @@ export const GPLX_QUESTIONS = [
     "answer": 1,
     "explanation": "Nguyên tắc an toàn cốt lõi: Luôn quan sát gương, giữ khoảng cách an toàn với xe trước và tuân thủ tốc độ cho phép.",
     "tip": "Mẹo: Lựa chọn mang tính cẩn trọng, quan sát toàn diện luôn là đáp án đúng.",
-    "imageSvg": ""
+    "imageSvg": "<svg viewBox=\"0 0 100 100\" class=\"sign-svg\" width=\"90\" height=\"90\"><circle cx=\"50\" cy=\"50\" r=\"46\" fill=\"#FFFFFF\" stroke=\"#DC2626\" stroke-width=\"8\"/><text x=\"50\" y=\"62\" font-family=\"Inter, sans-serif\" font-weight=\"900\" font-size=\"40\" fill=\"#1F2937\" text-anchor=\"middle\">80</text></svg>"
   },
   {
     "id": 114,
@@ -1837,7 +1837,7 @@ export const GPLX_QUESTIONS = [
     "answer": 1,
     "explanation": "Nguyên tắc an toàn cốt lõi: Luôn quan sát gương, giữ khoảng cách an toàn với xe trước và tuân thủ tốc độ cho phép.",
     "tip": "Mẹo: Lựa chọn mang tính cẩn trọng, quan sát toàn diện luôn là đáp án đúng.",
-    "imageSvg": ""
+    "imageSvg": "<svg viewBox=\"0 0 100 100\" class=\"sign-svg\" width=\"90\" height=\"90\"><polygon points=\"50,12 10,84 90,84\" fill=\"#EAB308\" stroke=\"#DC2626\" stroke-width=\"6\" stroke-linejoin=\"round\"/><rect x=\"36\" y=\"48\" width=\"28\" height=\"14\" rx=\"3\" fill=\"#1F2937\"/><circle cx=\"42\" cy=\"62\" r=\"4\" fill=\"#1F2937\"/><circle cx=\"58\" cy=\"62\" r=\"4\" fill=\"#1F2937\"/><path d=\"M38 68 Q44 74 38 80\" fill=\"none\" stroke=\"#1F2937\" stroke-width=\"3\" stroke-linecap=\"round\"/><path d=\"M58 68 Q64 74 58 80\" fill=\"none\" stroke=\"#1F2937\" stroke-width=\"3\" stroke-linecap=\"round\"/></svg>"
   },
   {
     "id": 115,
@@ -1853,7 +1853,7 @@ export const GPLX_QUESTIONS = [
     "answer": 1,
     "explanation": "Nguyên tắc an toàn cốt lõi: Luôn quan sát gương, giữ khoảng cách an toàn với xe trước và tuân thủ tốc độ cho phép.",
     "tip": "Mẹo: Lựa chọn mang tính cẩn trọng, quan sát toàn diện luôn là đáp án đúng.",
-    "imageSvg": ""
+    "imageSvg": "<svg viewBox=\"0 0 240 180\" class=\"sahinh-svg\" width=\"240\" height=\"180\"><rect width=\"240\" height=\"180\" fill=\"#E5E7EB\" rx=\"10\"/><rect x=\"95\" y=\"0\" width=\"50\" height=\"180\" fill=\"#4B5563\"/><rect x=\"0\" y=\"65\" width=\"240\" height=\"50\" fill=\"#4B5563\"/><line x1=\"120\" y1=\"0\" x2=\"120\" y2=\"65\" stroke=\"#FFFFFF\" stroke-dasharray=\"6 6\" stroke-width=\"2\"/><line x1=\"120\" y1=\"115\" x2=\"120\" y2=\"180\" stroke=\"#FFFFFF\" stroke-dasharray=\"6 6\" stroke-width=\"2\"/><line x1=\"0\" y1=\"90\" x2=\"95\" y2=\"90\" stroke=\"#FFFFFF\" stroke-dasharray=\"6 6\" stroke-width=\"2\"/><line x1=\"145\" y1=\"90\" x2=\"240\" y2=\"90\" stroke=\"#FFFFFF\" stroke-dasharray=\"6 6\" stroke-width=\"2\"/><rect x=\"105\" y=\"130\" width=\"30\" height=\"38\" rx=\"5\" fill=\"#EF4444\"/><text x=\"120\" y=\"153\" font-size=\"10\" fill=\"#FFFFFF\" text-anchor=\"middle\" font-weight=\"bold\">Xe Bạn</text><rect x=\"180\" y=\"72\" width=\"46\" height=\"26\" rx=\"5\" fill=\"#DC2626\"/><circle cx=\"203\" cy=\"67\" r=\"5\" fill=\"#EF4444\"/><text x=\"203\" y=\"88\" font-size=\"9\" fill=\"#FFFFFF\" text-anchor=\"middle\" font-weight=\"bold\">Cứu Hỏa</text><rect x=\"20\" y=\"72\" width=\"42\" height=\"26\" rx=\"5\" fill=\"#2563EB\"/><text x=\"41\" y=\"88\" font-size=\"9\" fill=\"#FFFFFF\" text-anchor=\"middle\" font-weight=\"bold\">Xe Con</text></svg>"
   },
   {
     "id": 116,
@@ -1869,7 +1869,7 @@ export const GPLX_QUESTIONS = [
     "answer": 1,
     "explanation": "Nguyên tắc an toàn cốt lõi: Luôn quan sát gương, giữ khoảng cách an toàn với xe trước và tuân thủ tốc độ cho phép.",
     "tip": "Mẹo: Lựa chọn mang tính cẩn trọng, quan sát toàn diện luôn là đáp án đúng.",
-    "imageSvg": ""
+    "imageSvg": "<svg viewBox=\"0 0 240 180\" class=\"sahinh-svg\" width=\"240\" height=\"180\"><rect width=\"240\" height=\"180\" fill=\"#E5E7EB\" rx=\"10\"/><rect x=\"95\" y=\"0\" width=\"50\" height=\"180\" fill=\"#4B5563\"/><rect x=\"0\" y=\"65\" width=\"240\" height=\"50\" fill=\"#4B5563\"/><line x1=\"120\" y1=\"0\" x2=\"120\" y2=\"65\" stroke=\"#FFFFFF\" stroke-dasharray=\"6 6\" stroke-width=\"2\"/><line x1=\"120\" y1=\"115\" x2=\"120\" y2=\"180\" stroke=\"#FFFFFF\" stroke-dasharray=\"6 6\" stroke-width=\"2\"/><rect x=\"105\" y=\"130\" width=\"30\" height=\"38\" rx=\"5\" fill=\"#10B981\"/><path d=\"M120 125 L120 90 L80 90\" fill=\"none\" stroke=\"#FBBF24\" stroke-width=\"3\" stroke-linecap=\"round\" stroke-dasharray=\"4 2\"/><polygon points=\"76,90 84,85 84,95\" fill=\"#FBBF24\"/><text x=\"120\" y=\"153\" font-size=\"9\" fill=\"#FFFFFF\" text-anchor=\"middle\" font-weight=\"bold\">Xe Con (Rẽ Trái)</text><rect x=\"105\" y=\"15\" width=\"30\" height=\"38\" rx=\"5\" fill=\"#3B82F6\"/><path d=\"M120 58 L120 120\" fill=\"none\" stroke=\"#60A5FA\" stroke-width=\"3\" stroke-linecap=\"round\"/><polygon points=\"120,125 115,117 125,117\" fill=\"#60A5FA\"/><text x=\"120\" y=\"38\" font-size=\"9\" fill=\"#FFFFFF\" text-anchor=\"middle\" font-weight=\"bold\">Xe Khách (Thẳng)</text></svg>"
   },
   {
     "id": 117,
@@ -1885,7 +1885,7 @@ export const GPLX_QUESTIONS = [
     "answer": 1,
     "explanation": "Nguyên tắc an toàn cốt lõi: Luôn quan sát gương, giữ khoảng cách an toàn với xe trước và tuân thủ tốc độ cho phép.",
     "tip": "Mẹo: Lựa chọn mang tính cẩn trọng, quan sát toàn diện luôn là đáp án đúng.",
-    "imageSvg": ""
+    "imageSvg": "<svg viewBox=\"0 0 100 100\" class=\"sign-svg\" width=\"90\" height=\"90\"><polygon points=\"50,12 10,84 90,84\" fill=\"#EAB308\" stroke=\"#DC2626\" stroke-width=\"6\" stroke-linejoin=\"round\"/><rect x=\"42\" y=\"36\" width=\"16\" height=\"38\" rx=\"4\" fill=\"#1F2937\"/><circle cx=\"50\" cy=\"43\" r=\"4\" fill=\"#EF4444\"/><circle cx=\"50\" cy=\"55\" r=\"4\" fill=\"#F59E0B\"/><circle cx=\"50\" cy=\"67\" r=\"4\" fill=\"#10B981\"/></svg>"
   },
   {
     "id": 118,
@@ -1901,7 +1901,7 @@ export const GPLX_QUESTIONS = [
     "answer": 1,
     "explanation": "Nguyên tắc an toàn cốt lõi: Luôn quan sát gương, giữ khoảng cách an toàn với xe trước và tuân thủ tốc độ cho phép.",
     "tip": "Mẹo: Lựa chọn mang tính cẩn trọng, quan sát toàn diện luôn là đáp án đúng.",
-    "imageSvg": ""
+    "imageSvg": "<svg viewBox=\"0 0 100 100\" class=\"sign-svg\" width=\"90\" height=\"90\"><polygon points=\"50,12 10,84 90,84\" fill=\"#EAB308\" stroke=\"#DC2626\" stroke-width=\"6\" stroke-linejoin=\"round\"/><circle cx=\"50\" cy=\"38\" r=\"5\" fill=\"#1F2937\"/><line x1=\"50\" y1=\"44\" x2=\"50\" y2=\"62\" stroke=\"#1F2937\" stroke-width=\"4\" stroke-linecap=\"round\"/><line x1=\"50\" y1=\"62\" x2=\"42\" y2=\"76\" stroke=\"#1F2937\" stroke-width=\"4\" stroke-linecap=\"round\"/><line x1=\"50\" y1=\"62\" x2=\"58\" y2=\"76\" stroke=\"#1F2937\" stroke-width=\"4\" stroke-linecap=\"round\"/><line x1=\"42\" y1=\"50\" x2=\"58\" y2=\"54\" stroke=\"#1F2937\" stroke-width=\"3\" stroke-linecap=\"round\"/></svg>"
   },
   {
     "id": 119,
@@ -1917,7 +1917,7 @@ export const GPLX_QUESTIONS = [
     "answer": 1,
     "explanation": "Nguyên tắc an toàn cốt lõi: Luôn quan sát gương, giữ khoảng cách an toàn với xe trước và tuân thủ tốc độ cho phép.",
     "tip": "Mẹo: Lựa chọn mang tính cẩn trọng, quan sát toàn diện luôn là đáp án đúng.",
-    "imageSvg": ""
+    "imageSvg": "<svg viewBox=\"0 0 100 100\" class=\"sign-svg\" width=\"90\" height=\"90\"><rect x=\"8\" y=\"8\" width=\"84\" height=\"84\" rx=\"10\" fill=\"#2563EB\" stroke=\"#FFFFFF\" stroke-width=\"3\"/><polygon points=\"20,55 35,40 50,55\" fill=\"#FFFFFF\"/><rect x=\"25\" y=\"55\" width=\"20\" height=\"30\" fill=\"#FFFFFF\"/><rect x=\"55\" y=\"30\" width=\"28\" height=\"55\" fill=\"#FFFFFF\"/><rect x=\"60\" y=\"38\" width=\"6\" height=\"8\" fill=\"#2563EB\"/><rect x=\"72\" y=\"38\" width=\"6\" height=\"8\" fill=\"#2563EB\"/><rect x=\"60\" y=\"52\" width=\"6\" height=\"8\" fill=\"#2563EB\"/><rect x=\"72\" y=\"52\" width=\"6\" height=\"8\" fill=\"#2563EB\"/></svg>"
   },
   {
     "id": 120,
@@ -1933,7 +1933,7 @@ export const GPLX_QUESTIONS = [
     "answer": 1,
     "explanation": "Nguyên tắc an toàn cốt lõi: Luôn quan sát gương, giữ khoảng cách an toàn với xe trước và tuân thủ tốc độ cho phép.",
     "tip": "Mẹo: Lựa chọn mang tính cẩn trọng, quan sát toàn diện luôn là đáp án đúng.",
-    "imageSvg": ""
+    "imageSvg": "<svg viewBox=\"0 0 100 100\" class=\"sign-svg\" width=\"90\" height=\"90\"><circle cx=\"50\" cy=\"50\" r=\"46\" fill=\"#2563EB\" stroke=\"#FFFFFF\" stroke-width=\"3\"/><circle cx=\"50\" cy=\"50\" r=\"18\" fill=\"none\" stroke=\"#FFFFFF\" stroke-width=\"6\" stroke-dasharray=\"24 10\"/><polygon points=\"68,50 78,40 78,60\" fill=\"#FFFFFF\" transform=\"rotate(-40 50 50)\"/><polygon points=\"32,50 22,40 22,60\" fill=\"#FFFFFF\" transform=\"rotate(140 50 50)\"/></svg>"
   }
 ];
 
