@@ -17,7 +17,8 @@ const STORAGE_KEYS = {
   THEME: 'theme',
   BOOKMARKS: 'gplx_bookmarks',
   MISTAKES: 'gplx_mistakes',
-  MASTERED: 'gplx_mastered'
+  MASTERED: 'gplx_mastered',
+  INSTANT_FEEDBACK: 'gplx_instant_feedback'
 };
 
 function getStorage(key, defaultVal) {
@@ -53,6 +54,8 @@ const state = {
   examQuestions: [],
   examAnswers: {}, // { questionIndex: selectedOption1to4 }
   examFlags: new Set(),
+  examRevealed: new Set(),
+  examInstantFeedback: getStorage(STORAGE_KEYS.INSTANT_FEEDBACK, true),
   examIndex: 0,
   examTimer: null,
   examSecondsRemaining: 20 * 60,
@@ -503,6 +506,44 @@ function initExam() {
   if (btnStartTop) btnStartTop.addEventListener('click', () => beginExamCountdown());
   if (btnStartHero) btnStartHero.addEventListener('click', () => beginExamCountdown());
 
+  // Instant feedback mode toggle wiring
+  const instantCb = document.getElementById('exam-instant-checkbox');
+  const readyInstantCb = document.getElementById('ready-instant-checkbox');
+
+  function updateInstantFeedback(enabled) {
+    state.examInstantFeedback = enabled;
+    setStorage(STORAGE_KEYS.INSTANT_FEEDBACK, enabled);
+    if (instantCb) instantCb.checked = enabled;
+    if (readyInstantCb) readyInstantCb.checked = enabled;
+    showToast(enabled ? '💡 Chế độ luyện thi: Hiện đáp án ngay sau khi chọn' : '⏱️ Chế độ thi chuẩn: Chỉ biết kết quả khi nộp bài', '🎯');
+
+    if (state.examQuestions.length > 0) {
+      renderExamQuestion(state.examIndex);
+      for (let i = 0; i < state.examQuestions.length; i++) {
+        updatePaletteTile(i);
+      }
+    }
+  }
+
+  if (instantCb) {
+    instantCb.checked = state.examInstantFeedback;
+    instantCb.addEventListener('change', (e) => updateInstantFeedback(e.target.checked));
+  }
+  if (readyInstantCb) {
+    readyInstantCb.checked = state.examInstantFeedback;
+    readyInstantCb.addEventListener('change', (e) => updateInstantFeedback(e.target.checked));
+  }
+
+  const btnPeek = document.getElementById('btn-peek-answer');
+  if (btnPeek) {
+    btnPeek.addEventListener('click', () => {
+      state.examRevealed.add(state.examIndex);
+      renderExamQuestion(state.examIndex);
+      updatePaletteTile(state.examIndex);
+      showToast('Đã mở đáp án & giải thích chi tiết!', '💡');
+    });
+  }
+
   document.getElementById('btn-start-new-exam').addEventListener('click', () => {
     const val = document.getElementById('select-exam').value;
     startExam(val);
@@ -590,6 +631,7 @@ function startExam(presetOrRandom) {
   state.examQuestions = selectedQuestions.slice(0, 30);
   state.examAnswers = {};
   state.examFlags.clear();
+  state.examRevealed.clear();
   state.examIndex = 0;
   state.examSubmitted = false;
   state.examStarted = false;
@@ -710,16 +752,18 @@ function updatePaletteTile(index) {
     tile.classList.add('current');
   }
 
-  if (state.isReviewMode) {
+  const selectedOpt = state.examAnswers[index];
+  const isRevealed = state.isReviewMode || (state.examInstantFeedback && selectedOpt !== undefined) || state.examRevealed.has(index);
+
+  if (isRevealed && selectedOpt !== undefined) {
     const q = state.examQuestions[index];
-    const userAns = state.examAnswers[index];
-    if (userAns === q.answer) {
+    if (selectedOpt === q.answer) {
       tile.classList.add('correct-result');
     } else {
       tile.classList.add('incorrect-result');
     }
   } else {
-    if (state.examAnswers[index] !== undefined) {
+    if (selectedOpt !== undefined) {
       tile.classList.add('answered');
     }
   }
@@ -780,11 +824,18 @@ function renderExamQuestion(index) {
     mediaBox.innerHTML = '';
   }
 
+  const selectedOpt = state.examAnswers[index];
+  const isRevealed = state.isReviewMode || (state.examInstantFeedback && selectedOpt !== undefined) || state.examRevealed.has(index);
+
+  // Peek button visibility
+  const btnPeek = document.getElementById('btn-peek-answer');
+  if (btnPeek) {
+    btnPeek.style.display = (isRevealed || state.isReviewMode) ? 'none' : 'inline-flex';
+  }
+
   // Render 4 options
   const optionsList = document.getElementById('exam-options-list');
   optionsList.innerHTML = '';
-
-  const selectedOpt = state.examAnswers[index];
 
   q.options.forEach((optText, optIdx) => {
     const optNum = optIdx + 1;
@@ -792,7 +843,7 @@ function renderExamQuestion(index) {
     btn.className = 'option-item';
     btn.type = 'button';
 
-    if (state.isReviewMode) {
+    if (isRevealed) {
       if (optNum === q.answer) {
         btn.classList.add('correct');
       }
@@ -802,7 +853,13 @@ function renderExamQuestion(index) {
       if (selectedOpt === optNum && selectedOpt === q.answer) {
         btn.classList.add('correct');
       }
-      btn.disabled = true;
+      if (state.isReviewMode) {
+        btn.disabled = true;
+      } else {
+        btn.addEventListener('click', () => {
+          selectExamOption(optNum);
+        });
+      }
     } else {
       if (selectedOpt === optNum) {
         btn.classList.add('selected');
@@ -820,11 +877,12 @@ function renderExamQuestion(index) {
     optionsList.appendChild(btn);
   });
 
-  // Review mode box
+  // Review mode & explanation box
   const reviewBox = document.getElementById('exam-review-box');
-  if (state.isReviewMode) {
+  if (isRevealed) {
     reviewBox.style.display = 'block';
-    document.getElementById('exam-review-answer').textContent = cleanOptionText(q.options[q.answer - 1]) || `Đáp án ${q.answer}`;
+    const answerText = cleanOptionText(q.options[q.answer - 1]) || `Đáp án ${q.answer}`;
+    document.getElementById('exam-review-answer').innerHTML = `${answerText} ${q.isCritical ? '<span class="badge-critical" style="margin-left: 0.5rem; font-size: 0.75rem;">⚠️ CÂU ĐIỂM LIỆT</span>' : ''}`;
     document.getElementById('exam-review-explanation').innerHTML = q.explanation || 'Không có giải thích chi tiết.';
   } else {
     reviewBox.style.display = 'none';
@@ -839,13 +897,33 @@ function selectExamOption(optNumber) {
   if (state.examSubmitted) return;
 
   state.examAnswers[state.examIndex] = optNumber;
-  updatePaletteTile(state.examIndex);
+  const q = state.examQuestions[state.examIndex];
 
-  // Update UI selection on current question
-  const items = document.querySelectorAll('#exam-options-list .option-item');
-  items.forEach((item, idx) => {
-    item.classList.toggle('selected', (idx + 1) === optNumber);
-  });
+  if (state.examInstantFeedback) {
+    state.examRevealed.add(state.examIndex);
+    updatePaletteTile(state.examIndex);
+    renderExamQuestion(state.examIndex);
+
+    if (optNumber === q.answer) {
+      showToast('Chính xác! 🎉', '✅');
+    } else {
+      state.mistakes.add(q.id);
+      setStorage(STORAGE_KEYS.MISTAKES, Array.from(state.mistakes));
+      updateBadges();
+
+      if (q.isCritical) {
+        showToast('⚠️ CẢNH BÁO: Bạn vừa chọn sai CÂU ĐIỂM LIỆT!', '🚨');
+      } else {
+        showToast(`Chưa đúng! Đáp án đúng là số (${q.answer})`, '❌');
+      }
+    }
+  } else {
+    updatePaletteTile(state.examIndex);
+    const items = document.querySelectorAll('#exam-options-list .option-item');
+    items.forEach((item, idx) => {
+      item.classList.toggle('selected', (idx + 1) === optNumber);
+    });
+  }
 }
 
 function prevExamQuestion() {

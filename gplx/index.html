@@ -221,6 +221,12 @@
           <span id="exam-timer-text">20:00</span>
         </div>
 
+        <!-- Instant feedback mode toggle -->
+        <label class="instant-feedback-toggle" id="exam-instant-toggle-label" title="Hiện đáp án và giải thích chi tiết ngay khi chọn phương án">
+          <input type="checkbox" id="exam-instant-checkbox" class="instant-toggle-checkbox" checked />
+          <span class="instant-toggle-label">💡 Hiện đáp án ngay</span>
+        </label>
+
         <button class="btn-submit-exam btn-start-exam" id="btn-start-exam">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
           <span>Bắt Đầu Làm Bài</span>
@@ -280,6 +286,16 @@
             </ul>
           </div>
 
+          <div class="ready-mode-box">
+            <label class="ready-mode-option">
+              <input type="checkbox" id="ready-instant-checkbox" class="instant-toggle-checkbox" checked />
+              <div class="ready-mode-text">
+                <strong>💡 Bật chế độ luyện thi: Hiện đáp án &amp; giải thích ngay sau khi chọn</strong>
+                <span>Báo đúng/sai tức thì và hiển thị ngay căn cứ luật kèm mẹo nhớ</span>
+              </div>
+            </label>
+          </div>
+
           <button class="btn-start-hero" id="btn-start-exam-hero" type="button">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
             <span>Bắt Đầu Tính Giờ &amp; Làm Bài</span>
@@ -294,10 +310,13 @@
               <span class="badge-chapter" id="exam-q-chapter">Chương 1</span>
               <span class="badge-critical" id="exam-critical-tag" style="display: none">⚠️ CÂU ĐIỂM LIỆT</span>
             </div>
-            <label class="flag-label" id="exam-flag-label">
-              <input type="checkbox" id="exam-flag-checkbox" class="flag-checkbox" />
-              <span>🚩 Đánh dấu xem lại</span>
-            </label>
+            <div class="exam-header-actions">
+              <button class="btn-peek-answer" id="btn-peek-answer" type="button" title="Xem trước đáp án và giải thích câu này">💡 Xem đáp án</button>
+              <label class="flag-label" id="exam-flag-label">
+                <input type="checkbox" id="exam-flag-checkbox" class="flag-checkbox" />
+                <span>🚩 Đánh dấu</span>
+              </label>
+            </div>
           </div>
 
           <div class="card-question-text" id="exam-q-text">Đang tải câu hỏi sát hạch...</div>
