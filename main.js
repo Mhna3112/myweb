@@ -252,20 +252,24 @@ const REPO_DESCRIPTIONS = {
     vi: 'Website portfolio và blog lập trình viên cá nhân hiện đại, hỗ trợ giao diện sáng/tối và Cloudflare Workers.'
   },
   'discord-bot-auto-quest': {
-    en: 'Automated Discord quest bot & automation assistant built with Python.',
-    vi: 'Bot Discord tự động hoàn thành nhiệm vụ và hỗ trợ tự động hóa viết bằng Python.'
+    en: 'Automated Discord quest bot & automation assistant built with Python and Asyncio.',
+    vi: 'Bot Discord tự động hoàn thành nhiệm vụ và hỗ trợ tự động hóa viết bằng Python và Asyncio.'
   },
   'Mhnauxui': {
-    en: 'Roblox Luau UI/UX components, client-side interactions, and custom script interfaces.',
-    vi: 'Thành phần giao diện người dùng Roblox Luau, tương tác phía client và script tùy chỉnh.'
+    en: 'Roblox Luau automation scripts (Autofarm, Kill Aura) and custom MhnaaUI interface library.',
+    vi: 'Bộ script tự động hóa Roblox Luau và thư viện giao diện tùy chỉnh MhnaaUI.'
   },
   'Mhnaproject1': {
-    en: 'TypeScript project exploring types, interfaces, and modern development tooling.',
-    vi: 'Dự án TypeScript khám phá hệ thống kiểu, interface và công cụ phát triển hiện đại.'
+    en: 'Multi-platform media downloader (TikTok, YouTube, FB, IG, Twitter/X) built with Next.js and TypeScript.',
+    vi: 'Trình phân tích & tải xuống Media đa nền tảng không watermark xây dựng bằng Next.js và TypeScript.'
   },
   'Learn-C-C-': {
     en: 'C & C++ practice exercises, data structures, and algorithms for system programming.',
     vi: 'Tuyển tập bài tập thực hành C & C++, cấu trúc dữ liệu và giải thuật lập trình hệ thống.'
+  },
+  'todp-cal': {
+    en: 'Comprehensive personal task & calendar web app with Firebase realtime sync, month grid, and Excel export.',
+    vi: 'Ứng dụng quản lý lịch & công việc cá nhân toàn diện với đồng bộ Firebase realtime và xuất Excel.'
   },
   'Mhna3112': {
     en: 'Personal GitHub profile README and configuration repository.',
@@ -865,22 +869,20 @@ const TRANSLATIONS = {
     // Projects
     'projects.label': '02. Projects',
     'projects.title': "Things I've Built",
-    'projects.desc':  "A collection of personal projects I've built while learning to code.",
+    'projects.desc':  "A collection of verified real-world projects and open-source software I've built.",
     'projects.wip':   'In Progress',
-    'projects.p1.name': 'Personal Portfolio',
-    'projects.p1.desc': 'This very website! A modern developer portfolio &amp; blog built with pure HTML, CSS, and JavaScript. Features dark/light themes, typewriter effect, and GitHub API integration.',
-    'projects.p2.name': 'Calculator App',
-    'projects.p2.desc': 'A fully functional calculator built with vanilla JavaScript. Supports basic arithmetic, keyboard input, and a clean responsive UI. My first real JavaScript project.',
-    'projects.p3.name': 'Todo Calendar App',
-    'projects.p3.desc': 'A comprehensive personal task &amp; calendar web app: month grid, 24-hour timeline, Firebase realtime sync across devices, per-day themes/wallpapers, reminders, and Excel/CSV import/export.',
+    'projects.mediahub.name': 'MediaHub Downloader',
+    'projects.mediahub.desc': 'Multi-platform media analyzer & high-speed downloader (TikTok, YouTube, Facebook, Instagram, Twitter/X, Douyin) without watermarks, featuring clean audio extraction & HD video processing.',
     'projects.gplx.name': 'Driver License 600 Questions & Flashcards (30-Q Mock Exam)',
     'projects.gplx.desc': 'Official 600-question Vietnamese Driver License exam prep app: Interactive 3D flashcards, authentic 30-question mock tests (20-min countdown), instant grading with critical failure question detection, 30-item status palette, and 100% offline LocalStorage support.',
-    'projects.p4.name': 'Number Guessing Game',
-    'projects.p4.desc': 'A command-line number guessing game written in C. Practices concepts like loops, conditionals, and random number generation. One of my first C programs.',
-    'projects.p5.name': 'Python Data Scraper',
-    'projects.p5.desc': 'A simple Python script that scrapes and processes data from public websites using requests and BeautifulSoup. Introduced me to the world of automation.',
-    'projects.p6.name': 'Dev Learning Tracker',
-    'projects.p6.desc': 'A web app to track my daily coding progress, set learning goals, and visualize my improvement over time. Currently in development!',
+    'projects.todo.name': 'Work Calendar — Todo Calendar',
+    'projects.todo.desc': 'Comprehensive personal task & calendar management web app: interactive month grid, 24-hour timeline, realtime Firebase synchronization across devices, custom daily wallpapers, reminders, and Excel/CSV import/export.',
+    'projects.discord.name': 'Discord Quest Auto-Completer Bot',
+    'projects.discord.desc': 'Asynchronous Python Discord bot designed to track and complete active Discord Quests in the background. Features multi-account concurrency, safe credential handling, and comprehensive activity logging.',
+    'projects.roblox.name': 'Mhnaa Hub & MhnaaUI Suite',
+    'projects.roblox.desc': 'Roblox automation script suite (Autofarm, Kill Aura, Dungeon Quests) and customizable MhnaaUI interface library for Roblox Luau developers, featuring clean layouts and one-line loadstring execution.',
+    'projects.cpp.name': 'C & C++ Algorithms & Data Structures',
+    'projects.cpp.desc': 'Curated collection of C and C++ algorithms and core data structures: pointer manipulations, dynamic memory allocation, recursive problems, string algorithms, and low-level system optimizations.',
     'projects.cta': 'View All on GitHub',
     // Blog
     'blog.label': '03. Blog',
@@ -992,22 +994,20 @@ const TRANSLATIONS = {
     // Projects
     'projects.label': '02. Dự án',
     'projects.title': 'Những gì tôi đã xây dựng',
-    'projects.desc':  'Tuyển tập các dự án cá nhân tôi đã xây dựng trong quá trình học lập trình.',
+    'projects.desc':  'Tuyển tập các dự án thật và phần mềm thực tế tôi đã lập trình và triển khai.',
     'projects.wip':   'Đang phát triển',
-    'projects.p1.name': 'Portfolio cá nhân',
-    'projects.p1.desc': 'Chính là website này! Một portfolio &amp; blog lập trình viên hiện đại được xây dựng bằng HTML, CSS và JavaScript thuần. Hỗ trợ chủ đề sáng/tối, hiệu ứng đánh máy và tích hợp GitHub API.',
-    'projects.p2.name': 'Ứng dụng máy tính',
-    'projects.p2.desc': 'Một máy tính đầy đủ chức năng được xây dựng bằng JavaScript thuần. Hỗ trợ các phép tính cơ bản, nhập liệu bằng bàn phím và giao diện responsive sạch sẽ. Dự án JavaScript thực sự đầu tiên của tôi.',
-    'projects.p3.name': 'Lịch Công Việc — Todo Calendar',
-    'projects.p3.desc': 'Ứng dụng quản lý lịch &amp; công việc cá nhân toàn diện: lịch tháng, thời gian biểu 24h, đồng bộ Firebase realtime, đổi màu/ảnh nền từng ngày, thông báo nhắc việc và nhập/xuất dữ liệu Excel/CSV.',
+    'projects.mediahub.name': 'MediaHub Downloader',
+    'projects.mediahub.desc': 'Trình phân tích & tải xuống Media đa nền tảng (TikTok, YouTube, Facebook, Instagram, Twitter/X...) không watermark, chuẩn âm thanh & hình ảnh chất lượng cao.',
     'projects.gplx.name': 'Ôn Thi Bằng Lái Ô Tô 600 Câu &amp; Thi Thử 30 Câu',
     'projects.gplx.desc': 'Ứng dụng ôn thi sát hạch lý thuyết lái xe ô tô 600 câu chuẩn Bộ GTVT: Flashcard 3D thông minh, đề thi 30 câu (20 phút), chấm điểm phát hiện câu điểm liệt, ma trận 30 câu tương tác và hoạt động 100% offline.',
-    'projects.p4.name': 'Trò chơi đoán số',
-    'projects.p4.desc': 'Trò chơi đoán số trên dòng lệnh viết bằng C. Thực hành các khái niệm như vòng lặp, điều kiện và tạo số ngẫu nhiên. Một trong những chương trình C đầu tiên của tôi.',
-    'projects.p5.name': 'Thu thập dữ liệu Python',
-    'projects.p5.desc': 'Một script Python đơn giản để thu thập và xử lý dữ liệu từ các website công khai bằng requests và BeautifulSoup. Giới thiệu tôi với thế giới tự động hóa.',
-    'projects.p6.name': 'Theo dõi học lập trình',
-    'projects.p6.desc': 'Ứng dụng web theo dõi tiến độ học lập trình hàng ngày, đặt mục tiêu học tập và trực quan hóa sự tiến bộ theo thời gian. Đang trong quá trình phát triển!',
+    'projects.todo.name': 'Lịch Công Việc — Todo Calendar',
+    'projects.todo.desc': 'Ứng dụng quản lý lịch & công việc cá nhân toàn diện: lịch tháng, thời gian biểu 24h, đồng bộ Firebase realtime giữa các thiết bị, đổi màu/ảnh nền từng ngày, thông báo nhắc việc và nhập/xuất dữ liệu Excel/CSV.',
+    'projects.discord.name': 'Discord Quest Auto-Completer Bot',
+    'projects.discord.desc': 'Bot Discord viết bằng Python quản lý và tự động nhận, hoàn thành các nhiệm vụ (Discord Quests) ở chế độ chạy ngầm bất đồng bộ. Hỗ trợ đa người dùng cùng lúc, quản lý token an toàn và hệ thống logging chi tiết.',
+    'projects.roblox.name': 'Mhnaa Hub &amp; MhnaaUI Suite',
+    'projects.roblox.desc': 'Trọn bộ script tự động hoá (Autofarm, Kill Aura, Dungeon Quest) và thư viện giao diện tuỳ biến MhnaaUI cho Roblox, tối ưu hoá luồng xử lý game scripting và hỗ trợ loadstring tức thì.',
+    'projects.cpp.name': 'Luyện Tập Thuật Toán C &amp; C++',
+    'projects.cpp.desc': 'Tuyển tập các bài tập thực hành cấu trúc dữ liệu và giải thuật bằng C & C++: xử lý mảng, con trỏ bộ nhớ, giải thuật đệ quy, xử lý chuỗi và tối ưu hoá hệ thống.',
     'projects.cta': 'Xem tất cả trên GitHub',
     // Blog
     'blog.label': '03. Blog',
