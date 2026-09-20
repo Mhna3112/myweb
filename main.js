@@ -56,7 +56,7 @@ function applyTheme(theme) {
 }
 
 (function initTheme() {
-  const saved = localStorage.getItem('theme') || 'light';
+  const saved = localStorage.getItem('theme') || 'dark';
   applyTheme(saved);
 })();
 
@@ -64,7 +64,7 @@ function applyTheme(theme) {
 const quickBtn = document.getElementById('theme-quick-btn');
 if (quickBtn) {
   quickBtn.addEventListener('click', () => {
-    const current = html.getAttribute('data-theme') || 'light';
+    const current = html.getAttribute('data-theme') || 'dark';
     applyTheme(current === 'dark' ? 'light' : 'dark');
   });
 }
