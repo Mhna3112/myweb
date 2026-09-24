@@ -1,5 +1,7 @@
 .wrangler/
 node_modules/
+.deploy-assets/
+.media-hub-source/
 .DS_Store
 Thumbs.db
 .agents/

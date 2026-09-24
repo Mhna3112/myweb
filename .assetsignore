@@ -5,3 +5,16 @@
 **/.gitignore
 **/wrangler.jsonc
 **/package.json
+**/package-lock.json
+**/.agents
+**/.wrangler
+**/.vscode
+**/src
+**/dist
+**/DESIGN.md
+**/README.md
+**/video.txt
+**/.deploy-assets
+**/scripts
+**/media-hub
+**/.media-hub-source

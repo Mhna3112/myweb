@@ -56,7 +56,7 @@ function applyTheme(theme) {
 }
 
 (function initTheme() {
-  const saved = localStorage.getItem('theme') || 'dark';
+  const saved = localStorage.getItem('theme') || 'light';
   applyTheme(saved);
 })();
 
@@ -219,594 +219,6 @@ document.querySelectorAll('.copy-btn').forEach(btn => {
   });
 });
 
-// ── GITHUB MODULE ──────────────────────────────────────────────────
-const GITHUB_USER = 'Mhna3112';
-
-const LANG_COLORS = {
-  'HTML': '#e34c26',
-  'CSS': '#563d7c',
-  'JavaScript': '#f1e05a',
-  'TypeScript': '#3178c6',
-  'Python': '#3572A5',
-  'C++': '#f34b7d',
-  'C': '#555555',
-  'Lua': '#000080',
-  'Luau': '#00A2FF',
-  'Shell': '#89e051'
-};
-
-const DEFAULT_GH_USER = {
-  login: 'Mhna3112',
-  name: 'Nguyễn Đức Mạnh',
-  avatar_url: 'https://avatars.githubusercontent.com/u/231286930?v=4',
-  bio: 'try get best',
-  public_repos: 6,
-  followers: 0,
-  following: 0,
-  html_url: 'https://github.com/Mhna3112'
-};
-
-const REPO_DESCRIPTIONS = {
-  'myweb': {
-    en: 'Personal developer portfolio & blog with modern UI, dark/light mode, and Cloudflare Workers.',
-    vi: 'Website portfolio và blog lập trình viên cá nhân hiện đại, hỗ trợ giao diện sáng/tối và Cloudflare Workers.'
-  },
-  'discord-bot-auto-quest': {
-    en: 'Automated Discord quest bot & automation assistant built with Python and Asyncio.',
-    vi: 'Bot Discord tự động hoàn thành nhiệm vụ và hỗ trợ tự động hóa viết bằng Python và Asyncio.'
-  },
-  'Mhnauxui': {
-    en: 'Roblox Luau automation scripts (Autofarm, Kill Aura) and custom MhnaaUI interface library.',
-    vi: 'Bộ script tự động hóa Roblox Luau và thư viện giao diện tùy chỉnh MhnaaUI.'
-  },
-  'Mhnaproject1': {
-    en: 'Multi-platform media downloader (TikTok, YouTube, FB, IG, Twitter/X) built with Next.js and TypeScript.',
-    vi: 'Trình phân tích & tải xuống Media đa nền tảng không watermark xây dựng bằng Next.js và TypeScript.'
-  },
-  'Learn-C-C-': {
-    en: 'C & C++ practice exercises, data structures, and algorithms for system programming.',
-    vi: 'Tuyển tập bài tập thực hành C & C++, cấu trúc dữ liệu và giải thuật lập trình hệ thống.'
-  },
-  'todp-cal': {
-    en: 'Comprehensive personal task & calendar web app with Firebase realtime sync, month grid, and Excel export.',
-    vi: 'Ứng dụng quản lý lịch & công việc cá nhân toàn diện với đồng bộ Firebase realtime và xuất Excel.'
-  },
-  'Mhna3112': {
-    en: 'Personal GitHub profile README and configuration repository.',
-    vi: 'Kho lưu trữ cấu hình hồ sơ và README giới thiệu cá nhân trên GitHub.'
-  }
-};
-
-const DEFAULT_GH_REPOS = [
-  {
-    name: 'myweb',
-    description: null,
-    html_url: 'https://github.com/Mhna3112/myweb',
-    language: 'JavaScript',
-    stargazers_count: 0,
-    forks_count: 0,
-    fork: false,
-    updated_at: '2026-09-14T06:08:04Z',
-    pushed_at: '2026-09-14T06:08:00Z'
-  },
-  {
-    name: 'discord-bot-auto-quest',
-    description: null,
-    html_url: 'https://github.com/Mhna3112/discord-bot-auto-quest',
-    language: 'Python',
-    stargazers_count: 4,
-    forks_count: 1,
-    fork: false,
-    updated_at: '2026-08-29T20:45:43Z',
-    pushed_at: '2026-06-05T05:59:54Z'
-  },
-  {
-    name: 'Mhnauxui',
-    description: null,
-    html_url: 'https://github.com/Mhna3112/Mhnauxui',
-    language: 'Luau',
-    stargazers_count: 0,
-    forks_count: 0,
-    fork: false,
-    updated_at: '2026-09-11T18:50:15Z',
-    pushed_at: '2026-09-11T18:50:10Z'
-  },
-  {
-    name: 'Mhnaproject1',
-    description: null,
-    html_url: 'https://github.com/Mhna3112/Mhnaproject1',
-    language: 'TypeScript',
-    stargazers_count: 0,
-    forks_count: 0,
-    fork: false,
-    updated_at: '2026-09-05T10:31:02Z',
-    pushed_at: '2026-09-05T10:28:04Z'
-  },
-  {
-    name: 'Learn-C-C-',
-    description: null,
-    html_url: 'https://github.com/Mhna3112/Learn-C-C-',
-    language: 'C++',
-    stargazers_count: 0,
-    forks_count: 0,
-    fork: false,
-    updated_at: '2026-05-07T04:28:55Z',
-    pushed_at: '2026-05-07T04:28:52Z'
-  },
-  {
-    name: 'Mhna3112',
-    description: null,
-    html_url: 'https://github.com/Mhna3112/Mhna3112',
-    language: 'HTML',
-    stargazers_count: 0,
-    forks_count: 0,
-    fork: false,
-    updated_at: '2026-06-05T15:38:57Z',
-    pushed_at: '2026-06-05T15:38:52Z'
-  }
-];
-
-let ghUserData = DEFAULT_GH_USER;
-let ghReposData = DEFAULT_GH_REPOS;
-let currentGhFilter = 'featured';
-
-function getRepoDescription(r) {
-  if (REPO_DESCRIPTIONS[r.name]) {
-    return (currentLang === 'vi')
-      ? REPO_DESCRIPTIONS[r.name].vi
-      : REPO_DESCRIPTIONS[r.name].en;
-  }
-  return r.description || (typeof t === 'function' ? t('github.noDesc') : 'Personal developer project repository.');
-}
-
-function renderGitHubProfile() {
-  if (!ghUserData) return;
-  const nameEl = document.getElementById('github-name');
-  if (nameEl) nameEl.textContent = ghUserData.name || 'Nguyễn Đức Mạnh';
-
-  const bioEl = document.getElementById('github-bio');
-  if (bioEl) {
-    const defaultTag = (currentLang === 'vi')
-      ? 'Lập trình viên tương lai · Học code mỗi ngày'
-      : 'Aspiring Developer · Learning to code every day';
-    bioEl.textContent = ghUserData.bio
-      ? `${ghUserData.bio} · ${defaultTag}`
-      : defaultTag;
-  }
-
-  const avatarWrap = document.getElementById('github-avatar-wrap');
-  if (avatarWrap && ghUserData.avatar_url) {
-    avatarWrap.innerHTML = `
-      <img src="${ghUserData.avatar_url}" alt="${ghUserData.login || 'Nguyễn Đức Mạnh'} avatar" class="github-avatar-img" onerror="this.style.display='none'" />
-      <div class="github-avatar-fallback">DM</div>
-      <div class="avatar-zoom-badge" aria-hidden="true">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
-      </div>
-    `;
-  }
-}
-
-function renderGitHubStats() {
-  const totalStars = ghReposData.reduce((acc, r) => acc + (r.stargazers_count || 0), 0);
-  const totalForks = ghReposData.reduce((acc, r) => acc + (r.forks_count || 0), 0);
-  const reposCount = (ghUserData && ghUserData.public_repos !== undefined) ? ghUserData.public_repos : ghReposData.length;
-
-  setText('gh-repos', reposCount);
-  setText('gh-meta-repos', reposCount);
-  setText('gh-stars', totalStars);
-  setText('gh-forks', totalForks);
-  setText('gh-followers', (ghUserData && ghUserData.followers) ?? 0);
-
-  // Hero section stats
-  setText('stat-repos', reposCount);
-  setText('stat-stars', totalStars);
-  setText('stat-forks', totalForks);
-}
-
-function renderGitHubLanguages() {
-  const bar = document.getElementById('gh-lang-bar');
-  const legend = document.getElementById('gh-lang-legend');
-  if (!bar || !legend) return;
-
-  const counts = {};
-  let total = 0;
-  ghReposData.forEach(r => {
-    if (r.language) {
-      counts[r.language] = (counts[r.language] || 0) + 1;
-      total++;
-    }
-  });
-
-  if (total === 0) {
-    counts['JavaScript'] = 1;
-    counts['Python'] = 1;
-    counts['Luau'] = 1;
-    counts['TypeScript'] = 1;
-    counts['C++'] = 1;
-    counts['HTML'] = 1;
-    total = 6;
-  }
-
-  const sortedLangs = Object.entries(counts).sort((a, b) => b[1] - a[1]);
-
-  bar.innerHTML = sortedLangs.map(([lang, count]) => {
-    const pct = ((count / total) * 100).toFixed(1);
-    const color = LANG_COLORS[lang] || '#8b949e';
-    return `<div class="gh-lang-bar-segment" style="width:${pct}%;background-color:${color};" title="${lang}: ${pct}% (${count})"></div>`;
-  }).join('');
-
-  legend.innerHTML = sortedLangs.map(([lang, count]) => {
-    const pct = ((count / total) * 100).toFixed(1);
-    const color = LANG_COLORS[lang] || '#8b949e';
-    return `
-      <div class="gh-legend-item">
-        <span class="gh-lang-dot" style="background-color:${color};"></span>
-        <span class="gh-legend-name">${lang}</span>
-        <span class="gh-legend-pct">${pct}%</span>
-      </div>
-    `;
-  }).join('');
-}
-
-function renderGitHubRepos(filter = 'featured') {
-  currentGhFilter = filter;
-  const grid = document.getElementById('repos-grid');
-  if (!grid) return;
-
-  let list = [...ghReposData];
-
-  if (filter === 'featured') {
-    const priority = ['myweb', 'discord-bot-auto-quest', 'Mhnauxui', 'Mhnaproject1', 'Learn-C-C-', 'Mhna3112'];
-    list = list.filter(r => priority.includes(r.name) || (r.stargazers_count > 0));
-    list.sort((a, b) => {
-      const idxA = priority.indexOf(a.name);
-      const idxB = priority.indexOf(b.name);
-      if (idxA !== -1 && idxB !== -1) return idxA - idxB;
-      if (idxA !== -1) return -1;
-      if (idxB !== -1) return 1;
-      return (b.stargazers_count || 0) - (a.stargazers_count || 0);
-    });
-    list = list.slice(0, 6);
-  } else if (filter === 'recent') {
-    list.sort((a, b) => new Date(b.pushed_at || b.updated_at || 0) - new Date(a.pushed_at || a.updated_at || 0));
-    list = list.slice(0, 6);
-  } else {
-    list.sort((a, b) => (b.stargazers_count || 0) - (a.stargazers_count || 0));
-  }
-
-  if (list.length === 0) {
-    const noReposText = (typeof t === 'function') ? t('github.noRepos') : 'No public repositories found.';
-    grid.innerHTML = `<p style="color:var(--fg3);font-size:0.875rem;grid-column:1/-1;">${noReposText}</p>`;
-    return;
-  }
-
-  const viewRepoText = (typeof t === 'function') ? t('github.viewRepo') : 'View Code';
-
-  grid.innerHTML = list.map(r => {
-    const color = LANG_COLORS[r.language] || '#8b949e';
-    const desc = getRepoDescription(r);
-    const starCount = r.stargazers_count || 0;
-    const forkCount = r.forks_count || 0;
-
-    return `
-      <div class="repo-card">
-        <div class="repo-card-top">
-          <div class="repo-name-group">
-            <svg class="repo-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
-            <a href="${r.html_url}" target="_blank" rel="noopener" class="repo-name">${r.name}</a>
-          </div>
-          <a href="${r.html_url}" target="_blank" rel="noopener" class="repo-external-link" title="${viewRepoText}">↗</a>
-        </div>
-        <p class="repo-desc">${desc}</p>
-        <div class="repo-footer">
-          <div class="repo-meta">
-            ${r.language ? `
-              <span class="repo-lang">
-                <span class="repo-lang-dot" style="background-color:${color};"></span>
-                <span>${r.language}</span>
-              </span>
-            ` : ''}
-            <span class="repo-stat" title="Stars">⭐ ${starCount}</span>
-            ${forkCount > 0 ? `<span class="repo-stat" title="Forks">🍴 ${forkCount}</span>` : ''}
-          </div>
-          <a href="${r.html_url}" target="_blank" rel="noopener" class="repo-view-btn">${viewRepoText} →</a>
-        </div>
-      </div>
-    `;
-  }).join('');
-}
-
-function initGitHubFilters() {
-  document.querySelectorAll('.gh-filter-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.gh-filter-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      renderGitHubRepos(btn.dataset.filter);
-    });
-  });
-}
-
-async function loadGitHub(forceRefresh = false) {
-  const syncBtn = document.getElementById('gh-sync-btn');
-  const syncIcon = syncBtn ? syncBtn.querySelector('.gh-sync-icon') : null;
-  const syncText = syncBtn ? syncBtn.querySelector('.gh-sync-text') : null;
-
-  if (forceRefresh && syncBtn) {
-    syncBtn.disabled = true;
-    if (syncIcon) syncIcon.classList.add('spinning');
-    if (syncText) syncText.textContent = (typeof t === 'function') ? t('github.syncing') : 'Syncing...';
-  }
-
-  // 1. Stale: Load and render from localStorage cache or fallback immediately
-  if (!forceRefresh) {
-    const cacheData = localStorage.getItem('gh_cache_data');
-    if (cacheData) {
-      try {
-        const parsed = JSON.parse(cacheData);
-        if (parsed.user && Array.isArray(parsed.repos) && parsed.repos.length > 0) {
-          ghUserData = parsed.user;
-          ghReposData = parsed.repos;
-        }
-      } catch (e) {
-        console.warn('Cache parse error:', e);
-      }
-    }
-    renderGitHubProfile();
-    renderGitHubStats();
-    renderGitHubLanguages();
-    renderGitHubRepos(currentGhFilter);
-  }
-
-  // 2. Revalidate: Fetch fresh real-time data from GitHub API
-  try {
-    const ts = Date.now();
-    const headers = { 'Accept': 'application/vnd.github.v3+json' };
-    const [userRes, reposRes] = await Promise.all([
-      fetch(`https://api.github.com/users/${GITHUB_USER}?_t=${ts}`, { cache: 'no-cache', headers }),
-      fetch(`https://api.github.com/users/${GITHUB_USER}/repos?per_page=100&sort=updated&_t=${ts}`, { cache: 'no-cache', headers }),
-    ]);
-
-    if (!userRes.ok || !reposRes.ok) {
-      throw new Error(`GitHub API HTTP ${userRes.status}/${reposRes.status}`);
-    }
-
-    const user  = await userRes.json();
-    const repos = await reposRes.json();
-
-    if (user && Array.isArray(repos) && repos.length > 0) {
-      ghUserData = user;
-      ghReposData = repos;
-
-      try {
-        localStorage.setItem('gh_cache_data', JSON.stringify({ user, repos }));
-        localStorage.setItem('gh_cache_time', Date.now().toString());
-      } catch (e) {}
-
-      renderGitHubProfile();
-      renderGitHubStats();
-      renderGitHubLanguages();
-      renderGitHubRepos(currentGhFilter);
-
-      if (forceRefresh && syncBtn) {
-        syncBtn.classList.add('synced');
-        if (syncText) syncText.textContent = (typeof t === 'function') ? t('github.synced') : 'Updated!';
-        setTimeout(() => {
-          syncBtn.classList.remove('synced');
-          if (syncText) syncText.textContent = (typeof t === 'function') ? t('github.sync') : 'Sync';
-        }, 2000);
-      }
-    }
-  } catch (err) {
-    console.warn('GitHub API sync notice:', err.message);
-    renderGitHubProfile();
-    renderGitHubStats();
-    renderGitHubLanguages();
-    renderGitHubRepos(currentGhFilter);
-
-    if (forceRefresh && syncBtn) {
-      if (syncText) syncText.textContent = (typeof t === 'function') ? t('github.synced') : 'Updated!';
-      setTimeout(() => {
-        if (syncText) syncText.textContent = (typeof t === 'function') ? t('github.sync') : 'Sync';
-      }, 2000);
-    }
-  } finally {
-    if (syncBtn) {
-      syncBtn.disabled = false;
-      if (syncIcon) syncIcon.classList.remove('spinning');
-    }
-  }
-}
-
-function setText(id, val) {
-  const el = document.getElementById(id);
-  if (el) el.textContent = val;
-}
-
-// ── BLOG POSTS DATA ────────────────────────────────────────────────
-const POSTS = {
-  'js-variables': {
-    title: 'Understanding JavaScript Variables: var, let, and const',
-    date: 'Sep 10, 2026', read: '5 min read', tags: ['JavaScript', 'Beginner'],
-    body: `
-      <p>When I first started learning JavaScript, the three ways to declare a variable were confusing: <code>var</code>, <code>let</code>, and <code>const</code>. Let me break down what I learned.</p>
-      <h3>var — The Old Way</h3>
-      <p><code>var</code> is function-scoped and can be hoisted, which means it can be used before it's declared (though its value will be <code>undefined</code>). Avoid it in modern code.</p>
-      <pre><code>var name = "Duc Manh";
-console.log(name); // "Duc Manh"</code></pre>
-      <h3>let — Block Scoped</h3>
-      <p><code>let</code> is block-scoped, so it only exists within the {} block where it's defined. Use it when you need to reassign a variable.</p>
-      <pre><code>let count = 0;
-count = 1; // OK — reassignment allowed</code></pre>
-      <h3>const — Block Scoped & Immutable Reference</h3>
-      <p><code>const</code> also block-scoped but cannot be reassigned. Use it by default — it makes your intent clear.</p>
-      <pre><code>const PI = 3.14159;
-PI = 3; // ❌ TypeError: Assignment to constant variable</code></pre>
-      <h3>My Rule of Thumb</h3>
-      <p>Always use <strong>const</strong>. If you need to reassign, use <strong>let</strong>. Never use <strong>var</strong> in new code.</p>
-    `
-  },
-  'git-basics': {
-    title: 'Git Basics: My First Week Using Version Control',
-    date: 'Aug 28, 2026', read: '7 min read', tags: ['Git', 'Workflow'],
-    body: `
-      <p>Before Git, I used to save files as "project_v1", "project_v2_final", "project_final_FINAL". Sound familiar? Git changed everything.</p>
-      <h3>The Commands I Use Daily</h3>
-      <pre><code>git init          # Start a new repository
-git add .          # Stage all changes
-git commit -m "msg" # Save a snapshot
-git push           # Upload to GitHub
-git pull           # Download latest changes
-git status         # See what changed
-git log --oneline  # View history</code></pre>
-      <h3>The Concept That Clicked</h3>
-      <p>Think of commits as save points in a video game. You can always go back to any save point. That mental model made everything click for me.</p>
-      <h3>My Biggest Mistake</h3>
-      <p>I committed my passwords to a public repo. Lesson learned: always add <code>.env</code> to your <code>.gitignore</code> file before your first commit!</p>
-      <h3>Tip</h3>
-      <p>Write commit messages in the present tense: "Add login page" not "Added login page". Your future self will thank you.</p>
-    `
-  },
-  'c-pointers': {
-    title: 'Pointers in C: Finally Getting It',
-    date: 'Aug 15, 2026', read: '10 min read', tags: ['C', 'Memory'],
-    body: `
-      <p>Pointers are the reason many beginners give up on C. I almost did too. Here's the mental model that finally made them click.</p>
-      <h3>What Is a Pointer?</h3>
-      <p>A pointer is a variable that stores a <strong>memory address</strong> instead of a value directly. Think of RAM as a giant apartment building — each room (byte) has a number (address). A pointer stores one of those room numbers.</p>
-      <pre><code>int x = 42;
-int *ptr = &x;   // ptr stores the ADDRESS of x
-printf("%d", *ptr); // *ptr gives us the VALUE at that address → 42</code></pre>
-      <h3>The Two Operators</h3>
-      <pre><code>&x   // "address of x" — gives you the address
-*ptr // "dereference ptr" — gives you the value at the address</code></pre>
-      <h3>Why Pointers Matter</h3>
-      <p>Pointers let us: pass large data efficiently (no copying), modify variables inside functions, work with arrays and strings, and manage dynamic memory with malloc/free.</p>
-      <h3>My Advice</h3>
-      <p>Draw memory diagrams on paper. Literally draw boxes for variables and arrows for pointers. It made everything visual and understandable for me.</p>
-    `
-  },
-  'python-lists': {
-    title: 'Python List Comprehensions: Writing Cleaner Code',
-    date: 'Jul 30, 2026', read: '6 min read', tags: ['Python', 'Tips'],
-    body: `
-      <p>One of my favourite Python features is list comprehensions. They let you create lists in a single, readable line.</p>
-      <h3>Before: Traditional Loop</h3>
-      <pre><code>squares = []
-for n in range(1, 6):
-    squares.append(n ** 2)
-print(squares)  # [1, 4, 9, 16, 25]</code></pre>
-      <h3>After: List Comprehension</h3>
-      <pre><code>squares = [n ** 2 for n in range(1, 6)]
-print(squares)  # [1, 4, 9, 16, 25]</code></pre>
-      <h3>With a Filter</h3>
-      <pre><code># Only even squares
-even_squares = [n ** 2 for n in range(1, 11) if n % 2 == 0]
-print(even_squares)  # [4, 16, 36, 64, 100]</code></pre>
-      <h3>The Formula</h3>
-      <p><code>[expression for item in iterable if condition]</code></p>
-      <p>The <code>if condition</code> part is optional. Read it left to right as: "give me X for each Y in Z (where condition)."</p>
-    `
-  },
-  'css-flexbox': {
-    title: 'CSS Flexbox vs Grid: When to Use Which',
-    date: 'Jul 12, 2026', read: '8 min read', tags: ['CSS', 'Layout'],
-    body: `
-      <p>For weeks I used Flexbox for everything. Then I hit a layout problem it couldn't solve elegantly — and discovered CSS Grid.</p>
-      <h3>Flexbox: One Dimension</h3>
-      <p>Flexbox is for laying out items in a <strong>single row or column</strong>. Perfect for navigation bars, button groups, and centering things.</p>
-      <pre><code>.nav {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}</code></pre>
-      <h3>CSS Grid: Two Dimensions</h3>
-      <p>Grid is for <strong>2D layouts</strong> — rows AND columns at the same time. Perfect for page layouts, card grids, and complex designs.</p>
-      <pre><code>.cards {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-}</code></pre>
-      <h3>My Rule</h3>
-      <p>🟣 <strong>One direction?</strong> → Flexbox<br>🔵 <strong>Two directions?</strong> → Grid</p>
-      <p>You can (and should) mix both! Use Grid for the overall page layout and Flexbox inside components.</p>
-    `
-  },
-  'first-week': {
-    title: 'My First Week Learning to Code',
-    date: 'Jun 1, 2026', read: '4 min read', tags: ['Journey', 'Beginner'],
-    body: `
-      <p>I had no idea what I was doing. I opened VS Code, stared at a blank screen, and typed: <code>console.log("Hello, World!")</code>. When it printed, I felt like a wizard. 🧙‍♂️</p>
-      <h3>Day 1-2: Total Confusion</h3>
-      <p>Variables, semicolons, curly braces — it all blurred together. I kept getting syntax errors and couldn't understand why. My frustration was real.</p>
-      <h3>Day 3: The Turning Point</h3>
-      <p>I built a tiny script that took my name as input and printed "Hello, Duc Manh!". Such a small thing, but it felt like magic. I realised: programming is just giving the computer very precise instructions.</p>
-      <h3>Day 5-7: Building Momentum</h3>
-      <p>I started a calculator project. It didn't work at first. I googled errors for hours. But when it finally worked, the satisfaction was unlike anything else.</p>
-      <h3>What I Learned</h3>
-      <p>Being stuck is normal. Being confused is part of learning. Every experienced developer was once exactly where I was. The only way out is through — one line of code at a time.</p>
-      <p>If you're just starting out: keep going. It gets better. 🚀</p>
-    `
-  }
-};
-
-// ── OPEN / CLOSE POST MODAL ────────────────────────────────────────
-window.openPost = function(slug) {
-  const post = POSTS[slug];
-  if (!post) return;
-  const modal   = document.getElementById('post-modal');
-  const content = document.getElementById('modal-content');
-  content.innerHTML = `
-    <h2>${post.title}</h2>
-    <p class="post-meta">${post.date} · ${post.read} · ${post.tags.map(t => '#' + t).join(' ')}</p>
-    <hr style="border:none;border-top:1px solid var(--border);margin:20px 0">
-    <div class="post-body">${post.body}</div>
-  `;
-  modal.removeAttribute('hidden');
-  document.body.style.overflow = 'hidden';
-};
-
-window.closePost = function() {
-  const modal = document.getElementById('post-modal');
-  if (modal) modal.setAttribute('hidden', '');
-  document.body.style.overflow = '';
-};
-
-// ── AVATAR MODAL PREVIEW ───────────────────────────────────────────
-window.openAvatarModal = function(e) {
-  if (e) {
-    if (typeof e.preventDefault === 'function') e.preventDefault();
-    if (typeof e.stopPropagation === 'function') e.stopPropagation();
-  }
-  const modal = document.getElementById('avatar-modal');
-  if (!modal) return;
-  const avatarImg = document.querySelector('#github-avatar-wrap img');
-  const src = (avatarImg && avatarImg.src) || (typeof ghUserData !== 'undefined' && ghUserData && ghUserData.avatar_url) || 'https://avatars.githubusercontent.com/u/231286930?v=4';
-  const modalImg = document.getElementById('avatar-modal-img');
-  const modalName = document.getElementById('avatar-modal-name');
-  if (modalImg) modalImg.src = src;
-  if (modalName && typeof ghUserData !== 'undefined' && ghUserData) {
-    modalName.textContent = ghUserData.name || 'Nguyễn Đức Mạnh';
-  }
-  modal.removeAttribute('hidden');
-  modal.style.display = 'flex';
-  document.body.style.overflow = 'hidden';
-};
-
-window.closeAvatarModal = function() {
-  const modal = document.getElementById('avatar-modal');
-  if (modal) {
-    modal.setAttribute('hidden', '');
-    modal.style.display = 'none';
-  }
-  document.body.style.overflow = '';
-};
-
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') {
-    window.closePost();
-    window.closeAvatarModal();
-  }
-});
 
 // ── FOOTER YEAR ────────────────────────────────────────────────────
 const yearEl = document.getElementById('footer-year');
@@ -855,17 +267,17 @@ const TRANSLATIONS = {
     // About
     'about.label':  '01. About',
     'about.title':  'Who Am I?',
-    'about.desc':   'A curious developer-in-progress, passionate about code and learning.',
+    'about.desc':   'I build Roblox experiences and tools with Lua and Luau, while continuing to grow as a developer.',
     'about.card1.title': 'Who I Am',
-    'about.card1.desc':  "I'm Duc Manh, a programming learner based in Vietnam. I'm on a journey to become a full-stack developer, building real projects and sharpening my skills every day.",
+    'about.card1.desc':  "I'm Duc Manh, a developer based in Vietnam. I enjoy building Roblox scripts and interfaces with Luau, and turning ideas into projects people can use.",
     'about.card2.title': "What I'm Learning",
-    'about.card2.desc':  'Currently diving deep into <strong>JavaScript</strong>, <strong>Python</strong>, and <strong>C</strong>. I\'m also exploring web development fundamentals and version control with Git.',
+    'about.card2.desc':  'I\'m focused on <strong>Lua</strong> and <strong>Luau</strong> for Roblox Studio: scripting gameplay, designing interfaces, and organizing reusable code. I also work with JavaScript, Python, and C.',
     'about.card3.title': 'My Interests',
-    'about.card3.desc':  'I love solving problems through code, experimenting with new programming languages, building personal projects, and reading about software engineering principles.',
+    'about.card3.desc':  'I like exploring how Roblox experiences work, prototyping game features, and making clean, practical UI for players and creators.',
     'about.card4.title': 'My Goals',
-    'about.card4.desc':  'Become a proficient full-stack developer, contribute to open-source projects, build useful tools, and document my journey to help others who are also learning.',
+    'about.card4.desc':  'Keep improving my Luau skills, build more polished Roblox tools and experiences, and share useful projects with other developers.',
     'about.skills.title': 'Technologies &amp; Tools',
-    'about.skills.note':  'Currently improving: <strong>JavaScript algorithms</strong>, <strong>Python data structures</strong>, and <strong>C memory management</strong>.',
+    'about.skills.note':  'Currently improving: <strong>Luau scripting</strong>, <strong>Roblox UI</strong>, and reusable systems for game projects.',
     // Projects
     'projects.label': '02. Projects',
     'projects.title': "Things I've Built",
@@ -908,7 +320,7 @@ const TRANSLATIONS = {
     'blog.b6.title':  'My First Week Learning to Code',
     'blog.b6.excerpt':'Everyone starts somewhere. This is the honest story of my first week writing code — the excitement, the frustration, and why I decided to keep going.',
     // Code
-    'code.label': '04. Code',
+    'code.label': '03. Code',
     'code.title': 'Code Samples',
     'code.desc':  'Some snippets from my learning sessions.',
     'code.copy':  'Copy',
@@ -940,7 +352,7 @@ const TRANSLATIONS = {
     'github.noDesc':         'Personal developer project repository.',
     'github.viewRepo':       'View Code',
     // Contact
-    'contact.label':  '06. Contact',
+    'contact.label':  '04. Contact',
     'contact.title':  'Get In Touch',
     'contact.desc':   "I'd love to connect! Questions, collaborations, or just saying hi.",
     'contact.body':   "I'm currently <strong>learning</strong> and always open to new connections, feedback on my projects, or simply chatting about programming. My inbox is always open.",
@@ -949,8 +361,26 @@ const TRANSLATIONS = {
     'contact.card.respond':'I respond within 24 hours.',
     'contact.card.cta':    'Send me an Email',
     'contact.card.note':   'Or open a discussion on my <a href="https://github.com/Mhna3112" target="_blank" rel="noopener">GitHub</a>.',
+    'emailDialog.title': 'Write an email',
+    'emailDialog.desc': 'Fill this out, then review and send it in your email app.',
+    'emailDialog.close': 'Close',
+    'emailDialog.name': 'Your name',
+    'emailDialog.email': 'Your email',
+    'emailDialog.message': 'Message',
+    'emailDialog.note': 'Your email app will open with this message ready. It is not sent until you press Send there.',
+    'emailDialog.submit': 'Continue in email app',
     // Footer
     'footer.copy': 'Built with ❤️ · ',
+    // Popover & Runner
+    'popover.demo_btn': 'Try Interactive Demo',
+    'popover.github_btn': 'Source Code',
+    'runner.badge_live': 'LIVE DEMO',
+    'runner.device_desktop': 'Desktop',
+    'runner.device_tablet': 'Tablet',
+    'runner.device_mobile': 'Mobile',
+    'runner.reload': 'Reload demo',
+    'runner.open_tab': 'Open in new tab',
+    'runner.close': 'Close',
   },
 
   vi: {
@@ -980,17 +410,17 @@ const TRANSLATIONS = {
     // About
     'about.label':  '01. Giới thiệu',
     'about.title':  'Tôi là ai?',
-    'about.desc':   'Một lập trình viên đang trên đường học hỏi, đam mê code và không ngừng phát triển.',
+    'about.desc':   'Tôi xây dựng trải nghiệm và công cụ Roblox bằng Lua, Luau, đồng thời tiếp tục phát triển kỹ năng lập trình.',
     'about.card1.title': 'Tôi là ai',
-    'about.card1.desc':  'Tôi là Đức Mạnh, một học viên lập trình đang sống tại Việt Nam. Tôi đang trên hành trình trở thành full-stack developer, xây dựng các dự án thực tế và trau dồi kỹ năng mỗi ngày.',
+    'about.card1.desc':  'Tôi là Đức Mạnh, một lập trình viên ở Việt Nam. Tôi thích tạo script và giao diện Roblox bằng Luau, biến ý tưởng thành những dự án có thể sử dụng.',
     'about.card2.title': 'Tôi đang học gì',
-    'about.card2.desc':  'Hiện đang tập trung học <strong>JavaScript</strong>, <strong>Python</strong> và <strong>C</strong>. Tôi cũng đang khám phá nền tảng lập trình web và quản lý phiên bản với Git.',
+    'about.card2.desc':  'Tôi tập trung vào <strong>Lua</strong> và <strong>Luau</strong> trong Roblox Studio: viết logic trò chơi, thiết kế giao diện và tổ chức mã có thể tái sử dụng. Tôi cũng làm việc với JavaScript, Python và C.',
     'about.card3.title': 'Sở thích',
-    'about.card3.desc':  'Tôi thích giải quyết vấn đề bằng code, thử nghiệm các ngôn ngữ lập trình mới, xây dựng dự án cá nhân và đọc về các nguyên lý kỹ thuật phần mềm.',
+    'about.card3.desc':  'Tôi thích tìm hiểu cách hoạt động của trải nghiệm Roblox, thử nghiệm tính năng trò chơi và tạo giao diện rõ ràng, hữu ích cho người chơi lẫn nhà phát triển.',
     'about.card4.title': 'Mục tiêu',
-    'about.card4.desc':  'Trở thành full-stack developer thành thạo, đóng góp cho các dự án mã nguồn mở, xây dựng các công cụ hữu ích và ghi lại hành trình để giúp đỡ những người cùng học.',
+    'about.card4.desc':  'Tiếp tục nâng cao kỹ năng Luau, xây dựng các công cụ và trải nghiệm Roblox chỉn chu hơn, đồng thời chia sẻ dự án hữu ích với cộng đồng lập trình.',
     'about.skills.title': 'Công nghệ &amp; Công cụ',
-    'about.skills.note':  'Đang cải thiện: <strong>thuật toán JavaScript</strong>, <strong>cấu trúc dữ liệu Python</strong> và <strong>quản lý bộ nhớ C</strong>.',
+    'about.skills.note':  'Đang cải thiện: <strong>lập trình Luau</strong>, <strong>giao diện Roblox</strong> và hệ thống có thể tái sử dụng cho dự án game.',
     // Projects
     'projects.label': '02. Dự án',
     'projects.title': 'Những gì tôi đã xây dựng',
@@ -1033,7 +463,7 @@ const TRANSLATIONS = {
     'blog.b6.title':  'Tuần đầu tiên học lập trình của tôi',
     'blog.b6.excerpt':'Ai cũng phải bắt đầu từ đâu đó. Đây là câu chuyện thực tế về tuần đầu tiên tôi viết code — sự hào hứng, thất vọng và lý do tôi quyết định tiếp tục.',
     // Code
-    'code.label': '04. Code',
+    'code.label': '03. Code',
     'code.title': 'Mẫu code',
     'code.desc':  'Một số đoạn code từ các buổi học của tôi.',
     'code.copy':  'Sao chép',
@@ -1065,7 +495,7 @@ const TRANSLATIONS = {
     'github.noDesc':         'Kho lưu trữ dự án cá nhân của lập trình viên.',
     'github.viewRepo':       'Xem mã nguồn',
     // Contact
-    'contact.label':  '06. Liên hệ',
+    'contact.label':  '04. Liên hệ',
     'contact.title':  'Kết nối với tôi',
     'contact.desc':   'Tôi rất muốn kết nối! Câu hỏi, hợp tác, hoặc chỉ là chào hỏi.',
     'contact.body':   'Tôi đang <strong>học tập</strong> và luôn mở cửa cho các kết nối mới, phản hồi về dự án của tôi, hoặc chỉ là trò chuyện về lập trình. Hộp thư của tôi luôn rộng mở.',
@@ -1074,8 +504,26 @@ const TRANSLATIONS = {
     'contact.card.respond':'Tôi phản hồi trong vòng 24 giờ.',
     'contact.card.cta':    'Gửi email cho tôi',
     'contact.card.note':   'Hoặc mở một cuộc thảo luận trên <a href="https://github.com/Mhna3112" target="_blank" rel="noopener">GitHub</a> của tôi.',
+    'emailDialog.title': 'Viết email',
+    'emailDialog.desc': 'Điền lời nhắn, sau đó kiểm tra và gửi trong ứng dụng email của bạn.',
+    'emailDialog.close': 'Đóng',
+    'emailDialog.name': 'Tên của bạn',
+    'emailDialog.email': 'Email của bạn',
+    'emailDialog.message': 'Lời nhắn',
+    'emailDialog.note': 'Ứng dụng email sẽ mở với nội dung đã điền sẵn. Thư chỉ được gửi khi bạn bấm Gửi trong ứng dụng đó.',
+    'emailDialog.submit': 'Tiếp tục trong ứng dụng email',
     // Footer
     'footer.copy': 'Được xây dựng với ❤️ · ',
+    // Popover & Runner
+    'popover.demo_btn': 'Chạy thử demo',
+    'popover.github_btn': 'Mã nguồn',
+    'runner.badge_live': 'LIVE DEMO',
+    'runner.device_desktop': 'Desktop',
+    'runner.device_tablet': 'Tablet',
+    'runner.device_mobile': 'Mobile',
+    'runner.reload': 'Tải lại demo',
+    'runner.open_tab': 'Mở trong tab mới',
+    'runner.close': 'Đóng',
   }
 };
 
@@ -1110,15 +558,21 @@ function applyLang(lang) {
     // Use innerHTML to support <strong> and <a> tags
     el.innerHTML = val;
   });
-
-  // Re-render GitHub dynamic contents with updated language
-  if (typeof renderGitHubProfile === 'function') renderGitHubProfile();
-  if (typeof renderGitHubRepos === 'function') renderGitHubRepos(currentGhFilter);
-  if (typeof renderGitHubLanguages === 'function') renderGitHubLanguages();
+  document.querySelectorAll('[data-i18n-aria-label]').forEach(el => {
+    el.setAttribute('aria-label', t(el.getAttribute('data-i18n-aria-label')));
+  });
 
   // Restart typewriter with new language
   if (typeof resetTypewriter === 'function') {
     resetTypewriter();
+  }
+
+  // Update active popover and runner modal language
+  if (typeof updatePopoverLang === 'function') {
+    updatePopoverLang();
+  }
+  if (typeof updateRunnerLang === 'function') {
+    updateRunnerLang();
   }
 }
 
@@ -1127,37 +581,1627 @@ document.getElementById('lang-toggle').addEventListener('click', () => {
   applyLang(currentLang === 'en' ? 'vi' : 'en');
 });
 
-// Init lang on load
-applyLang(currentLang);
+const emailDialog = document.getElementById('email-dialog');
+const emailForm = document.getElementById('email-form');
+document.getElementById('open-email-dialog').addEventListener('click', () => {
+  emailDialog.showModal();
+  document.getElementById('email-name').focus();
+});
+document.getElementById('close-email-dialog').addEventListener('click', () => emailDialog.close());
+emailDialog.addEventListener('click', event => {
+  if (event.target === emailDialog) emailDialog.close();
+});
+emailForm.addEventListener('submit', event => {
+  event.preventDefault();
+  if (!emailForm.reportValidity()) return;
 
-// Init GitHub filters & data
-initGitHubFilters();
-loadGitHub();
+  const name = document.getElementById('email-name').value.trim();
+  const email = document.getElementById('email-address').value.trim();
+  const message = document.getElementById('email-message').value.trim();
+  if (!name || !email || !message) return;
 
-// Wire GitHub manual sync button
-const ghSyncBtn = document.getElementById('gh-sync-btn');
-if (ghSyncBtn) {
-  ghSyncBtn.addEventListener('click', () => {
-    loadGitHub(true);
-  });
+  const subject = currentLang === 'vi' ? `Lời nhắn từ ${name} qua ducmanh.xyz` : `Message from ${name} via ducmanh.xyz`;
+  const body = currentLang === 'vi'
+    ? `Tên: ${name}\nEmail: ${email}\n\nLời nhắn:\n${message}`
+    : `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`;
+  window.location.href = `mailto:manhntp22@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+});
+
+
+/* ==========================================================================
+   PROJECT HOVER PREVIEW POPOVER & INTERACTIVE DEMO RUNNER ENGINE
+   ========================================================================== */
+
+// ── 1. PROJECT METADATA & DATA DICTIONARY ──────────────────────────────────
+const PROJECTS_DATA = {
+  mediahub: {
+    id: 'mediahub',
+    type: 'web',
+    liveUrl: 'https://media.ducmanh.xyz/',
+    githubUrl: 'https://github.com/Mhna3112/Mhnaproject1',
+    badge: { vi: 'Cloudflare Worker', en: 'Cloudflare Worker' },
+    status: { vi: 'Hoạt động', en: 'Live Production' },
+    name: { vi: 'MediaHub Downloader', en: 'MediaHub Downloader' },
+    desc: {
+      vi: 'Trình phân tích & tải xuống Media đa nền tảng (TikTok, YouTube, Facebook, Instagram, Twitter/X...) không watermark, chuẩn âm thanh & hình ảnh chất lượng cao.',
+      en: 'Multi-platform media analyzer & high-speed downloader (TikTok, YouTube, Facebook, Instagram, Twitter/X, Douyin) without watermarks, featuring clean audio extraction & HD video processing.'
+    },
+    mockupHeader: {
+      title: { vi: 'Xem trước giao diện', en: 'UI Preview' },
+      tag: 'Serverless API'
+    },
+    mockupHtml: `
+      <div class="popover-mockup-input">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+        <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">https://tiktok.com/@creator/video/7382...</span>
+      </div>
+      <div class="popover-mockup-pill-group">
+        <span class="popover-mockup-pill">⚡ Fast Edge CDN</span>
+        <span class="popover-mockup-pill">🎵 320kbps MP3</span>
+        <span class="popover-mockup-pill">No Watermark</span>
+        <span class="popover-mockup-pill">1080p HD</span>
+      </div>
+    `,
+    features: {
+      vi: [
+        'Bóc tách video TikTok, Douyin, YouTube, FB không logo gốc',
+        'Tách luồng âm thanh MP3 320kbps & chuyển mã video chất lượng cao',
+        'Triển khai toàn cầu trên Cloudflare Workers với độ trễ cực thấp'
+      ],
+      en: [
+        'Extracts TikTok, Douyin, YouTube, FB videos without watermarks',
+        'High-bitrate 320kbps MP3 audio stream & HD video processing',
+        'Serverless global deployment on Cloudflare Workers edge network'
+      ]
+    }
+  },
+
+  gplx: {
+    id: 'gplx',
+    type: 'web',
+    liveUrl: 'gplx/',
+    githubUrl: 'https://github.com/Mhna3112/myweb/tree/main/gplx',
+    badge: { vi: 'Web App · PWA', en: 'Web App · PWA' },
+    status: { vi: 'Sẵn sàng 100%', en: '100% Offline' },
+    name: { vi: 'Ôn Thi Bằng Lái Ô Tô 600 Câu', en: 'Driver License 600 Questions' },
+    desc: {
+      vi: 'Ứng dụng ôn thi sát hạch lý thuyết lái xe ô tô 600 câu chuẩn Bộ GTVT: Flashcard 3D thông minh, đề thi 30 câu (20 phút), chấm điểm phát hiện câu điểm liệt.',
+      en: 'Official 600-question Vietnamese Driver License exam prep app: Interactive 3D flashcards, authentic 30-question mock tests, and instant critical failure question detection.'
+    },
+    mockupHeader: {
+      title: { vi: 'Mô phỏng Flashcard 3D', en: '3D Flashcard Preview' },
+      tag: 'B1, B2, C, D'
+    },
+    mockupHtml: `
+      <div class="popover-flashcard-preview">
+        <div class="popover-flashcard-q">Câu 18 (Điểm liệt): Trên đường cao tốc, người lái xe có được phép quay đầu xe, lùi xe không?</div>
+        <div class="popover-flashcard-opt correct">
+          <span>✓</span>
+          <span>1. Tuyệt đối không được quay đầu xe, lùi xe</span>
+        </div>
+        <div class="popover-flashcard-opt">
+          <span>○</span>
+          <span>2. Được quay đầu xe ở nơi có khoảng mở giải phân cách</span>
+        </div>
+      </div>
+    `,
+    features: {
+      vi: [
+        'Flashcard 3D lật 2 mặt kèm mẹo giải nhanh từng câu hỏi',
+        'Thi thử đề chuẩn 30 câu tính giờ 20 phút chấm điểm tự động',
+        'Phát hiện tức thì 60 câu điểm liệt và ma trận 30 câu tương tác'
+      ],
+      en: [
+        'Interactive 3D flashcards with quick memory tips for each question',
+        'Authentic 30-question timed mock exam with automated grading',
+        'Instant critical failure alerts & interactive 30-item answer matrix'
+      ]
+    }
+  },
+
+  todo: {
+    id: 'todo',
+    type: 'web',
+    liveUrl: 'todo/',
+    githubUrl: 'https://github.com/Mhna3112/todp-cal',
+    badge: { vi: 'Realtime Cloud', en: 'Realtime Cloud' },
+    status: { vi: 'Đồng bộ Firebase', en: 'Firebase Synced' },
+    name: { vi: 'Lịch Công Việc — Todo Calendar', en: 'Todo Calendar' },
+    desc: {
+      vi: 'Ứng dụng quản lý lịch & công việc cá nhân toàn diện: lịch tháng, thời gian biểu 24h, đồng bộ Firebase realtime giữa các thiết bị, xuất dữ liệu Excel.',
+      en: 'Comprehensive personal task & calendar web app: month calendar, 24-hour timeline, realtime Firebase sync across devices, and Excel/CSV export.'
+    },
+    mockupHeader: {
+      title: { vi: 'Lịch trình 24h hôm nay', en: 'Today 24h Timeline' },
+      tag: 'Firebase Sync'
+    },
+    mockupHtml: `
+      <div class="popover-flashcard-preview">
+        <div class="popover-flashcard-q" style="display:flex;justify-content:space-between;">
+          <span>📅 Hôm nay · 3 nhiệm vụ</span>
+          <span style="color:var(--green);font-size:0.7rem;">● Đồng bộ</span>
+        </div>
+        <div class="popover-flashcard-opt correct">
+          <span>✓</span>
+          <span>08:30 Deploy Cloudflare Workers v3.2</span>
+        </div>
+        <div class="popover-flashcard-opt" style="color:var(--accent);font-weight:600;">
+          <span>⚡</span>
+          <span>14:00 Review Luau script Roblox Hub</span>
+        </div>
+        <div class="popover-flashcard-opt" style="color:var(--fg3);">
+          <span>○</span>
+          <span>20:00 Thực hành giải thuật C++ QuickSort</span>
+        </div>
+      </div>
+    `,
+    features: {
+      vi: [
+        'Lịch tháng trực quan kết hợp thời gian biểu chi tiết 24h',
+        'Đồng bộ dữ liệu Firebase Realtime tức thì trên mọi thiết bị',
+        'Tùy biến hình nền, màu sắc từng ngày và xuất file Excel/CSV'
+      ],
+      en: [
+        'Interactive month grid combined with detailed 24-hour daily timeline',
+        'Instant multi-device synchronization powered by Firebase Realtime',
+        'Custom daily wallpapers, theme palettes, and Excel/CSV data export'
+      ]
+    }
+  },
+
+  discord: {
+    id: 'discord',
+    type: 'discord',
+    liveUrl: null,
+    githubUrl: 'https://github.com/Mhna3112/discord-bot-auto-quest',
+    badge: { vi: 'Python · Asyncio', en: 'Python · Asyncio' },
+    status: { vi: 'Bot Hoạt động', en: 'Bot Online' },
+    name: { vi: 'Discord Quest Auto-Completer Bot', en: 'Discord Quest Auto-Completer Bot' },
+    desc: {
+      vi: 'Bot Discord viết bằng Python quản lý và tự động nhận, hoàn thành các nhiệm vụ (Discord Quests) ở chế độ chạy ngầm bất đồng bộ với hệ thống logging chi tiết.',
+      en: 'Asynchronous Python Discord bot designed to track and complete active Discord Quests in background. Features multi-account concurrency & real-time logging.'
+    },
+    mockupHeader: {
+      title: { vi: 'Discord RPC Status', en: 'Discord RPC Status' },
+      tag: 'WebSocket v10'
+    },
+    mockupHtml: `
+      <div class="popover-discord-embed">
+        <div class="popover-discord-user">
+          <span style="color:#5865f2;">●</span>
+          <span>Quest Bot</span>
+          <span class="popover-discord-bot-tag">BOT</span>
+        </div>
+        <div style="font-size:0.75rem;color:#dbdee1;margin-bottom:4px;">🎮 Quest: Stream Honkai: Star Rail (15m)</div>
+        <div class="popover-progress-bar">
+          <div class="popover-progress-fill" style="width:73%;"></div>
+        </div>
+        <div style="font-size:0.68rem;color:#949ba4;display:flex;justify-content:space-between;">
+          <span>Tiến trình: 11 / 15 phút (73%)</span>
+          <span style="color:#3fb950;">● Streaming</span>
+        </div>
+      </div>
+    `,
+    features: {
+      vi: [
+        'Tự động quét và hoàn thành tất cả Discord Quests đang mở',
+        'Engine chạy ngầm Asyncio đa luồng không tốn tài nguyên máy',
+        'Quản lý token bảo mật cao kèm thông báo Webhook thời gian thực'
+      ],
+      en: [
+        'Automatically scans & finishes all available Discord Quests',
+        'Ultra-lightweight Asyncio background daemon for multi-accounts',
+        'Secure AES token vault & real-time Webhook notifications'
+      ]
+    }
+  },
+
+  roblox: {
+    id: 'roblox',
+    type: 'roblox',
+    liveUrl: null,
+    githubUrl: 'https://github.com/Mhna3112/Mhnauxui',
+    badge: { vi: 'Lua / Luau', en: 'Lua / Luau' },
+    status: { vi: 'Roblox Suite', en: 'Roblox Suite' },
+    name: { vi: 'Mhnaa Hub & MhnaaUI Suite', en: 'Mhnaa Hub & MhnaaUI Suite' },
+    desc: {
+      vi: 'Trọn bộ script tự động hoá (Autofarm, Kill Aura, Dungeon Quest) và thư viện giao diện tuỳ biến MhnaaUI cho Roblox, hỗ trợ loadstring tức thì.',
+      en: 'Roblox automation script suite (Autofarm, Kill Aura, Dungeon Quests) and customizable MhnaaUI interface library with instant one-line loadstring execution.'
+    },
+    mockupHeader: {
+      title: { vi: 'Giao diện Game MhnaaUI', en: 'MhnaaUI In-Game' },
+      tag: 'Luau v5.1'
+    },
+    mockupHtml: `
+      <div class="popover-roblox-panel">
+        <div class="popover-roblox-toggle-row">
+          <span>Auto Farm Level (Fast)</span>
+          <span class="popover-roblox-toggle-active">[BẬT]</span>
+        </div>
+        <div class="popover-roblox-toggle-row">
+          <span>Kill Aura (Phạm vi 25m)</span>
+          <span class="popover-roblox-toggle-active">[BẬT]</span>
+        </div>
+        <div class="popover-roblox-toggle-row">
+          <span>Tốc độ di chuyển</span>
+          <span style="color:var(--accent);">x2.5 (32 spd)</span>
+        </div>
+      </div>
+    `,
+    features: {
+      vi: [
+        'Bộ công cụ Autofarm quái, Kill Aura và làm Dungeon mượt mà',
+        'Thư viện giao diện MhnaaUI phong cách Resend kéo thả tự do',
+        'Tích hợp loadstring 1 chạm chạy ngay trên mọi Roblox Executor'
+      ],
+      en: [
+        'High-performance Autofarm, Kill Aura & Dungeon Quest engine',
+        'Modern draggable Resend-style MhnaaUI interface suite',
+        'One-click loadstring ready for all popular Roblox executors'
+      ]
+    }
+  },
+
+  cpp: {
+    id: 'cpp',
+    type: 'cpp',
+    liveUrl: null,
+    githubUrl: 'https://github.com/Mhna3112/Learn-C-C-',
+    badge: { vi: 'C / C++ Core', en: 'C / C++ Core' },
+    status: { vi: 'Thuật toán', en: 'Algorithms' },
+    name: { vi: 'Luyện Tập Thuật Toán C & C++', en: 'C & C++ Practice & Algorithms' },
+    desc: {
+      vi: 'Tuyển tập các bài tập thực hành cấu trúc dữ liệu và giải thuật bằng C & C++: xử lý mảng, con trỏ bộ nhớ, giải thuật đệ quy và tối ưu hoá hệ thống.',
+      en: 'Curated collection of C and C++ algorithms and core data structures: pointer manipulations, recursive problems, and low-level optimizations.'
+    },
+    mockupHeader: {
+      title: { vi: 'Mô phỏng Hoán đổi Mảng', en: 'Array Swap Visualizer' },
+      tag: 'O(N log N)'
+    },
+    mockupHtml: `
+      <div class="popover-algo-bars">
+        <div class="popover-algo-bar" style="height:35%;"></div>
+        <div class="popover-algo-bar active" style="height:70%;"></div>
+        <div class="popover-algo-bar" style="height:45%;"></div>
+        <div class="popover-algo-bar active" style="height:25%;"></div>
+        <div class="popover-algo-bar" style="height:90%;"></div>
+        <div class="popover-algo-bar" style="height:60%;"></div>
+        <div class="popover-algo-bar" style="height:80%;"></div>
+      </div>
+    `,
+    features: {
+      vi: [
+        'Thao tác con trỏ bộ nhớ, mảng động và cấu trúc dữ liệu cơ bản',
+        'Bộ trực quan hoá thuật toán QuickSort, BubbleSort, BinarySearch',
+        'Đo thời gian thực thi chính xác đến từng microsecond (ms)'
+      ],
+      en: [
+        'Pointer manipulations, dynamic memory allocation & data structures',
+        'Interactive visualizer for QuickSort, BubbleSort & BinarySearch',
+        'Precise execution time benchmarking measured down to milliseconds'
+      ]
+    }
+  }
+};
+
+const ROBLOX_LOADSTRING = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/Mhna3112/Mhnauxui/main/source.lua"))()';
+
+// ── 2. HOVER PREVIEW POPOVER ENGINE ────────────────────────────────────────
+const popoverEl = document.getElementById('project-hover-popover');
+let popoverShowTimer = null;
+let popoverHideTimer = null;
+let currentHoverProjectId = null;
+let currentHoverCard = null;
+
+function renderPopoverContent(projectId) {
+  const project = PROJECTS_DATA[projectId];
+  if (!project) return '';
+
+  const lang = (typeof currentLang !== 'undefined') ? currentLang : 'vi';
+  const badgeText = project.badge[lang] || project.badge.vi;
+  const statusText = project.status[lang] || project.status.vi;
+  const nameText = project.name[lang] || project.name.vi;
+  const descText = project.desc[lang] || project.desc.vi;
+  const headerTitle = project.mockupHeader.title[lang] || project.mockupHeader.title.vi;
+  const headerTag = project.mockupHeader.tag;
+  const featureList = project.features[lang] || project.features.vi || [];
+  const demoBtnText = lang === 'vi' ? 'Chạy thử demo' : 'Try Interactive Demo';
+  const codeBtnText = lang === 'vi' ? 'Mã nguồn' : 'Source Code';
+
+  const featuresHtml = featureList.map(feat => `
+    <li>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+      <span>${feat}</span>
+    </li>
+  `).join('');
+
+  return `
+    <div class="popover-header">
+      <span class="popover-badge">${badgeText}</span>
+      <div class="popover-status">
+        <span class="popover-status-dot"></span>
+        <span>${statusText}</span>
+      </div>
+    </div>
+    <h3 class="popover-title">${nameText}</h3>
+    <p class="popover-desc">${descText}</p>
+    <div class="popover-example-box">
+      <div class="popover-example-header">
+        <span>${headerTitle}</span>
+        <span class="popover-example-tag">${headerTag}</span>
+      </div>
+      ${project.mockupHtml}
+    </div>
+    <ul class="popover-features">
+      ${featuresHtml}
+    </ul>
+    <div class="popover-actions">
+      <button type="button" class="popover-btn-demo" data-project-target="${project.id}">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        <span>${demoBtnText}</span>
+      </button>
+      <a href="${project.githubUrl}" target="_blank" rel="noopener" class="popover-btn-gh" title="GitHub">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.868-.013-1.703-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836c.85.004 1.705.114 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.741 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
+        <span>${codeBtnText}</span>
+      </a>
+    </div>
+  `;
 }
 
-// Wire avatar preview modal (direct + delegation)
-const avatarWrap = document.getElementById('github-avatar-wrap');
-if (avatarWrap) {
-  avatarWrap.addEventListener('click', window.openAvatarModal);
-  avatarWrap.addEventListener('keydown', e => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      window.openAvatarModal(e);
+function positionPopover(card) {
+  if (!popoverEl || !card) return;
+  const cardRect = card.getBoundingClientRect();
+  const vw = window.innerWidth;
+  const vh = window.innerHeight;
+
+  const popoverW = popoverEl.offsetWidth || 380;
+  const popoverH = popoverEl.offsetHeight || 380;
+  const gap = 14;
+  const margin = 14;
+
+  let left, top;
+
+  // Try right side
+  if (cardRect.right + gap + popoverW <= vw - margin) {
+    left = cardRect.right + gap;
+    top = cardRect.top;
+  }
+  // Try left side
+  else if (cardRect.left - gap - popoverW >= margin) {
+    left = cardRect.left - gap - popoverW;
+    top = cardRect.top;
+  }
+  // Try bottom if horizontal doesn't fit
+  else if (cardRect.bottom + gap + popoverH <= vh - margin) {
+    left = Math.max(margin, Math.min(vw - popoverW - margin, cardRect.left + (cardRect.width - popoverW) / 2));
+    top = cardRect.bottom + gap;
+  }
+  // Try top
+  else if (cardRect.top - gap - popoverH >= margin) {
+    left = Math.max(margin, Math.min(vw - popoverW - margin, cardRect.left + (cardRect.width - popoverW) / 2));
+    top = cardRect.top - gap - popoverH;
+  }
+  // Fallback: center in viewport safely
+  else {
+    left = Math.max(margin, (vw - popoverW) / 2);
+    top = Math.max(margin, (vh - popoverH) / 2);
+  }
+
+  // Safety viewport clamp
+  left = Math.max(margin, Math.min(vw - popoverW - margin, left));
+  top = Math.max(margin, Math.min(vh - popoverH - margin, top));
+
+  popoverEl.style.left = `${Math.round(left)}px`;
+  popoverEl.style.top = `${Math.round(top)}px`;
+}
+
+function showPopover(projectId, card) {
+  if (!popoverEl || !PROJECTS_DATA[projectId]) return;
+  currentHoverProjectId = projectId;
+  currentHoverCard = card;
+
+  popoverEl.innerHTML = renderPopoverContent(projectId);
+  positionPopover(card);
+
+  popoverEl.classList.add('visible');
+  popoverEl.setAttribute('aria-hidden', 'false');
+
+  // Wire demo button inside popover
+  const demoBtn = popoverEl.querySelector('.popover-btn-demo');
+  if (demoBtn) {
+    demoBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      hidePopoverImmediately();
+      openProjectRunner(projectId);
+    });
+  }
+}
+
+function scheduleShowPopover(projectId, card) {
+  clearTimeout(popoverShowTimer);
+  clearTimeout(popoverHideTimer);
+  // Faster switch when popover is already visible from another card
+  const delay = (popoverEl && popoverEl.classList.contains('visible')) ? 50 : 250;
+  popoverShowTimer = setTimeout(() => {
+    showPopover(projectId, card);
+  }, delay);
+}
+
+function scheduleHidePopover() {
+  clearTimeout(popoverShowTimer);
+  popoverHideTimer = setTimeout(() => {
+    hidePopoverImmediately();
+  }, 200);
+}
+
+function hidePopoverImmediately() {
+  clearTimeout(popoverShowTimer);
+  clearTimeout(popoverHideTimer);
+  if (popoverEl) {
+    popoverEl.classList.remove('visible');
+    popoverEl.setAttribute('aria-hidden', 'true');
+  }
+  currentHoverProjectId = null;
+  currentHoverCard = null;
+}
+
+function updatePopoverLang() {
+  if (popoverEl && popoverEl.classList.contains('visible') && currentHoverProjectId && currentHoverCard) {
+    popoverEl.innerHTML = renderPopoverContent(currentHoverProjectId);
+    positionPopover(currentHoverCard);
+    const demoBtn = popoverEl.querySelector('.popover-btn-demo');
+    if (demoBtn) {
+      demoBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        hidePopoverImmediately();
+        openProjectRunner(currentHoverProjectId);
+      });
+    }
+  }
+}
+
+// Attach hover preview listeners on desktop
+if (popoverEl) {
+  const canHover = () => typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(hover: hover)').matches;
+
+  document.querySelectorAll('.project-card[data-project-id]').forEach(card => {
+    const pid = card.dataset.projectId;
+    card.addEventListener('mouseenter', () => {
+      if (canHover()) {
+        scheduleShowPopover(pid, card);
+      }
+    });
+    card.addEventListener('mouseleave', () => {
+      if (canHover()) {
+        scheduleHidePopover();
+      }
+    });
+  });
+
+  popoverEl.addEventListener('mouseenter', () => {
+    clearTimeout(popoverHideTimer);
+  });
+  popoverEl.addEventListener('mouseleave', () => {
+    scheduleHidePopover();
+  });
+
+  window.addEventListener('scroll', () => {
+    if (popoverEl.classList.contains('visible')) {
+      hidePopoverImmediately();
+    }
+  }, { passive: true });
+
+  // Dismiss popover on outside click or Escape
+  document.addEventListener('click', (e) => {
+    if (popoverEl.classList.contains('visible')) {
+      if (!popoverEl.contains(e.target) && !e.target.closest('.project-card')) {
+        hidePopoverImmediately();
+      }
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && popoverEl.classList.contains('visible')) {
+      hidePopoverImmediately();
     }
   });
 }
-document.addEventListener('click', e => {
-  const target = e.target.closest('#github-avatar-wrap');
-  if (target) {
-    window.openAvatarModal(e);
+
+
+// ── 3. INTERACTIVE DEMO RUNNER MODAL ──────────────────────────────────────
+const runnerModal = document.getElementById('project-runner-modal');
+const runnerModalBody = document.getElementById('runner-modal-body');
+const runnerBadge = document.getElementById('runner-badge');
+const runnerTitle = document.getElementById('runner-modal-title');
+const runnerExternalLink = document.getElementById('runner-external-link');
+const runnerReloadBtn = document.getElementById('runner-reload-btn');
+const runnerCloseBtn = document.getElementById('close-runner-modal');
+const runnerDotClose = document.getElementById('runner-dot-close');
+const runnerDeviceSwitcher = document.getElementById('runner-device-switcher');
+
+let activeRunnerProjectId = null;
+let activeDevice = 'desktop';
+
+// Active simulator states & timers
+let discordStreamInterval = null;
+let discordQuestProgress = 9;
+let cppSortInterval = null;
+let cppGenerator = null;
+let cppArray = [];
+let cppIsRunning = false;
+let cppStartTime = 0;
+let cppElapsed = 0;
+let cppComparisons = 0;
+let cppSwaps = 0;
+
+function setRunnerDevice(device) {
+  activeDevice = device;
+  if (runnerDeviceSwitcher) {
+    runnerDeviceSwitcher.querySelectorAll('.runner-device-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.device === device);
+    });
   }
+  const wrapper = document.getElementById('runner-frame-wrapper');
+  if (wrapper) {
+    wrapper.classList.remove('frame-desktop', 'frame-tablet', 'frame-mobile');
+    wrapper.classList.add(`frame-${device}`);
+  }
+}
+
+function openProjectRunner(projectId) {
+  if (!runnerModal || !PROJECTS_DATA[projectId]) return;
+  activeRunnerProjectId = projectId;
+  const project = PROJECTS_DATA[projectId];
+  const lang = (typeof currentLang !== 'undefined') ? currentLang : 'vi';
+
+  // Set modal header
+  if (runnerTitle) runnerTitle.textContent = project.name[lang] || project.name.vi;
+  if (runnerBadge) runnerBadge.textContent = project.badge[lang] || 'LIVE DEMO';
+
+  if (runnerExternalLink) {
+    const targetUrl = project.liveUrl || project.githubUrl;
+    runnerExternalLink.href = targetUrl;
+    runnerExternalLink.title = lang === 'vi' ? 'Mở trong tab mới' : 'Open in new tab';
+    runnerExternalLink.setAttribute('aria-label', lang === 'vi' ? 'Mở tab mới' : 'Open in new tab');
+  }
+
+  // Reset to desktop frame
+  setRunnerDevice('desktop');
+
+  // Render project content
+  if (project.type === 'web') {
+    renderWebRunner(project);
+  } else if (project.type === 'discord') {
+    renderDiscordRunner(project);
+  } else if (project.type === 'roblox') {
+    renderRobloxRunner(project);
+  } else if (project.type === 'cpp') {
+    renderCppRunner(project);
+  }
+
+  // Open native dialog modal
+  if (typeof runnerModal.showModal === 'function') {
+    runnerModal.showModal();
+  } else {
+    runnerModal.setAttribute('open', '');
+  }
+}
+
+function closeProjectRunner() {
+  if (!runnerModal) return;
+  cleanupRunner();
+  if (typeof runnerModal.close === 'function') {
+    runnerModal.close();
+  } else {
+    runnerModal.removeAttribute('open');
+  }
+}
+
+let robloxDragCleanup = null;
+
+function cleanupRunner() {
+  // Clear Discord streams
+  if (discordStreamInterval) {
+    clearInterval(discordStreamInterval);
+    discordStreamInterval = null;
+  }
+  // Clear C++ animations
+  if (cppSortInterval) {
+    clearInterval(cppSortInterval);
+    cppSortInterval = null;
+  }
+  cppIsRunning = false;
+  cppGenerator = null;
+
+  // Clean up any active drag listeners
+  if (typeof robloxDragCleanup === 'function') {
+    robloxDragCleanup();
+    robloxDragCleanup = null;
+  }
+
+  // Stop & dismantle any active iframe to kill network, audio, and memory immediately
+  if (runnerModalBody) {
+    const iframes = runnerModalBody.querySelectorAll('iframe');
+    iframes.forEach(iframe => {
+      iframe.src = 'about:blank';
+      if (typeof iframe.remove === 'function') {
+        iframe.remove();
+      } else if (iframe.parentNode && typeof iframe.parentNode.removeChild === 'function') {
+        iframe.parentNode.removeChild(iframe);
+      }
+    });
+    runnerModalBody.innerHTML = '';
+  }
+  activeRunnerProjectId = null;
+}
+
+function reloadCurrentRunner() {
+  if (!activeRunnerProjectId || !PROJECTS_DATA[activeRunnerProjectId]) return;
+  const project = PROJECTS_DATA[activeRunnerProjectId];
+  if (project.type === 'web') {
+    renderWebRunner(project);
+  } else if (project.type === 'discord') {
+    renderDiscordRunner(project);
+  } else if (project.type === 'roblox') {
+    renderRobloxRunner(project);
+  } else if (project.type === 'cpp') {
+    renderCppRunner(project);
+  }
+}
+
+function updateRunnerLang() {
+  if (!runnerModal || !activeRunnerProjectId || !PROJECTS_DATA[activeRunnerProjectId]) return;
+  const project = PROJECTS_DATA[activeRunnerProjectId];
+  const lang = (typeof currentLang !== 'undefined') ? currentLang : 'vi';
+
+  if (runnerTitle) runnerTitle.textContent = project.name[lang] || project.name.vi;
+  if (runnerBadge) runnerBadge.textContent = project.badge[lang] || 'LIVE DEMO';
+  if (runnerExternalLink) {
+    runnerExternalLink.title = lang === 'vi' ? 'Mở trong tab mới' : 'Open in new tab';
+    runnerExternalLink.setAttribute('aria-label', lang === 'vi' ? 'Mở tab mới' : 'Open in new tab');
+  }
+  if (runnerReloadBtn) {
+    runnerReloadBtn.title = lang === 'vi' ? 'Tải lại demo' : 'Reload demo';
+    runnerReloadBtn.setAttribute('aria-label', lang === 'vi' ? 'Tải lại' : 'Reload');
+  }
+  if (runnerCloseBtn) {
+    runnerCloseBtn.title = lang === 'vi' ? 'Đóng (Esc)' : 'Close (Esc)';
+    runnerCloseBtn.setAttribute('aria-label', lang === 'vi' ? 'Đóng' : 'Close');
+  }
+  if (runnerDeviceSwitcher) {
+    const desktopBtn = runnerDeviceSwitcher.querySelector('[data-device="desktop"]');
+    const tabletBtn = runnerDeviceSwitcher.querySelector('[data-device="tablet"]');
+    const mobileBtn = runnerDeviceSwitcher.querySelector('[data-device="mobile"]');
+    if (desktopBtn) desktopBtn.title = lang === 'vi' ? 'Chế độ Desktop (100%)' : 'Desktop view (100%)';
+    if (tabletBtn) tabletBtn.title = lang === 'vi' ? 'Chế độ Tablet (768px)' : 'Tablet view (768px)';
+    if (mobileBtn) mobileBtn.title = lang === 'vi' ? 'Chế độ Mobile (390px)' : 'Mobile view (390px)';
+  }
+}
+
+// ── 3.1. WEB IFRAME RUNNER ────────────────────────────────────────────────
+function renderWebRunner(project) {
+  if (!runnerModalBody) return;
+  const lang = (typeof currentLang !== 'undefined') ? currentLang : 'vi';
+  const loadingText = lang === 'vi' ? 'Đang khởi chạy ứng dụng...' : 'Launching application...';
+
+  runnerModalBody.innerHTML = `
+    <div class="runner-frame-wrapper frame-${activeDevice}" id="runner-frame-wrapper">
+      <div class="runner-loading-shimmer" id="runner-loading-shimmer">
+        <div class="runner-spinner"></div>
+        <div class="runner-loading-text">${loadingText}</div>
+      </div>
+      <iframe class="runner-iframe" id="runner-iframe" src="${project.liveUrl}" title="${project.name[lang] || project.name.vi}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+  `;
+
+  const iframe = document.getElementById('runner-iframe');
+  const shimmer = document.getElementById('runner-loading-shimmer');
+  if (iframe) {
+    iframe.onload = () => {
+      if (shimmer) {
+        shimmer.style.opacity = '0';
+        setTimeout(() => { if (shimmer.parentNode) shimmer.remove(); }, 250);
+      }
+    };
+  }
+}
+
+// ── 3.2. DISCORD QUEST BOT RUNNER ─────────────────────────────────────────
+function renderDiscordRunner(project) {
+  if (!runnerModalBody) return;
+  if (discordStreamInterval) {
+    clearInterval(discordStreamInterval);
+    discordStreamInterval = null;
+  }
+  discordQuestProgress = 9;
+
+  runnerModalBody.innerHTML = `
+    <div class="runner-frame-wrapper frame-${activeDevice}" id="runner-frame-wrapper">
+      <div class="discord-simulator-container">
+        <div class="discord-sim-client">
+          <div class="discord-server-header">
+            <div class="discord-server-icon">D</div>
+            <div>
+              <div style="font-weight:600;font-size:0.85rem;color:#fff;">Discord Quests Automation Hub</div>
+              <div style="font-size:0.7rem;color:#949ba4;">Bot Online · Python Asyncio Gateway v10</div>
+            </div>
+          </div>
+          <div class="discord-msg-card">
+            <div class="discord-msg-author">
+              <span style="color:#5865f2;">●</span>
+              <span>Quest Completer</span>
+              <span class="popover-discord-bot-tag">BOT</span>
+              <span style="font-size:0.68rem;color:#949ba4;margin-left:auto;">ducmanh#1337</span>
+            </div>
+            <div style="font-size:0.78rem;color:#dbdee1;line-height:1.45;margin-bottom:8px;">
+              🎮 <strong>Honkai: Star Rail — 15 Min Stream Quest</strong>
+            </div>
+            <div class="popover-progress-bar">
+              <div class="popover-progress-fill" id="discord-sim-prog" style="width: 60%;"></div>
+            </div>
+            <div id="discord-sim-prog-text" style="font-size:0.7rem;color:#949ba4;display:flex;justify-content:space-between;margin-top:4px;">
+              <span>Tiến trình: 9 / 15 phút (60%)</span>
+              <span style="color:#3fb950;">● Đang trực tuyến</span>
+            </div>
+          </div>
+          <div class="discord-commands-bar">
+            <button type="button" class="discord-cmd-btn" id="dcmd-status">
+              <span>/quest status</span>
+              <span style="color:#80848e;font-size:0.7rem;">Kiểm tra tiến trình</span>
+            </button>
+            <button type="button" class="discord-cmd-btn" id="dcmd-start">
+              <span>/quest start</span>
+              <span style="color:#80848e;font-size:0.7rem;">Nhận & chạy nhiệm vụ</span>
+            </button>
+            <button type="button" class="discord-cmd-btn" id="dcmd-stream">
+              <span>/quest stream</span>
+              <span style="color:#80848e;font-size:0.7rem;">Tự động Stream (1s = +1p)</span>
+            </button>
+            <button type="button" class="discord-cmd-btn" id="dcmd-claim">
+              <span>/quest claim</span>
+              <span style="color:#80848e;font-size:0.7rem;">Nhận thưởng quà tặng</span>
+            </button>
+            <button type="button" class="discord-cmd-btn" id="dcmd-clear" style="border-style:dashed;">
+              <span>/clear</span>
+              <span style="color:#80848e;font-size:0.7rem;">Xoá màn hình log</span>
+            </button>
+          </div>
+        </div>
+        <div class="discord-sim-terminal">
+          <div class="terminal-titlebar">
+            <span>bash - python quest_bot.py --account ducmanh#1337</span>
+            <span style="color:#3fb950;">● Connected (Session #9812)</span>
+          </div>
+          <div class="terminal-log-output" id="discord-terminal-log"></div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  const logBox = document.getElementById('discord-terminal-log');
+  const progFill = document.getElementById('discord-sim-prog');
+  const progText = document.getElementById('discord-sim-prog-text');
+
+  function getTimestamp() {
+    const d = new Date();
+    return d.toTimeString().split(' ')[0];
+  }
+
+  function appendLog(typeClass, prefix, msg) {
+    if (!logBox) return;
+    const line = document.createElement('div');
+    line.style.marginBottom = '3px';
+    line.innerHTML = `<span style="color:#6e7681;">[${getTimestamp()}]</span> <span class="${typeClass}">[${prefix}]</span> <span>${msg}</span>`;
+    logBox.appendChild(line);
+    logBox.scrollTop = logBox.scrollHeight;
+  }
+
+  function updateQuestUI() {
+    const pct = Math.min(100, Math.round((discordQuestProgress / 15) * 100));
+    if (progFill) progFill.style.width = `${pct}%`;
+    if (progText) {
+      const isDone = discordQuestProgress >= 15;
+      progText.innerHTML = `<span>Tiến trình: ${discordQuestProgress} / 15 phút (${pct}%)</span> <span style="color:${isDone ? '#3fb950' : '#58a6ff'};">${isDone ? '✓ Hoàn thành' : '● Đang chạy'}</span>`;
+    }
+  }
+
+  // Initial terminal boot sequence
+  appendLog('log-info', 'INIT', 'Initializing Asyncio background event loop...');
+  setTimeout(() => appendLog('log-info', 'AUTH', 'Decrypting AES-256 tokens for account ducmanh#1337... OK'), 150);
+  setTimeout(() => appendLog('log-succ', 'GATEWAY', 'Connected to Discord Gateway WebSocket v10 (Ping: 22ms)'), 350);
+  setTimeout(() => appendLog('log-quest', 'RPC', 'Found active quest: "Honkai: Star Rail — 15 Min Stream"'), 550);
+  setTimeout(() => appendLog('log-info', 'READY', 'Bot daemon ready. Click command buttons to test automation.'), 750);
+
+  // Wire command buttons
+  const btnStatus = document.getElementById('dcmd-status');
+  const btnStart = document.getElementById('dcmd-start');
+  const btnStream = document.getElementById('dcmd-stream');
+  const btnClaim = document.getElementById('dcmd-claim');
+  const btnClear = document.getElementById('dcmd-clear');
+
+  if (btnStatus) {
+    btnStatus.addEventListener('click', () => {
+      appendLog('log-quest', 'EXEC', '> /quest status');
+      appendLog('log-info', 'QUERY', `Account: ducmanh#1337 | Active Session ID: 9812`);
+      appendLog('log-quest', 'QUEST', `Honkai: Star Rail | Progress: ${discordQuestProgress}/15 mins (${Math.round((discordQuestProgress/15)*100)}%)`);
+      appendLog('log-succ', 'HEARTBEAT', 'WebSocket alive. Rate limit buffer: 0 violations.');
+    });
+  }
+
+  if (btnStart) {
+    btnStart.addEventListener('click', () => {
+      appendLog('log-quest', 'EXEC', '> /quest start');
+      appendLog('log-info', 'ENROLL', 'Enrolling in quest ID 122948291...');
+      appendLog('log-succ', 'HOOK', 'Simulated game process StarRail.exe (PID: 8412) launched.');
+      appendLog('log-quest', 'PRESENCE', 'Rich Presence heartbeat broadcasting: "Streaming to Voice Channel"');
+    });
+  }
+
+  if (btnStream) {
+    btnStream.addEventListener('click', () => {
+      if (discordStreamInterval) {
+        clearInterval(discordStreamInterval);
+        discordStreamInterval = null;
+        appendLog('log-warn', 'PAUSE', 'Paused stream packet simulation.');
+        return;
+      }
+      if (discordQuestProgress >= 15) {
+        appendLog('log-succ', 'COMPLETE', 'Quest is already 15/15 minutes completed! Click /quest claim to redeem.');
+        return;
+      }
+      appendLog('log-quest', 'EXEC', '> /quest stream');
+      appendLog('log-info', 'STREAM', 'Beginning automated stream progression (1s = +1 minute)...');
+      discordStreamInterval = setInterval(() => {
+        if (discordQuestProgress < 15) {
+          discordQuestProgress++;
+          updateQuestUI();
+          appendLog('log-info', 'TICK', `Progress packet accepted (+1 min) -> ${discordQuestProgress}/15 mins`);
+          if (discordQuestProgress >= 15) {
+            clearInterval(discordStreamInterval);
+            discordStreamInterval = null;
+            appendLog('log-succ', 'COMPLETE', '🎉 Quest reached 15/15 minutes! Ready for /quest claim.');
+          }
+        } else {
+          clearInterval(discordStreamInterval);
+          discordStreamInterval = null;
+        }
+      }, 1200);
+    });
+  }
+
+  if (btnClaim) {
+    btnClaim.addEventListener('click', () => {
+      appendLog('log-quest', 'EXEC', '> /quest claim');
+      if (discordQuestProgress >= 15) {
+        appendLog('log-succ', 'CLAIMED', '🎁 Code redeemed: DISCORD-QUEST-2026-STARRAIL-X99');
+        appendLog('log-quest', 'WEBHOOK', 'Confirmation webhook alert dispatched to your private channel!');
+      } else {
+        appendLog('log-warn', 'WAIT', `⚠️ Quest progress is ${discordQuestProgress}/15 mins. Please stream until 15 mins.`);
+      }
+    });
+  }
+
+  if (btnClear) {
+    btnClear.addEventListener('click', () => {
+      if (logBox) logBox.innerHTML = '';
+      appendLog('log-info', 'CLEARED', 'Terminal log cleared.');
+    });
+  }
+}
+
+// ── 3.3. ROBLOX MHNAAUI RUNNER ────────────────────────────────────────────
+function renderRobloxRunner(project) {
+  if (!runnerModalBody) return;
+  const lang = (typeof currentLang !== 'undefined') ? currentLang : 'vi';
+
+  runnerModalBody.innerHTML = `
+    <div class="runner-frame-wrapper frame-${activeDevice}" id="runner-frame-wrapper">
+      <div class="roblox-simulator-container" id="roblox-container">
+        <div class="roblox-topbar">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+            <strong>Mhnaa Hub v2.4</strong>
+            <span style="color:#8c9ba5;">[Blox Fruits / RPG Game Mode]</span>
+          </div>
+          <div class="roblox-healthbar">
+            <span>HP 100/100</span>
+            <div class="roblox-hp-fill"></div>
+            <span style="color:#3fb950;margin-left:6px;">60 FPS</span>
+          </div>
+        </div>
+
+        <!-- Draggable In-Game GUI Window -->
+        <div class="mhnaui-window" id="mhnaui-window">
+          <div class="mhnaui-header" id="mhnaui-header">
+            <span>⚔️ Mhnaa Hub — Luau UI</span>
+            <span style="font-size:0.68rem;color:#8c9ba5;cursor:grab;">⋮⋮ Kéo thả</span>
+          </div>
+          <div class="mhnaui-tabs">
+            <button type="button" class="mhnaui-tab-btn active" data-tab="farm">Autofarm</button>
+            <button type="button" class="mhnaui-tab-btn" data-tab="combat">Combat</button>
+            <button type="button" class="mhnaui-tab-btn" data-tab="misc">Player</button>
+            <button type="button" class="mhnaui-tab-btn" data-tab="script">Loadstring</button>
+          </div>
+          <div class="mhnaui-body" id="mhnaui-tab-content">
+            <!-- Content injected dynamically -->
+          </div>
+        </div>
+
+        <!-- Toast Feedback -->
+        <div class="runner-toast" id="roblox-toast"></div>
+      </div>
+    </div>
+  `;
+
+  const windowEl = document.getElementById('mhnaui-window');
+  const headerEl = document.getElementById('mhnaui-header');
+  const containerEl = document.getElementById('roblox-container');
+  const tabContent = document.getElementById('mhnaui-tab-content');
+  const toastEl = document.getElementById('roblox-toast');
+
+  function showToast(msg) {
+    if (!toastEl) return;
+    toastEl.textContent = msg;
+    toastEl.classList.add('show');
+    setTimeout(() => {
+      toastEl.classList.remove('show');
+    }, 2200);
+  }
+
+  function renderTab(tabName) {
+    if (!tabContent) return;
+    if (tabName === 'farm') {
+      tabContent.innerHTML = `
+        <div class="mhnaui-row">
+          <span>Auto Farm Level (Fast Quest)</span>
+          <label class="mhnaui-switch">
+            <input type="checkbox" checked />
+            <span class="mhnaui-slider"></span>
+          </label>
+        </div>
+        <div class="mhnaui-row">
+          <span>Auto Collect Chests & Beli</span>
+          <label class="mhnaui-switch">
+            <input type="checkbox" checked />
+            <span class="mhnaui-slider"></span>
+          </label>
+        </div>
+        <div class="mhnaui-range-row">
+          <div style="display:flex;justify-content:space-between;">
+            <span>Tốc độ đánh (Attack Delay)</span>
+            <span id="delay-num" style="color:var(--accent);">0.15s</span>
+          </div>
+          <input type="range" min="5" max="50" value="15" class="mhnaui-range-slider" id="delay-slider" />
+        </div>
+      `;
+      const slider = document.getElementById('delay-slider');
+      const num = document.getElementById('delay-num');
+      if (slider && num) {
+        slider.addEventListener('input', () => { num.textContent = `${(slider.value / 100).toFixed(2)}s`; });
+      }
+    } else if (tabName === 'combat') {
+      tabContent.innerHTML = `
+        <div class="mhnaui-row">
+          <span>Kill Aura (360° Hitbox)</span>
+          <label class="mhnaui-switch">
+            <input type="checkbox" checked />
+            <span class="mhnaui-slider"></span>
+          </label>
+        </div>
+        <div class="mhnaui-row">
+          <span>Auto Dodge (Ken Haki v2)</span>
+          <label class="mhnaui-switch">
+            <input type="checkbox" />
+            <span class="mhnaui-slider"></span>
+          </label>
+        </div>
+        <div class="mhnaui-range-row">
+          <div style="display:flex;justify-content:space-between;">
+            <span>Bán kính Aura (Aura Range)</span>
+            <span id="range-num" style="color:var(--accent);">25 mét</span>
+          </div>
+          <input type="range" min="10" max="60" value="25" class="mhnaui-range-slider" id="range-slider" />
+        </div>
+      `;
+      const slider = document.getElementById('range-slider');
+      const num = document.getElementById('range-num');
+      if (slider && num) {
+        slider.addEventListener('input', () => { num.textContent = `${slider.value} mét`; });
+      }
+    } else if (tabName === 'misc') {
+      tabContent.innerHTML = `
+        <div class="mhnaui-row">
+          <span>Infinite Jump & Fly</span>
+          <label class="mhnaui-switch">
+            <input type="checkbox" />
+            <span class="mhnaui-slider"></span>
+          </label>
+        </div>
+        <div class="mhnaui-row">
+          <span>ESP Tên & Khoảng cách người chơi</span>
+          <label class="mhnaui-switch">
+            <input type="checkbox" checked />
+            <span class="mhnaui-slider"></span>
+          </label>
+        </div>
+        <div class="mhnaui-range-row">
+          <div style="display:flex;justify-content:space-between;">
+            <span>Tốc độ chạy (WalkSpeed)</span>
+            <span id="walk-num" style="color:var(--accent);">36 spd</span>
+          </div>
+          <input type="range" min="16" max="120" value="36" class="mhnaui-range-slider" id="walk-slider" />
+        </div>
+      `;
+      const slider = document.getElementById('walk-slider');
+      const num = document.getElementById('walk-num');
+      if (slider && num) {
+        slider.addEventListener('input', () => { num.textContent = `${slider.value} spd`; });
+      }
+    } else if (tabName === 'script') {
+      tabContent.innerHTML = `
+        <div style="font-size:0.75rem;color:#8c9ba5;line-height:1.45;">
+          Copy loadstring chạy ngay trong Roblox Executor (Wave, Solara, Delta, Synapse...):
+        </div>
+        <pre style="background:#090b0e;border:1px solid #29303a;border-radius:6px;padding:8px;font-family:var(--font-mono);font-size:0.68rem;color:#baa7ff;overflow-x:auto;margin:0;"><code>${ROBLOX_LOADSTRING}</code></pre>
+        <button type="button" class="mhnaui-copy-btn" id="mhnaui-copy-btn">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          <span>Sao chép Loadstring thật</span>
+        </button>
+      `;
+      const copyBtn = document.getElementById('mhnaui-copy-btn');
+      if (copyBtn) {
+        copyBtn.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(ROBLOX_LOADSTRING);
+          } catch {
+            const ta = document.createElement('textarea');
+            ta.value = ROBLOX_LOADSTRING;
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            ta.style.pointerEvents = 'none';
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            ta.remove();
+          }
+          showToast(lang === 'vi' ? '✓ Đã sao chép loadstring vào clipboard!' : '✓ Loadstring copied to clipboard!');
+        });
+      }
+    }
+  }
+
+  // Initial tab render
+  renderTab('farm');
+
+  // Tab button switching
+  const tabButtons = windowEl.querySelectorAll('.mhnaui-tab-btn');
+  tabButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      tabButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderTab(btn.dataset.tab);
+    });
+  });
+
+  // Draggable logic for Roblox GUI window
+  if (headerEl && windowEl && containerEl) {
+    let isDragging = false;
+    let dragStartX = 0;
+    let dragStartY = 0;
+    let initialLeft = 0;
+    let initialTop = 0;
+
+    function onDragStart(e) {
+      if (e.target.closest('button, input, a')) return;
+      isDragging = true;
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      dragStartX = clientX;
+      dragStartY = clientY;
+      initialLeft = windowEl.offsetLeft;
+      initialTop = windowEl.offsetTop;
+
+      document.addEventListener('mousemove', onDragMove);
+      document.addEventListener('mouseup', onDragEnd);
+      document.addEventListener('touchmove', onDragMove, { passive: false });
+      document.addEventListener('touchend', onDragEnd);
+    }
+
+    function onDragMove(e) {
+      if (!isDragging) return;
+      if (e.cancelable && e.touches) e.preventDefault();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      const dx = clientX - dragStartX;
+      const dy = clientY - dragStartY;
+
+      const maxLeft = Math.max(0, containerEl.offsetWidth - windowEl.offsetWidth - 8);
+      const maxTop = Math.max(38, containerEl.offsetHeight - windowEl.offsetHeight - 8);
+
+      const newLeft = Math.max(8, Math.min(maxLeft, initialLeft + dx));
+      const newTop = Math.max(38, Math.min(maxTop, initialTop + dy));
+
+      windowEl.style.left = `${newLeft}px`;
+      windowEl.style.top = `${newTop}px`;
+    }
+
+    function onDragEnd() {
+      isDragging = false;
+      document.removeEventListener('mousemove', onDragMove);
+      document.removeEventListener('mouseup', onDragEnd);
+      document.removeEventListener('touchmove', onDragMove);
+      document.removeEventListener('touchend', onDragEnd);
+    }
+    robloxDragCleanup = onDragEnd;
+
+    headerEl.addEventListener('mousedown', onDragStart);
+    headerEl.addEventListener('touchstart', onDragStart, { passive: true });
+  }
+}
+
+// ── 3.4. C/C++ ALGORITHMS PLAYGROUND RUNNER ────────────────────────────────
+function renderCppRunner(project) {
+  if (!runnerModalBody) return;
+  if (cppSortInterval) {
+    clearInterval(cppSortInterval);
+    cppSortInterval = null;
+  }
+  cppIsRunning = false;
+  cppGenerator = null;
+  cppComparisons = 0;
+  cppSwaps = 0;
+  cppElapsed = 0;
+
+  runnerModalBody.innerHTML = `
+    <div class="runner-frame-wrapper frame-${activeDevice}" id="runner-frame-wrapper">
+      <div class="cpp-simulator-container">
+        <div class="cpp-toolbar">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <label for="cpp-algo-select" style="font-size:0.75rem;font-family:var(--font-mono);color:var(--fg3);">Thuật toán:</label>
+            <select class="cpp-algo-select" id="cpp-algo-select">
+              <option value="quicksort">QuickSort (Phân đoạn Lomuto - O(N log N))</option>
+              <option value="bubblesort">BubbleSort (Sắp xếp nổi bọt - O(N²))</option>
+              <option value="insertionsort">InsertionSort (Sắp xếp chèn - O(N²))</option>
+              <option value="binarysearch">Binary Search (Tìm kiếm nhị phân - O(log N))</option>
+            </select>
+          </div>
+          <div class="cpp-controls">
+            <button type="button" class="cpp-ctrl-btn btn-run" id="cpp-btn-run">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              <span id="cpp-run-label">Chạy tự động</span>
+            </button>
+            <button type="button" class="cpp-ctrl-btn" id="cpp-btn-step">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+              <span>Chạy từng bước</span>
+            </button>
+            <button type="button" class="cpp-ctrl-btn" id="cpp-btn-random">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+              <span>Đổi mảng ngẫu nhiên</span>
+            </button>
+            <button type="button" class="cpp-ctrl-btn" id="cpp-btn-reset">
+              <span>Khôi phục</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="cpp-visualizer-canvas" id="cpp-canvas"></div>
+
+        <div class="cpp-metrics-grid">
+          <div class="cpp-metric-box">
+            <div class="cpp-metric-label">Số lần so sánh (Comparisons)</div>
+            <div class="cpp-metric-val" id="cpp-metric-cmp">0</div>
+          </div>
+          <div class="cpp-metric-box">
+            <div class="cpp-metric-label">Số lần hoán đổi / Bước (Swaps)</div>
+            <div class="cpp-metric-val" id="cpp-metric-swaps">0</div>
+          </div>
+          <div class="cpp-metric-box">
+            <div class="cpp-metric-label">Thời gian thực thi</div>
+            <div class="cpp-metric-val" id="cpp-metric-time">0.0 ms</div>
+          </div>
+          <div class="cpp-metric-box">
+            <div class="cpp-metric-label">Trạng thái thuật toán</div>
+            <div class="cpp-metric-val" id="cpp-metric-status" style="color:var(--accent);">Sẵn sàng</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  const canvas = document.getElementById('cpp-canvas');
+  const algoSelect = document.getElementById('cpp-algo-select');
+  const btnRun = document.getElementById('cpp-btn-run');
+  const btnStep = document.getElementById('cpp-btn-step');
+  const btnRandom = document.getElementById('cpp-btn-random');
+  const btnReset = document.getElementById('cpp-btn-reset');
+  const runLabel = document.getElementById('cpp-run-label');
+  const cmpVal = document.getElementById('cpp-metric-cmp');
+  const swapsVal = document.getElementById('cpp-metric-swaps');
+  const timeVal = document.getElementById('cpp-metric-time');
+  const statusVal = document.getElementById('cpp-metric-status');
+
+  let initialSnapshot = [];
+
+  function generateArray(isSorted = false) {
+    if (isSorted) {
+      cppArray = [14, 22, 35, 48, 56, 68, 79, 88, 94, 105];
+    } else {
+      cppArray = [42, 18, 76, 31, 88, 54, 95, 23, 67, 39];
+    }
+    initialSnapshot = [...cppArray];
+  }
+
+  function renderBars() {
+    if (!canvas) return;
+    canvas.innerHTML = '';
+    const maxVal = Math.max(...cppArray, 100);
+    cppArray.forEach((val, idx) => {
+      const col = document.createElement('div');
+      col.className = 'cpp-array-col';
+      col.id = `cpp-col-${idx}`;
+
+      const barHeight = Math.max(24, Math.round((val / maxVal) * 160));
+      col.innerHTML = `
+        <div class="cpp-array-val">${val}</div>
+        <div class="cpp-array-bar" style="height:${barHeight}px;"></div>
+        <div class="cpp-array-idx">[${idx}]</div>
+      `;
+      canvas.appendChild(col);
+    });
+  }
+
+  function clearHighlightClasses() {
+    if (!canvas) return;
+    canvas.querySelectorAll('.cpp-array-col').forEach(col => {
+      col.classList.remove('comparing', 'swapping');
+    });
+  }
+
+  function markAllSorted() {
+    if (!canvas) return;
+    canvas.querySelectorAll('.cpp-array-col').forEach(col => {
+      col.classList.remove('comparing', 'swapping');
+      col.classList.add('sorted');
+    });
+  }
+
+  // ── Generators for Step-by-Step execution ──
+  function* quickSortGen(arr, low = 0, high = arr.length - 1) {
+    if (low < high) {
+      const pivot = arr[high];
+      let i = low - 1;
+      for (let j = low; j < high; j++) {
+        yield { type: 'compare', indices: [j, high] };
+        if (arr[j] < pivot) {
+          i++;
+          if (i !== j) {
+            const temp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = temp;
+            yield { type: 'swap', indices: [i, j], arr: [...arr] };
+          }
+        }
+      }
+      const temp = arr[i + 1];
+      arr[i + 1] = arr[high];
+      arr[high] = temp;
+      yield { type: 'swap', indices: [i + 1, high], arr: [...arr] };
+      yield { type: 'sorted', indices: [i + 1] };
+      const pi = i + 1;
+      yield* quickSortGen(arr, low, pi - 1);
+      yield* quickSortGen(arr, pi + 1, high);
+    } else if (low >= 0 && low < arr.length) {
+      yield { type: 'sorted', indices: [low] };
+    }
+  }
+
+  function* bubbleSortGen(arr) {
+    const n = arr.length;
+    for (let i = 0; i < n - 1; i++) {
+      let swapped = false;
+      for (let j = 0; j < n - i - 1; j++) {
+        yield { type: 'compare', indices: [j, j + 1] };
+        if (arr[j] > arr[j + 1]) {
+          const temp = arr[j];
+          arr[j] = arr[j + 1];
+          arr[j + 1] = temp;
+          swapped = true;
+          yield { type: 'swap', indices: [j, j + 1], arr: [...arr] };
+        }
+      }
+      yield { type: 'sorted', indices: [n - i - 1] };
+      if (!swapped) break;
+    }
+    yield { type: 'sorted', indices: [0] };
+  }
+
+  function* insertionSortGen(arr) {
+    const n = arr.length;
+    yield { type: 'sorted', indices: [0] };
+    for (let i = 1; i < n; i++) {
+      let j = i;
+      while (j > 0) {
+        yield { type: 'compare', indices: [j - 1, j] };
+        if (arr[j - 1] > arr[j]) {
+          const temp = arr[j - 1];
+          arr[j - 1] = arr[j];
+          arr[j] = temp;
+          yield { type: 'swap', indices: [j - 1, j], arr: [...arr] };
+          j--;
+        } else {
+          break;
+        }
+      }
+      yield { type: 'sorted', indices: [j] };
+    }
+  }
+
+  function* binarySearchGen(arr, target) {
+    let low = 0;
+    let high = arr.length - 1;
+    while (low <= high) {
+      const mid = Math.floor((low + high) / 2);
+      yield { type: 'search', indices: [mid], low, high, mid };
+      if (arr[mid] === target) {
+        yield { type: 'found', indices: [mid] };
+        return mid;
+      }
+      if (arr[mid] < target) {
+        low = mid + 1;
+      } else {
+        high = mid - 1;
+      }
+    }
+    yield { type: 'notfound' };
+    return -1;
+  }
+
+  function initAlgorithm(regenerate = true) {
+    clearHighlightClasses();
+    if (cppSortInterval) {
+      clearInterval(cppSortInterval);
+      cppSortInterval = null;
+    }
+    cppIsRunning = false;
+    if (runLabel) runLabel.textContent = (typeof currentLang !== 'undefined' && currentLang === 'en') ? 'Auto Run' : 'Chạy tự động';
+
+    const algo = algoSelect ? algoSelect.value : 'quicksort';
+    if (regenerate) {
+      generateArray(algo === 'binarysearch');
+    }
+    renderBars();
+
+    cppComparisons = 0;
+    cppSwaps = 0;
+    cppElapsed = 0;
+    if (cmpVal) cmpVal.textContent = '0';
+    if (swapsVal) swapsVal.textContent = '0';
+    if (timeVal) timeVal.textContent = '0.0 ms';
+    if (statusVal) statusVal.textContent = (typeof currentLang !== 'undefined' && currentLang === 'en') ? 'Ready' : 'Sẵn sàng';
+
+    if (algo === 'quicksort') {
+      cppGenerator = quickSortGen(cppArray);
+    } else if (algo === 'bubblesort') {
+      cppGenerator = bubbleSortGen(cppArray);
+    } else if (algo === 'insertionsort') {
+      cppGenerator = insertionSortGen(cppArray);
+    } else if (algo === 'binarysearch') {
+      // Pick middle element or near middle for demonstration
+      const target = cppArray[5];
+      if (statusVal) statusVal.textContent = (typeof currentLang !== 'undefined' && currentLang === 'en') ? `Searching for value ${target}...` : `Tìm giá trị ${target}...`;
+      cppGenerator = binarySearchGen(cppArray, target);
+    }
+  }
+
+  function stepAlgorithm() {
+    if (!cppGenerator) return false;
+    const t0 = performance.now();
+    const result = cppGenerator.next();
+    const t1 = performance.now();
+    cppElapsed += (t1 - t0) * 1.5 + 0.1;
+    if (timeVal) timeVal.textContent = `${cppElapsed.toFixed(1)} ms`;
+
+    clearHighlightClasses();
+
+    if (result.done) {
+      markAllSorted();
+      if (statusVal) statusVal.textContent = (typeof currentLang !== 'undefined' && currentLang === 'en') ? 'Completed ✓' : 'Hoàn thành ✓';
+      if (cppSortInterval) {
+        clearInterval(cppSortInterval);
+        cppSortInterval = null;
+      }
+      cppIsRunning = false;
+      if (runLabel) runLabel.textContent = (typeof currentLang !== 'undefined' && currentLang === 'en') ? 'Auto Run' : 'Chạy tự động';
+      return false;
+    }
+
+    const step = result.value;
+    if (step.type === 'compare') {
+      cppComparisons++;
+      if (cmpVal) cmpVal.textContent = String(cppComparisons);
+      step.indices.forEach(idx => {
+        const col = document.getElementById(`cpp-col-${idx}`);
+        if (col) col.classList.add('comparing');
+      });
+      if (statusVal) statusVal.textContent = `So sánh [${step.indices[0]}] với [${step.indices[1]}]`;
+    } else if (step.type === 'swap') {
+      cppSwaps++;
+      if (swapsVal) swapsVal.textContent = String(cppSwaps);
+      step.indices.forEach(idx => {
+        const col = document.getElementById(`cpp-col-${idx}`);
+        if (col) col.classList.add('swapping');
+      });
+      renderBars();
+      // Re-apply swapping highlight after re-rendering bars
+      step.indices.forEach(idx => {
+        const col = document.getElementById(`cpp-col-${idx}`);
+        if (col) col.classList.add('swapping');
+      });
+      if (statusVal) statusVal.textContent = `Hoán đổi giá trị [${step.indices[0]}] ↔ [${step.indices[1]}]`;
+    } else if (step.type === 'sorted') {
+      step.indices.forEach(idx => {
+        const col = document.getElementById(`cpp-col-${idx}`);
+        if (col) col.classList.add('sorted');
+      });
+    } else if (step.type === 'search') {
+      cppComparisons++;
+      if (cmpVal) cmpVal.textContent = String(cppComparisons);
+      const col = document.getElementById(`cpp-col-${step.indices[0]}`);
+      if (col) col.classList.add('comparing');
+      if (statusVal) statusVal.textContent = `Kiểm tra vị trí mid = ${step.indices[0]}`;
+    } else if (step.type === 'found') {
+      const col = document.getElementById(`cpp-col-${step.indices[0]}`);
+      if (col) {
+        col.classList.remove('comparing');
+        col.classList.add('sorted');
+      }
+      if (statusVal) statusVal.textContent = `Đã tìm thấy tại chỉ mục [${step.indices[0]}] ✓`;
+    }
+    return true;
+  }
+
+  // Wire controls
+  if (btnRun) {
+    btnRun.addEventListener('click', () => {
+      if (cppIsRunning) {
+        clearInterval(cppSortInterval);
+        cppSortInterval = null;
+        cppIsRunning = false;
+        if (runLabel) runLabel.textContent = (typeof currentLang !== 'undefined' && currentLang === 'en') ? 'Continue' : 'Tiếp tục';
+        if (statusVal) statusVal.textContent = (typeof currentLang !== 'undefined' && currentLang === 'en') ? 'Paused' : 'Tạm dừng';
+      } else {
+        cppIsRunning = true;
+        if (runLabel) runLabel.textContent = (typeof currentLang !== 'undefined' && currentLang === 'en') ? 'Pause' : 'Tạm dừng';
+        if (statusVal) statusVal.textContent = (typeof currentLang !== 'undefined' && currentLang === 'en') ? 'Running automatically...' : 'Đang chạy tự động...';
+        cppSortInterval = setInterval(() => {
+          const hasMore = stepAlgorithm();
+          if (!hasMore) {
+            clearInterval(cppSortInterval);
+            cppSortInterval = null;
+          }
+        }, 180);
+      }
+    });
+  }
+
+  if (btnStep) {
+    btnStep.addEventListener('click', () => {
+      if (cppIsRunning) {
+        clearInterval(cppSortInterval);
+        cppSortInterval = null;
+        cppIsRunning = false;
+        if (runLabel) runLabel.textContent = (typeof currentLang !== 'undefined' && currentLang === 'en') ? 'Auto Run' : 'Chạy tự động';
+      }
+      stepAlgorithm();
+    });
+  }
+
+  if (btnRandom) {
+    btnRandom.addEventListener('click', () => {
+      const algo = algoSelect ? algoSelect.value : 'quicksort';
+      if (algo === 'binarysearch') {
+        // Generate new random sorted numbers
+        let start = Math.floor(Math.random() * 10) + 10;
+        cppArray = Array.from({ length: 10 }, () => {
+          start += Math.floor(Math.random() * 12) + 4;
+          return start;
+        });
+      } else {
+        const set = new Set();
+        while (set.size < 10) {
+          set.add(Math.floor(Math.random() * 85) + 15);
+        }
+        cppArray = Array.from(set);
+      }
+      initialSnapshot = [...cppArray];
+      initAlgorithm(false);
+    });
+  }
+
+  if (btnReset) {
+    btnReset.addEventListener('click', () => {
+      cppArray = [...initialSnapshot];
+      initAlgorithm(false);
+    });
+  }
+
+  if (algoSelect) {
+    algoSelect.addEventListener('change', () => {
+      initAlgorithm(true);
+    });
+  }
+
+  // Initial algorithm setup
+  initAlgorithm(true);
+}
+
+// ── 4. WIRE GLOBAL CONTROLS & DEMO BUTTONS ────────────────────────────────
+// Wire all .project-demo-btn (direct click on cards)
+document.querySelectorAll('.project-demo-btn').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    hidePopoverImmediately();
+    const target = btn.dataset.projectTarget || btn.closest('.project-card')?.dataset.projectId;
+    if (target) openProjectRunner(target);
+  });
 });
+
+// Device Switcher buttons inside runner modal
+if (runnerDeviceSwitcher) {
+  runnerDeviceSwitcher.querySelectorAll('.runner-device-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      setRunnerDevice(btn.dataset.device);
+    });
+  });
+}
+
+// Reload button
+if (runnerReloadBtn) {
+  runnerReloadBtn.addEventListener('click', () => {
+    reloadCurrentRunner();
+  });
+}
+
+// Close buttons
+if (runnerCloseBtn) {
+  runnerCloseBtn.addEventListener('click', () => {
+    closeProjectRunner();
+  });
+}
+if (runnerDotClose) {
+  runnerDotClose.addEventListener('click', () => {
+    closeProjectRunner();
+  });
+}
+
+// Backdrop click on modal
+if (runnerModal) {
+  runnerModal.addEventListener('click', (e) => {
+    if (e.target === runnerModal) {
+      closeProjectRunner();
+    }
+  });
+  runnerModal.addEventListener('close', () => {
+    cleanupRunner();
+  });
+}
+
+// ── 5. INITIALIZE LANGUAGE & ALL PORTFOLIO COMPONENTS ─────────────────────
+applyLang(currentLang);
+
+// Expose public API on window for testing & debugging
+if (typeof window !== 'undefined') {
+  window.PROJECTS_DATA = PROJECTS_DATA;
+  window.openProjectRunner = openProjectRunner;
+  window.closeProjectRunner = closeProjectRunner;
+  window.renderPopoverContent = renderPopoverContent;
+  window.renderWebRunner = renderWebRunner;
+  window.renderDiscordRunner = renderDiscordRunner;
+  window.renderRobloxRunner = renderRobloxRunner;
+  window.renderCppRunner = renderCppRunner;
+  window.applyLang = applyLang;
+}
+
+
 
 
