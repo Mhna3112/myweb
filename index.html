@@ -1,22 +1,90 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="vi" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Duc Manh — Programming Learner &amp; Aspiring Developer." />
-  <title>Duc Manh — Dev Journey</title>
+  <title>Duc Manh — Dev Journey | Portfolio &amp; Projects</title>
+  <meta name="description" content="Khám phá portfolio và các dự án thực tế của Đức Mạnh: MediaHub Downloader, Ôn thi GPLX 600 câu, Lịch Todo Calendar, Discord Quest Bot, Roblox Luau UI, Thuật toán C/C++." />
+  <meta name="author" content="Duc Manh" />
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://ducmanh.xyz/" />
+
+  <!-- Favicon & App Icons -->
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png" />
+  <link rel="icon" type="image/jpeg" href="avatar.jpg" />
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+  <link rel="manifest" href="site.webmanifest" />
+  <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+
+  <!-- Open Graph / Facebook / Zalo / Discord -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://ducmanh.xyz/" />
+  <meta property="og:title" content="Duc Manh — Dev Journey | Portfolio &amp; Projects" />
+  <meta property="og:description" content="Khám phá portfolio và các dự án thực tế của Đức Mạnh: MediaHub Downloader, Ôn thi GPLX 600 câu, Lịch Todo Calendar, Discord Quest Bot, Roblox Luau UI, Thuật toán C/C++." />
+  <meta property="og:image" content="https://ducmanh.xyz/og-image.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Duc Manh Portfolio Preview" />
+  <meta property="og:locale" content="vi_VN" />
+  <meta property="og:locale:alternate" content="en_US" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://ducmanh.xyz/" />
+  <meta name="twitter:title" content="Duc Manh — Dev Journey | Portfolio &amp; Projects" />
+  <meta name="twitter:description" content="Khám phá portfolio và các dự án thực tế của Đức Mạnh: Web Apps, Discord Bot, Roblox Luau UI, Thuật toán C/C++." />
+  <meta name="twitter:image" content="https://ducmanh.xyz/og-image.jpg" />
+
+  <!-- Schema.org JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        "@id": "https://ducmanh.xyz/#person",
+        "name": "Duc Manh",
+        "alternateName": "Đức Mạnh",
+        "url": "https://ducmanh.xyz",
+        "image": "https://ducmanh.xyz/avatar.jpg",
+        "jobTitle": "Software Developer & Programming Learner",
+        "description": "Developer from Vietnam building web applications, Roblox Luau scripts, Python Discord bots, and C/C++ algorithms.",
+        "sameAs": [
+          "https://github.com/Mhna3112"
+        ],
+        "knowsAbout": ["JavaScript", "HTML5", "CSS3", "Python", "C", "C++", "Lua", "Luau", "Cloudflare Workers"]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://ducmanh.xyz/#website",
+        "url": "https://ducmanh.xyz",
+        "name": "Duc Manh — Dev Journey",
+        "publisher": {
+          "@id": "https://ducmanh.xyz/#person"
+        },
+        "inLanguage": ["vi", "en"]
+      }
+    ]
+  }
+  </script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,400;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" />
-  <link rel="stylesheet" href="style.css?v=3.2" />
+  <link rel="stylesheet" href="style.css?v=3.3" />
 </head>
 <body>
   <a href="#main-content" class="skip-link">Skip to main content</a>
   <div id="reading-progress" role="progressbar" aria-label="Reading progress"></div>
   <header id="navbar" role="banner">
     <nav class="nav-container" aria-label="Main navigation">
-      <a href="#home" class="nav-logo"><span class="logo-bracket">&lt;</span>DucManh<span class="logo-bracket">/&gt;</span></a>
+      <a href="#home" class="nav-logo">
+        <img src="avatar.jpg" alt="Duc Manh Avatar" class="nav-logo-avatar" width="28" height="28" />
+        <span class="logo-bracket">&lt;</span>DucManh<span class="logo-bracket">/&gt;</span>
+      </a>
       <ul class="nav-links" id="nav-links" role="list">
         <li><a href="#home"     class="nav-link" data-i18n="nav.home">Home</a></li>
         <li><a href="#about"    class="nav-link" data-i18n="nav.about">About</a></li>
@@ -78,12 +146,22 @@
       <div class="hero-bg-grid" aria-hidden="true"></div>
       <div class="container hero-container">
         <div class="hero-text">
-          <div class="hero-badge"><span class="badge-dot"></span><span data-i18n="hero.badge">Open to learning &amp; collaboration</span></div>
+          <div class="hero-top-row">
+            <div class="hero-avatar-wrapper">
+              <img src="avatar.jpg" alt="Duc Manh Avatar" class="hero-avatar-img" width="56" height="56" />
+              <span class="hero-avatar-status" title="Open to collaborate"></span>
+            </div>
+            <div class="hero-badge"><span class="badge-dot"></span><span data-i18n="hero.badge">Open to learning &amp; collaboration</span></div>
+          </div>
           <h1 class="hero-title"><span id="typewriter"></span><span class="cursor" aria-hidden="true">|</span></h1>
           <p class="hero-sub" data-i18n="hero.sub">I am passionate about <strong>learning programming</strong> and building projects. I enjoy exploring new technologies, improving my coding skills, and documenting my learning journey — one commit at a time.</p>
           <div class="hero-cta">
             <a href="#about"    class="btn btn-primary"  data-i18n="hero.cta.about">About Me</a>
             <a href="#projects" class="btn btn-outline"  data-i18n="hero.cta.projects">My Projects</a>
+            <a href="mailto:manhntp22@gmail.com?subject=Duc%20Manh%20CV%20Request" class="btn btn-outline btn-cv" id="hero-cv-btn" title="Liên hệ nhận CV / Request CV">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              <span data-i18n="hero.cta.cv">Nhận CV (Resume)</span>
+            </a>
           </div>
         </div>
         <div class="hero-visual" aria-hidden="true">

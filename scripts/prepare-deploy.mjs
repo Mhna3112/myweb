@@ -9,7 +9,19 @@ if (output !== join(root, '.deploy-assets')) {
   throw new Error('Unexpected deploy output path');
 }
 
-const files = ['index.html', 'main.js', 'style.css'];
+const files = [
+  'index.html',
+  'main.js',
+  'style.css',
+  'avatar.jpg',
+  'favicon.png',
+  'apple-touch-icon.png',
+  'og-image.jpg',
+  'robots.txt',
+  'sitemap.xml',
+  'site.webmanifest',
+  '404.html'
+];
 const directories = ['gplx'];
 const todoFiles = ['index.html', 'style.css', 'script.js', 'todo-calendar.html', 'todo2.html', 'vietnam-flag.jpg'];
 
