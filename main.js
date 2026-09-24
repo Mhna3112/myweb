@@ -1060,38 +1060,74 @@ function updatePopoverLang() {
   }
 }
 
-// Attach hover preview listeners on desktop
-if (popoverEl) {
-  const canHover = () => typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(hover: hover)').matches;
-
-  document.querySelectorAll('.project-card[data-project-id]').forEach(card => {
-    const pid = card.dataset.projectId;
-    card.addEventListener('mouseenter', () => {
-      if (canHover()) {
-        scheduleShowPopover(pid, card);
-      }
-    });
-    card.addEventListener('mouseleave', () => {
-      if (canHover()) {
-        scheduleHidePopover();
-      }
-    });
-  });
-
-  popoverEl.addEventListener('mouseenter', () => {
-    clearTimeout(popoverHideTimer);
-  });
-  popoverEl.addEventListener('mouseleave', () => {
-    scheduleHidePopover();
-  });
-
-  window.addEventListener('scroll', () => {
-    if (popoverEl.classList.contains('visible')) {
-      hidePopoverImmediately();
-    }
+// ── MOUSE TRACKING & RUNNER HOVER ENGINE ────────────────────────────────────
+let currentMousePos = { x: 0, y: 0 };
+if (typeof window !== 'undefined') {
+  window.addEventListener('mousemove', (e) => {
+    currentMousePos.x = e.clientX;
+    currentMousePos.y = e.clientY;
   }, { passive: true });
+}
 
-  // Dismiss popover on outside click or Escape
+let runnerOpenTimer = null;
+let runnerHoverCloseTimer = null;
+let isHoverTriggered = false;
+
+function scheduleOpenRunner(projectId) {
+  clearTimeout(runnerHoverCloseTimer);
+  clearTimeout(runnerOpenTimer);
+  const isAlreadyOpen = runnerModal && (runnerModal.open || runnerModal.hasAttribute('open'));
+  const delay = isAlreadyOpen ? 80 : 220;
+  runnerOpenTimer = setTimeout(() => {
+    openProjectRunner(projectId, { autoRun: true, triggeredByHover: true });
+  }, delay);
+}
+
+function cancelOpenRunner() {
+  clearTimeout(runnerOpenTimer);
+}
+
+function scheduleCloseRunner() {
+  clearTimeout(runnerOpenTimer);
+  if (!isHoverTriggered) return;
+  clearTimeout(runnerHoverCloseTimer);
+  runnerHoverCloseTimer = setTimeout(() => {
+    closeProjectRunner();
+  }, 350);
+}
+
+function cancelRunnerClose() {
+  clearTimeout(runnerHoverCloseTimer);
+}
+
+const canHover = () => typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(hover: hover)').matches;
+
+// Wire project cards hover preview & direct click
+document.querySelectorAll('.project-card[data-project-id]').forEach(card => {
+  const pid = card.dataset.projectId;
+  card.addEventListener('mouseenter', () => {
+    if (canHover()) {
+      scheduleOpenRunner(pid);
+    }
+  });
+  card.addEventListener('mouseleave', () => {
+    if (canHover()) {
+      cancelOpenRunner();
+      if (runnerModal && (runnerModal.open || runnerModal.hasAttribute('open')) && isHoverTriggered) {
+        scheduleCloseRunner();
+      }
+    }
+  });
+  card.addEventListener('click', (e) => {
+    if (e.target.closest('a, button')) return;
+    cancelOpenRunner();
+    cancelRunnerClose();
+    if (pid) openProjectRunner(pid, { autoRun: true, triggeredByHover: false });
+  });
+});
+
+// Dismiss popover on outside click or Escape if ever opened
+if (popoverEl) {
   document.addEventListener('click', (e) => {
     if (popoverEl.classList.contains('visible')) {
       if (!popoverEl.contains(e.target) && !e.target.closest('.project-card')) {
@@ -1106,7 +1142,6 @@ if (popoverEl) {
     }
   });
 }
-
 
 // ── 3. INTERACTIVE DEMO RUNNER MODAL ──────────────────────────────────────
 const runnerModal = document.getElementById('project-runner-modal');
@@ -1148,8 +1183,13 @@ function setRunnerDevice(device) {
   }
 }
 
-function openProjectRunner(projectId) {
+function openProjectRunner(projectId, options = {}) {
   if (!runnerModal || !PROJECTS_DATA[projectId]) return;
+  if (activeRunnerProjectId) {
+    cleanupRunner();
+  }
+  const { autoRun = true, triggeredByHover = false } = options;
+  isHoverTriggered = triggeredByHover;
   activeRunnerProjectId = projectId;
   const project = PROJECTS_DATA[projectId];
   const lang = (typeof currentLang !== 'undefined') ? currentLang : 'vi';
@@ -1168,30 +1208,54 @@ function openProjectRunner(projectId) {
   // Reset to desktop frame
   setRunnerDevice('desktop');
 
-  // Render project content
+  // Render project content with autoRun option
   if (project.type === 'web') {
-    renderWebRunner(project);
+    renderWebRunner(project, { autoRun });
   } else if (project.type === 'discord') {
-    renderDiscordRunner(project);
+    renderDiscordRunner(project, { autoRun });
   } else if (project.type === 'roblox') {
-    renderRobloxRunner(project);
+    renderRobloxRunner(project, { autoRun });
   } else if (project.type === 'cpp') {
-    renderCppRunner(project);
+    renderCppRunner(project, { autoRun });
   }
 
   // Open native dialog modal
   if (typeof runnerModal.showModal === 'function') {
-    runnerModal.showModal();
+    if (!runnerModal.open) {
+      runnerModal.showModal();
+    }
   } else {
     runnerModal.setAttribute('open', '');
+  }
+
+  // If opened via hover, verify mouse position and set initial safety timer if outside
+  if (triggeredByHover && typeof window !== 'undefined') {
+    clearTimeout(runnerHoverCloseTimer);
+    if (currentMousePos.x !== 0 || currentMousePos.y !== 0) {
+      const rect = runnerModal.getBoundingClientRect();
+      const isInside = currentMousePos.x >= rect.left && currentMousePos.x <= rect.right &&
+                       currentMousePos.y >= rect.top && currentMousePos.y <= rect.bottom;
+      if (!isInside) {
+        runnerHoverCloseTimer = setTimeout(() => {
+          if (isHoverTriggered && runnerModal && (runnerModal.open || runnerModal.hasAttribute('open'))) {
+            closeProjectRunner();
+          }
+        }, 750);
+      }
+    }
   }
 }
 
 function closeProjectRunner() {
   if (!runnerModal) return;
+  isHoverTriggered = false;
+  clearTimeout(runnerOpenTimer);
+  clearTimeout(runnerHoverCloseTimer);
   cleanupRunner();
   if (typeof runnerModal.close === 'function') {
-    runnerModal.close();
+    if (runnerModal.open) {
+      runnerModal.close();
+    }
   } else {
     runnerModal.removeAttribute('open');
   }
@@ -1200,6 +1264,9 @@ function closeProjectRunner() {
 let robloxDragCleanup = null;
 
 function cleanupRunner() {
+  clearTimeout(runnerOpenTimer);
+  clearTimeout(runnerHoverCloseTimer);
+
   // Clear Discord streams
   if (discordStreamInterval) {
     clearInterval(discordStreamInterval);
@@ -1279,7 +1346,7 @@ function updateRunnerLang() {
 }
 
 // ── 3.1. WEB IFRAME RUNNER ────────────────────────────────────────────────
-function renderWebRunner(project) {
+function renderWebRunner(project, options = {}) {
   if (!runnerModalBody) return;
   const lang = (typeof currentLang !== 'undefined') ? currentLang : 'vi';
   const loadingText = lang === 'vi' ? 'Đang khởi chạy ứng dụng...' : 'Launching application...';
@@ -1307,7 +1374,7 @@ function renderWebRunner(project) {
 }
 
 // ── 3.2. DISCORD QUEST BOT RUNNER ─────────────────────────────────────────
-function renderDiscordRunner(project) {
+function renderDiscordRunner(project, options = {}) {
   if (!runnerModalBody) return;
   if (discordStreamInterval) {
     clearInterval(discordStreamInterval);
@@ -1410,7 +1477,7 @@ function renderDiscordRunner(project) {
   setTimeout(() => appendLog('log-info', 'AUTH', 'Decrypting AES-256 tokens for account ducmanh#1337... OK'), 150);
   setTimeout(() => appendLog('log-succ', 'GATEWAY', 'Connected to Discord Gateway WebSocket v10 (Ping: 22ms)'), 350);
   setTimeout(() => appendLog('log-quest', 'RPC', 'Found active quest: "Honkai: Star Rail — 15 Min Stream"'), 550);
-  setTimeout(() => appendLog('log-info', 'READY', 'Bot daemon ready. Click command buttons to test automation.'), 750);
+  setTimeout(() => appendLog('log-info', 'READY', 'Bot daemon ready. Automation active.'), 750);
 
   // Wire command buttons
   const btnStatus = document.getElementById('dcmd-status');
@@ -1487,10 +1554,19 @@ function renderDiscordRunner(project) {
       appendLog('log-info', 'CLEARED', 'Terminal log cleared.');
     });
   }
+
+  // Auto-start streaming progression if autoRun is enabled
+  if (options.autoRun !== false) {
+    setTimeout(() => {
+      if (activeRunnerProjectId === project.id && !discordStreamInterval && btnStream) {
+        btnStream.click();
+      }
+    }, 900);
+  }
 }
 
 // ── 3.3. ROBLOX MHNAAUI RUNNER ────────────────────────────────────────────
-function renderRobloxRunner(project) {
+function renderRobloxRunner(project, options = {}) {
   if (!runnerModalBody) return;
   const lang = (typeof currentLang !== 'undefined') ? currentLang : 'vi';
 
@@ -1737,10 +1813,19 @@ function renderRobloxRunner(project) {
     headerEl.addEventListener('mousedown', onDragStart);
     headerEl.addEventListener('touchstart', onDragStart, { passive: true });
   }
+
+  // Auto-feedback toast if autoRun is enabled
+  if (options.autoRun !== false) {
+    setTimeout(() => {
+      if (activeRunnerProjectId === project.id) {
+        showToast(lang === 'vi' ? '⚡ MhnaaUI v2.4 đã sẵn sàng • Kéo thả & điều khiển trực tiếp' : '⚡ MhnaaUI v2.4 active • Drag & toggle live controls');
+      }
+    }, 350);
+  }
 }
 
 // ── 3.4. C/C++ ALGORITHMS PLAYGROUND RUNNER ────────────────────────────────
-function renderCppRunner(project) {
+function renderCppRunner(project, options = {}) {
   if (!runnerModalBody) return;
   if (cppSortInterval) {
     clearInterval(cppSortInterval);
@@ -2133,6 +2218,15 @@ function renderCppRunner(project) {
 
   // Initial algorithm setup
   initAlgorithm(true);
+
+  // Auto-start algorithm sorting if autoRun is enabled
+  if (options.autoRun !== false) {
+    setTimeout(() => {
+      if (activeRunnerProjectId === project.id && !cppIsRunning && btnRun) {
+        btnRun.click();
+      }
+    }, 350);
+  }
 }
 
 // ── 4. WIRE GLOBAL CONTROLS & DEMO BUTTONS ────────────────────────────────
@@ -2140,9 +2234,11 @@ function renderCppRunner(project) {
 document.querySelectorAll('.project-demo-btn').forEach(btn => {
   btn.addEventListener('click', (e) => {
     e.stopPropagation();
+    cancelOpenRunner();
+    cancelRunnerClose();
     hidePopoverImmediately();
     const target = btn.dataset.projectTarget || btn.closest('.project-card')?.dataset.projectId;
-    if (target) openProjectRunner(target);
+    if (target) openProjectRunner(target, { autoRun: true, triggeredByHover: false });
   });
 });
 
@@ -2174,17 +2270,52 @@ if (runnerDotClose) {
   });
 }
 
-// Backdrop click on modal
+// Modal event listeners (hover interaction, backdrop, outside click)
 if (runnerModal) {
+  runnerModal.addEventListener('mouseenter', () => {
+    cancelRunnerClose();
+  });
+
+  runnerModal.addEventListener('mousemove', () => {
+    cancelRunnerClose();
+  }, { passive: true });
+
+  runnerModal.addEventListener('mouseleave', (e) => {
+    if (!isHoverTriggered) return;
+    if (runnerModal.open || runnerModal.hasAttribute('open')) {
+      const rect = runnerModal.getBoundingClientRect();
+      if (e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom) {
+        return;
+      }
+    }
+    scheduleCloseRunner();
+  });
+
+  // Backdrop click on modal
   runnerModal.addEventListener('click', (e) => {
     if (e.target === runnerModal) {
       closeProjectRunner();
     }
   });
+
   runnerModal.addEventListener('close', () => {
     cleanupRunner();
   });
 }
+
+// Window scroll closes hover runner so user can read page
+window.addEventListener('scroll', () => {
+  if (runnerModal && (runnerModal.open || runnerModal.hasAttribute('open')) && isHoverTriggered) {
+    closeProjectRunner();
+  }
+}, { passive: true });
+
+// Escape key support
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && runnerModal && (runnerModal.open || runnerModal.hasAttribute('open'))) {
+    closeProjectRunner();
+  }
+});
 
 // ── 5. INITIALIZE LANGUAGE & ALL PORTFOLIO COMPONENTS ─────────────────────
 applyLang(currentLang);
@@ -2194,6 +2325,8 @@ if (typeof window !== 'undefined') {
   window.PROJECTS_DATA = PROJECTS_DATA;
   window.openProjectRunner = openProjectRunner;
   window.closeProjectRunner = closeProjectRunner;
+  window.scheduleOpenRunner = scheduleOpenRunner;
+  window.scheduleCloseRunner = scheduleCloseRunner;
   window.renderPopoverContent = renderPopoverContent;
   window.renderWebRunner = renderWebRunner;
   window.renderDiscordRunner = renderDiscordRunner;

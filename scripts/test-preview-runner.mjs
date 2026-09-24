@@ -124,6 +124,7 @@ const mockDoc = {
     Object.assign(new MockElement('article'), { dataset: { projectId: 'cpp' } }),
   ],
   querySelector: (sel) => new MockElement('div'),
+  createElement: (tag) => new MockElement(tag),
   addEventListener: () => {},
   removeEventListener: () => {},
 };
@@ -332,6 +333,34 @@ console.log('  ✓ Roblox draggable header has touch-action: none');
 sandbox.window.openProjectRunner('mediahub');
 sandbox.window.closeProjectRunner();
 console.log('  ✓ Modal runner opens and closes with complete cleanup');
+
+// 7. Test Hover Auto-Open, Auto-Run, and Huge Theater Modal Styles
+console.log('\n[TEST 7] Testing Hover Auto-Open, Auto-Run, and Theater Modal Dimensions:');
+if (typeof sandbox.window.scheduleOpenRunner !== 'function' || typeof sandbox.window.scheduleCloseRunner !== 'function') {
+  console.error('  ✗ scheduleOpenRunner or scheduleCloseRunner is not exposed on window!');
+  process.exit(1);
+}
+console.log('  ✓ scheduleOpenRunner & scheduleCloseRunner APIs verified');
+
+// Test auto-run invocation with options
+sandbox.window.openProjectRunner('cpp', { autoRun: true, triggeredByHover: true });
+sandbox.window.closeProjectRunner();
+sandbox.window.openProjectRunner('discord', { autoRun: true, triggeredByHover: true });
+sandbox.window.closeProjectRunner();
+console.log('  ✓ Auto-run and triggeredByHover options handled smoothly across simulator engines');
+
+// Verify huge modal dimensions & animations in CSS
+if (!cssContent.includes('min(1240px, 95vw)') || !cssContent.includes('min(880px, 92vh)')) {
+  console.error('  ✗ Runner modal CSS missing expanded "to đùng" dimensions (1240px x 880px)!');
+  process.exit(1);
+}
+console.log('  ✓ Runner modal sized to large theater view (min(1240px, 95vw) x min(880px, 92vh))');
+
+if (!cssContent.includes('runnerModalEnter') || !cssContent.includes('runnerBackdropFade')) {
+  console.error('  ✗ Runner modal CSS missing entrance and backdrop animations!');
+  process.exit(1);
+}
+console.log('  ✓ Entrance animation (runnerModalEnter) & backdrop fade (runnerBackdropFade) verified');
 
 console.log('\n======================================================');
 console.log('🎉 ALL TESTS PASSED SUCCESSFULLY WITH ZERO DEFECTS!');

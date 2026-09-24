@@ -2287,13 +2287,30 @@ body {
   border-radius: var(--radius-panel);
   background: #09090b;
   color: var(--fg);
-  width: min(1200px, 95vw);
-  height: min(860px, 92vh);
+  width: min(1240px, 95vw);
+  height: min(880px, 92vh);
   max-height: 92vh;
   padding: 0;
   overflow: hidden;
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.9), 0 0 40px rgba(146, 129, 247, 0.16);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.92), 0 0 50px rgba(146, 129, 247, 0.2);
   margin: auto;
+  outline: none;
+}
+.project-runner-modal:focus-visible {
+  outline: none;
+}
+.project-runner-modal[open] {
+  animation: runnerModalEnter 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+@keyframes runnerModalEnter {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 [data-theme="light"] .project-runner-modal {
   background: #ffffff;
@@ -2304,6 +2321,11 @@ body {
   background: rgba(0, 0, 0, 0.82);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  animation: runnerBackdropFade 0.22s ease-out forwards;
+}
+@keyframes runnerBackdropFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .runner-modal-header {
