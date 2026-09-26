@@ -89,7 +89,7 @@
         <li><a href="#home"     class="nav-link" data-i18n="nav.home">Home</a></li>
         <li><a href="#about"    class="nav-link" data-i18n="nav.about">About</a></li>
         <li><a href="#projects" class="nav-link" data-i18n="nav.projects">Projects</a></li>
-        <li><a href="#donate"   class="nav-link" data-i18n="nav.donate">Donate</a></li>
+        <li><a href="donate/"   class="nav-link" data-i18n="nav.donate">Donate ↗</a></li>
         <li><a href="#contact"  class="nav-link" data-i18n="nav.contact">Contact</a></li>
         <li class="mobile-theme-menu">
           <div class="mobile-theme-title" data-i18n="nav.theme_title">GIAO DIỆN</div>
@@ -116,7 +116,7 @@
         </li>
       </ul>
       <div class="nav-actions">
-        <a href="#donate" class="donate-nav-pill" title="Ủng hộ cà phê" aria-label="Ủng hộ cà phê">
+        <a href="donate/" class="donate-nav-pill" title="Ủng hộ cà phê" aria-label="Ủng hộ cà phê">
           <span class="donate-pill-icon">☕</span>
           <span class="donate-pill-text" data-i18n="nav.donate">Donate</span>
         </a>
@@ -466,164 +466,10 @@ int main() {
       </div>
     </section>
 
-    <!-- 04. Support & Buy Me a Coffee (SePay Webhook Integrated) -->
-    <section id="donate" class="section donate-section">
-      <div class="container">
-        <div class="section-header">
-          <span class="section-label" data-i18n="donate.label">04. Support</span>
-          <h2 class="section-title" data-i18n="donate.title">Buy Me A Coffee ☕</h2>
-          <p class="section-desc" data-i18n="donate.desc">Mỗi sự ủng hộ dù nhỏ đều là nguồn động viên to lớn giúp mình duy trì máy chủ, tiếp tục học tập và sáng tạo các dự án mã nguồn mở.</p>
-        </div>
-
-        <div class="donate-grid">
-          <!-- Cột trái: Quét mã QR SePay / VietQR -->
-          <div class="donate-card donate-qr-card reveal">
-            <div class="donate-card-header">
-              <div class="donate-card-title-group">
-                <span class="donate-card-icon" aria-hidden="true">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-                </span>
-                <h3 class="donate-card-heading" data-i18n="donate.qr.heading">Quét mã VietQR</h3>
-              </div>
-              <span class="donate-badge-instant">⚡ SePay Webhook Live</span>
-            </div>
-
-            <!-- Preset Mệnh giá -->
-            <div class="donate-presets" id="donate-presets" role="group" aria-label="Chọn số tiền ủng hộ">
-              <button type="button" class="donate-preset-btn" data-amount="10000">
-                <span class="preset-emoji">🍵</span>
-                <span class="preset-amount">10.000₫</span>
-                <span class="preset-note">Cốc trà đá</span>
-              </button>
-              <button type="button" class="donate-preset-btn active" data-amount="20000">
-                <span class="preset-emoji">☕</span>
-                <span class="preset-amount">20.000₫</span>
-                <span class="preset-note">Ly cà phê</span>
-              </button>
-              <button type="button" class="donate-preset-btn" data-amount="50000">
-                <span class="preset-emoji">🍜</span>
-                <span class="preset-amount">50.000₫</span>
-                <span class="preset-note">Bát phở</span>
-              </button>
-              <button type="button" class="donate-preset-btn" data-amount="100000">
-                <span class="preset-emoji">🚀</span>
-                <span class="preset-amount">100.000₫</span>
-                <span class="preset-note">Tiếp sức</span>
-              </button>
-            </div>
-
-            <!-- Tùy chỉnh số tiền và lời nhắn -->
-            <div class="donate-form-row">
-              <div class="donate-input-col">
-                <label for="donate-amount-input" class="donate-label" data-i18n="donate.amount.label">Số tiền (VNĐ)</label>
-                <div class="donate-input-inner">
-                  <input type="number" id="donate-amount-input" class="donate-input font-mono" value="20000" min="2000" step="1000" />
-                  <span class="donate-input-suffix">₫</span>
-                </div>
-              </div>
-              <div class="donate-input-col">
-                <label for="donate-note-input" class="donate-label" data-i18n="donate.note.label">Lời nhắn / Tên của bạn</label>
-                <input type="text" id="donate-note-input" class="donate-input" maxlength="40" placeholder="VD: Nam chuc Manh hoc tot" />
-              </div>
-            </div>
-
-            <!-- Khung mã QR tự sinh -->
-            <div class="donate-qr-container">
-              <div class="donate-qr-box">
-                <img id="donate-qr-img" src="" alt="Mã VietQR chuyển khoản SePay" width="210" height="210" />
-                <div class="donate-qr-overlay" id="donate-qr-loading">
-                  <div class="donate-spinner"></div>
-                </div>
-              </div>
-              <p class="donate-qr-hint" data-i18n="donate.qr.hint">Mở app Ngân hàng hoặc Momo quét mã QR chuyển khoản tức thì</p>
-            </div>
-
-            <!-- Bảng thông tin chuyển khoản thủ công -->
-            <div class="donate-bank-info">
-              <div class="donate-info-item">
-                <span class="info-label" data-i18n="donate.bank.name">Ngân hàng</span>
-                <span class="info-val" id="donate-bank-val">MBBank (Quân Đội)</span>
-                <button type="button" class="donate-copy-btn" data-copy="MBBank" title="Sao chép" aria-label="Sao chép ngân hàng">Copy</button>
-              </div>
-              <div class="donate-info-item">
-                <span class="info-label" data-i18n="donate.bank.acc">Số tài khoản</span>
-                <span class="info-val font-mono" id="donate-acc-val">0333333333</span>
-                <button type="button" class="donate-copy-btn" id="donate-copy-acc-btn" data-copy="0333333333" title="Sao chép" aria-label="Sao chép số tài khoản">Copy</button>
-              </div>
-              <div class="donate-info-item">
-                <span class="info-label" data-i18n="donate.bank.owner">Chủ tài khoản</span>
-                <span class="info-val" id="donate-owner-val">NGUYEN DUC MANH</span>
-              </div>
-              <div class="donate-info-item highlight-content">
-                <span class="info-label" data-i18n="donate.bank.content">Nội dung CK</span>
-                <span class="info-val font-mono" id="donate-content-val">MANH 20k</span>
-                <button type="button" class="donate-copy-btn" id="donate-copy-content-btn" data-copy="MANH 20k" title="Sao chép" aria-label="Sao chép nội dung">Copy</button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Cột phải: Bảng vàng vinh danh & Lịch sử nhận qua Webhook SePay -->
-          <div class="donate-card donate-honor-card reveal">
-            <div class="donate-card-header">
-              <div class="donate-card-title-group">
-                <span class="donate-card-icon trophy-icon" aria-hidden="true">🏆</span>
-                <h3 class="donate-card-heading" data-i18n="donate.honor.heading">Bảng vàng vinh danh</h3>
-              </div>
-              <div class="donate-realtime-badge" title="Tự động cập nhật tức thì khi có Webhook SePay">
-                <span class="realtime-dot"></span>
-                <span class="realtime-text">Realtime</span>
-              </div>
-            </div>
-
-            <!-- Thống kê tổng quan -->
-            <div class="donate-stats-grid">
-              <div class="donate-stat-card">
-                <span class="stat-count font-mono" id="donate-stat-count">0</span>
-                <span class="stat-title" data-i18n="donate.stats.count">Lượt ủng hộ</span>
-              </div>
-              <div class="donate-stat-card">
-                <span class="stat-count font-mono" id="donate-stat-amount">0₫</span>
-                <span class="stat-title" data-i18n="donate.stats.amount">Tổng động viên</span>
-              </div>
-            </div>
-
-            <!-- Danh sách người ủng hộ gần nhất -->
-            <div class="donate-history-box">
-              <div class="donate-history-header">
-                <span class="history-title" data-i18n="donate.history.title">Lịch sử giao dịch gần đây</span>
-                <span class="history-sync-time" id="donate-sync-time">Vừa cập nhật</span>
-              </div>
-              <div class="donate-scroll-list" id="donate-scroll-list">
-                <ul class="donate-items-list" id="donate-items-list" role="list">
-                  <!-- Tự động nạp từ API -->
-                </ul>
-                <div class="donate-empty" id="donate-empty" style="display: none;">
-                  <span class="empty-emoji">☕</span>
-                  <p data-i18n="donate.empty">Chưa có giao dịch mới hôm nay. Hãy là người đầu tiên mời Mạnh một tách cà phê nhé!</p>
-                </div>
-              </div>
-            </div>
-
-            <!-- Footer: Nút test giả lập giao dịch & Powered by -->
-            <div class="donate-card-footer">
-              <button type="button" class="donate-test-trigger" id="donate-test-trigger" title="Bấm để thử nghiệm hiệu ứng Webhook">
-                <span class="test-sparkle">✨</span>
-                <span data-i18n="donate.test.btn">Thử nghiệm Webhook (Demo)</span>
-              </button>
-              <div class="donate-gateway-tag">
-                <span>Webhook by</span>
-                <a href="https://sepay.vn" target="_blank" rel="noopener" class="sepay-link"><strong>SePay</strong></a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <section id="contact" class="section contact-section">
       <div class="container">
         <div class="section-header">
-          <span class="section-label" data-i18n="contact.label">05. Contact</span>
+          <span class="section-label" data-i18n="contact.label">04. Contact</span>
           <h2 class="section-title" data-i18n="contact.title">Get In Touch</h2>
           <p class="section-desc" data-i18n="contact.desc">I'd love to connect! Questions, collaborations, or just saying hi.</p>
         </div>

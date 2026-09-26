@@ -22,7 +22,7 @@ const files = [
   'site.webmanifest',
   '404.html'
 ];
-const directories = ['gplx'];
+const directories = ['gplx', 'donate'];
 const todoFiles = ['index.html', 'style.css', 'script.js', 'todo-calendar.html', 'todo2.html', 'vietnam-flag.jpg'];
 
 await rm(output, { recursive: true, force: true });

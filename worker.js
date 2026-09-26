@@ -40,6 +40,11 @@ export default {
       });
     }
 
+    if (url.pathname === '/donate') {
+      url.pathname = '/donate/';
+      return Response.redirect(url.toString(), 301);
+    }
+
     // ==========================================
     // 1. API: NHẬN WEBHOOK TỪ SEPAY
     // ==========================================
