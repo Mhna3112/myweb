@@ -245,6 +245,7 @@ const TRANSLATIONS = {
     'nav.home':        'Home',
     'nav.about':       'About',
     'nav.projects':    'Projects',
+    'nav.donate':      'Donate',
     'nav.blog':        'Blog',
     'nav.github':      'GitHub',
     'nav.contact':     'Contact',
@@ -352,8 +353,26 @@ const TRANSLATIONS = {
     'github.visitProfile':   'Visit profile directly →',
     'github.noDesc':         'Personal developer project repository.',
     'github.viewRepo':       'View Code',
+    // Donate / Support
+    'donate.label':        '04. Support',
+    'donate.title':        'Buy Me A Coffee ☕',
+    'donate.desc':         'Every contribution, big or small, inspires me to maintain servers, learn, and build open-source projects.',
+    'donate.qr.heading':   'Scan VietQR Code',
+    'donate.amount.label': 'Amount (VND)',
+    'donate.note.label':   'Your Name / Message',
+    'donate.qr.hint':      'Open any Mobile Banking app or Momo to scan and transfer instantly',
+    'donate.bank.name':    'Bank',
+    'donate.bank.acc':     'Account No.',
+    'donate.bank.owner':   'Account Name',
+    'donate.bank.content': 'Transfer Note',
+    'donate.honor.heading':'Supporters Honor Board',
+    'donate.stats.count':  'Supporters',
+    'donate.stats.amount': 'Total Raised',
+    'donate.history.title':'Recent Transfers',
+    'donate.empty':        'No donations yet today. Be the first to buy me a coffee!',
+    'donate.test.btn':     'Simulate Webhook (Demo)',
     // Contact
-    'contact.label':  '04. Contact',
+    'contact.label':  '05. Contact',
     'contact.title':  'Get In Touch',
     'contact.desc':   "I'd love to connect! Questions, collaborations, or just saying hi.",
     'contact.body':   "I'm currently <strong>learning</strong> and always open to new connections, feedback on my projects, or simply chatting about programming. My inbox is always open.",
@@ -389,6 +408,7 @@ const TRANSLATIONS = {
     'nav.home':        'Trang chủ',
     'nav.about':       'Giới thiệu',
     'nav.projects':    'Dự án',
+    'nav.donate':      'Ủng hộ',
     'nav.blog':        'Blog',
     'nav.github':      'GitHub',
     'nav.contact':     'Liên hệ',
@@ -496,8 +516,26 @@ const TRANSLATIONS = {
     'github.visitProfile':   'Truy cập hồ sơ trực tiếp →',
     'github.noDesc':         'Kho lưu trữ dự án cá nhân của lập trình viên.',
     'github.viewRepo':       'Xem mã nguồn',
+    // Donate / Support
+    'donate.label':        '04. Tiếp sức',
+    'donate.title':        'Mời mình tách Cà phê ☕',
+    'donate.desc':         'Mỗi sự ủng hộ dù nhỏ đều là nguồn động viên to lớn giúp mình duy trì máy chủ, tiếp tục học tập và sáng tạo các dự án mã nguồn mở.',
+    'donate.qr.heading':   'Quét mã VietQR',
+    'donate.amount.label': 'Số tiền (VNĐ)',
+    'donate.note.label':   'Lời nhắn / Tên của bạn',
+    'donate.qr.hint':      'Mở app Ngân hàng hoặc Momo/ZaloPay quét mã QR chuyển khoản tức thì',
+    'donate.bank.name':    'Ngân hàng',
+    'donate.bank.acc':     'Số tài khoản',
+    'donate.bank.owner':   'Chủ tài khoản',
+    'donate.bank.content': 'Nội dung CK',
+    'donate.honor.heading':'Bảng vàng vinh danh',
+    'donate.stats.count':  'Lượt ủng hộ',
+    'donate.stats.amount': 'Tổng quỹ động viên',
+    'donate.history.title':'Lịch sử giao dịch gần đây',
+    'donate.empty':        'Chưa có giao dịch mới hôm nay. Hãy là người đầu tiên mời Mạnh một tách cà phê nhé!',
+    'donate.test.btn':     'Thử nghiệm Webhook (Demo)',
     // Contact
-    'contact.label':  '04. Liên hệ',
+    'contact.label':  '05. Liên hệ',
     'contact.title':  'Kết nối với tôi',
     'contact.desc':   'Tôi rất muốn kết nối! Câu hỏi, hợp tác, hoặc chỉ là chào hỏi.',
     'contact.body':   'Tôi đang <strong>học tập</strong> và luôn mở cửa cho các kết nối mới, phản hồi về dự án của tôi, hoặc chỉ là trò chuyện về lập trình. Hộp thư của tôi luôn rộng mở.',
@@ -2319,7 +2357,325 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-// ── 5. INITIALIZE LANGUAGE & ALL PORTFOLIO COMPONENTS ─────────────────────
+// ── 5. SEPAY WEBHOOK & VIETQR DONATION MODULE ──────────────────────────
+function initSepayDonations() {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
+  const donateSection = document.getElementById('donate');
+  if (!donateSection) return;
+
+  const CONFIG = {
+    bank: 'MBBank',               // Ngân hàng nhận tiền (MBBank, VCB, TPB, etc.)
+    accountNumber: '0333333333',   // Số tài khoản của bạn (thay bằng STK của bạn)
+    accountName: 'NGUYEN DUC MANH',
+    prefix: 'MANH'
+  };
+
+  const qrImg = document.getElementById('donate-qr-img');
+  const qrLoading = document.getElementById('donate-qr-loading');
+  const amountInput = document.getElementById('donate-amount-input');
+  const noteInput = document.getElementById('donate-note-input');
+  const presets = document.querySelectorAll('.donate-preset-btn');
+  const contentVal = document.getElementById('donate-content-val');
+  const copyContentBtn = document.getElementById('donate-copy-content-btn');
+  const copyAccBtn = document.getElementById('donate-copy-acc-btn');
+  const accVal = document.getElementById('donate-acc-val');
+  const ownerVal = document.getElementById('donate-owner-val');
+  const bankVal = document.getElementById('donate-bank-val');
+
+  if (accVal) accVal.textContent = CONFIG.accountNumber;
+  if (copyAccBtn) copyAccBtn.setAttribute('data-copy', CONFIG.accountNumber);
+  if (ownerVal) ownerVal.textContent = CONFIG.accountName;
+
+  const statCount = document.getElementById('donate-stat-count');
+  const statAmount = document.getElementById('donate-stat-amount');
+  const itemsList = document.getElementById('donate-items-list');
+  const emptyState = document.getElementById('donate-empty');
+  const syncTime = document.getElementById('donate-sync-time');
+  const testTriggerBtn = document.getElementById('donate-test-trigger');
+
+  let qrDebounceTimer = null;
+
+  function formatVND(num) {
+    return Number(num || 0).toLocaleString('vi-VN') + '₫';
+  }
+
+  function timeAgo(dateStr) {
+    try {
+      const d = new Date(dateStr);
+      const diffMs = Date.now() - d.getTime();
+      const diffMin = Math.floor(diffMs / 60000);
+      if (diffMin < 1) return 'Vừa xong';
+      if (diffMin < 60) return `${diffMin} phút trước`;
+      const diffHours = Math.floor(diffMin / 60);
+      if (diffHours < 24) return `${diffHours} giờ trước`;
+      const diffDays = Math.floor(diffHours / 24);
+      return `${diffDays} ngày trước`;
+    } catch {
+      return 'Gần đây';
+    }
+  }
+
+  function updateQR() {
+    if (qrLoading && qrLoading.classList) qrLoading.classList.add('loading');
+
+    const amount = Math.max(2000, parseInt(amountInput?.value, 10) || 20000);
+    const userNote = (noteInput?.value || '').trim();
+    const transferDes = userNote ? `${CONFIG.prefix} ${userNote}` : `${CONFIG.prefix} ${Math.floor(amount / 1000)}k`;
+
+    if (contentVal) contentVal.textContent = transferDes;
+    if (copyContentBtn) copyContentBtn.setAttribute('data-copy', transferDes);
+
+    const qrUrl = `https://qr.sepay.vn/img?bank=${encodeURIComponent(CONFIG.bank)}&acc=${encodeURIComponent(CONFIG.accountNumber)}&template=compact&amount=${amount}&des=${encodeURIComponent(transferDes)}`;
+
+    if (qrImg) {
+      if (typeof Image !== 'undefined') {
+        const temp = new Image();
+        temp.onload = () => {
+          qrImg.src = qrUrl;
+          if (qrLoading && qrLoading.classList) qrLoading.classList.remove('loading');
+        };
+        temp.onerror = () => {
+          qrImg.src = `https://img.vietqr.io/image/${CONFIG.bank}-${CONFIG.accountNumber}-compact.png?amount=${amount}&addInfo=${encodeURIComponent(transferDes)}&accountName=${encodeURIComponent(CONFIG.accountName)}`;
+          if (qrLoading && qrLoading.classList) qrLoading.classList.remove('loading');
+        };
+        temp.src = qrUrl;
+      } else {
+        qrImg.src = qrUrl;
+      }
+    }
+  }
+
+  function scheduleUpdateQR() {
+    clearTimeout(qrDebounceTimer);
+    qrDebounceTimer = setTimeout(updateQR, 250);
+  }
+
+  presets.forEach(btn => {
+    btn.addEventListener('click', () => {
+      presets.forEach(b => b.classList && b.classList.remove('active'));
+      if (btn.classList) btn.classList.add('active');
+      const val = parseInt(btn.getAttribute('data-amount'), 10);
+      if (amountInput) amountInput.value = val;
+      updateQR();
+    });
+  });
+
+  if (amountInput) {
+    amountInput.addEventListener('input', () => {
+      const val = parseInt(amountInput.value, 10);
+      presets.forEach(b => {
+        if (b.classList) b.classList.toggle('active', parseInt(b.getAttribute('data-amount'), 10) === val);
+      });
+      scheduleUpdateQR();
+    });
+  }
+
+  if (noteInput) {
+    noteInput.addEventListener('input', scheduleUpdateQR);
+  }
+
+  donateSection.querySelectorAll('.donate-copy-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const text = btn.getAttribute('data-copy') || '';
+      if (!text) return;
+      try {
+        if (navigator.clipboard) {
+          await navigator.clipboard.writeText(text);
+        } else {
+          throw new Error('Clipboard fallback');
+        }
+      } catch {
+        const input = document.createElement('input');
+        input.value = text;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand('copy');
+        document.body.removeChild(input);
+      }
+      const originalText = btn.textContent;
+      btn.textContent = 'Copied!';
+      if (btn.classList) btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = originalText;
+        if (btn.classList) btn.classList.remove('copied');
+      }, 1800);
+    });
+  });
+
+  function renderDonations(donations, stats) {
+    if (statCount) statCount.textContent = stats?.totalCount ?? donations.length;
+    if (statAmount) statAmount.textContent = formatVND(stats?.totalAmount ?? donations.reduce((s, d) => s + (Number(d.amount) || 0), 0));
+
+    if (!itemsList) return;
+
+    if (!donations || donations.length === 0) {
+      itemsList.innerHTML = '';
+      if (emptyState) emptyState.style.display = 'flex';
+      return;
+    }
+
+    if (emptyState) emptyState.style.display = 'none';
+
+    itemsList.innerHTML = donations.map(item => {
+      const initials = (item.donorName || 'U').charAt(0).toUpperCase();
+      const cleanContent = escapeHtml(item.content || item.donorName || 'Ủng hộ');
+      const formattedAmount = formatVND(item.amount);
+      const when = timeAgo(item.transactionDate || item.timestamp);
+      const gateway = item.gateway ? escapeHtml(item.gateway) : 'Bank';
+
+      return `
+        <li class="donate-item" data-id="${item.id || ''}">
+          <div class="donate-item-main">
+            <div class="donate-item-avatar" aria-hidden="true">${initials}</div>
+            <div class="donate-item-details">
+              <span class="donate-item-donor" title="${cleanContent}">${cleanContent}</span>
+              <span class="donate-item-meta">
+                <span>${when}</span> · <span>${gateway}</span>
+              </span>
+            </div>
+          </div>
+          <span class="donate-item-amount">+${formattedAmount}</span>
+        </li>
+      `;
+    }).join('');
+
+    if (syncTime) {
+      const now = new Date();
+      syncTime.textContent = `${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`;
+    }
+  }
+
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function showLiveDonationToast(donation) {
+    let toastEl = document.querySelector('.donation-live-toast');
+    if (!toastEl) {
+      toastEl = document.createElement('div');
+      toastEl.className = 'donation-live-toast';
+      toastEl.setAttribute('role', 'alert');
+      toastEl.innerHTML = `
+        <span class="donation-toast-icon">☕</span>
+        <div class="donation-toast-body">
+          <span class="donation-toast-title">Ting Ting! Vừa có ủng hộ mới!</span>
+          <span class="donation-toast-msg"></span>
+        </div>
+      `;
+      document.body.appendChild(toastEl);
+    }
+    const msgEl = toastEl.querySelector('.donation-toast-msg');
+    const name = donation.donorName || 'Một người bạn';
+    const amount = formatVND(donation.amount);
+    if (msgEl) {
+      msgEl.textContent = `${name} vừa ủng hộ ${amount}! Cảm ơn bạn rất nhiều!`;
+    }
+    if (toastEl.classList) {
+      toastEl.classList.add('show');
+      setTimeout(() => {
+        toastEl.classList.remove('show');
+      }, 5500);
+    }
+  }
+
+  async function fetchDonations() {
+    try {
+      if (typeof fetch === 'undefined') return;
+      const res = await fetch('/api/donations');
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.success) {
+          renderDonations(data.donations || [], data.stats);
+        }
+      }
+    } catch {
+      // Ignored if server API is not available
+    }
+  }
+
+  function setupSSE() {
+    if (typeof EventSource === 'undefined') return;
+    try {
+      const source = new EventSource('/api/donations/stream');
+      source.addEventListener('donation', (event) => {
+        try {
+          const donation = JSON.parse(event.data);
+          showLiveDonationToast(donation);
+          fetchDonations();
+        } catch (e) {
+          console.error('[SePay SSE] Parse error:', e);
+        }
+      });
+      source.onerror = () => {
+        source.close();
+        setTimeout(setupSSE, 20000);
+      };
+    } catch {
+      // Ignored
+    }
+  }
+
+  if (testTriggerBtn) {
+    testTriggerBtn.addEventListener('click', async () => {
+      testTriggerBtn.disabled = true;
+      testTriggerBtn.innerHTML = '<span>⏳ Đang gửi giả lập...</span>';
+
+      const currentAmount = Math.max(2000, parseInt(amountInput?.value, 10) || 20000);
+      try {
+        if (typeof fetch !== 'undefined') {
+          const res = await fetch('/api/sepay-test', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              amount: currentAmount,
+              note: noteInput?.value || 'Ung ho Duc Manh phat trien website!'
+            })
+          });
+
+          if (res.ok) {
+            const result = await res.json();
+            if (result.donation) {
+              showLiveDonationToast(result.donation);
+              await fetchDonations();
+            }
+          } else {
+            showLiveDonationToast({
+              donorName: noteInput?.value || 'Bạn học cùng đam mê',
+              amount: currentAmount,
+              content: 'Ủng hộ bạn cốc cà phê demo!',
+              transactionDate: new Date().toISOString(),
+              gateway: 'MBBank'
+            });
+          }
+        }
+      } catch {
+        showLiveDonationToast({
+          donorName: noteInput?.value || 'Bạn học cùng đam mê',
+          amount: currentAmount,
+          content: 'Ủng hộ bạn cốc cà phê demo!',
+          transactionDate: new Date().toISOString(),
+          gateway: 'MBBank'
+        });
+      } finally {
+        setTimeout(() => {
+          testTriggerBtn.disabled = false;
+          testTriggerBtn.innerHTML = '<span class="test-sparkle">✨</span><span data-i18n="donate.test.btn">Thử nghiệm Webhook (Demo)</span>';
+        }, 1200);
+      }
+    });
+  }
+
+  updateQR();
+  fetchDonations();
+  setupSSE();
+}
+
+// ── 6. INITIALIZE LANGUAGE & ALL PORTFOLIO COMPONENTS ─────────────────────
+initSepayDonations();
 applyLang(currentLang);
 
 // Expose public API on window for testing & debugging
