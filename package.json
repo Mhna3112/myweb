@@ -7,8 +7,8 @@
     "start": "node server.mjs",
     "build:site": "node scripts/prepare-deploy.mjs",
     "test": "node --check main.js && node scripts/test-preview-runner.mjs",
-    "deploy": "npm run build:site && wrangler deploy --assets .deploy-assets",
-    "preview": "npm run build:site && wrangler dev --assets .deploy-assets"
+    "deploy": "npm run build:site && wrangler deploy",
+    "preview": "npm run build:site && wrangler dev"
   },
   "devDependencies": {
     "wrangler": "^4.136.3"

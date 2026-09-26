@@ -1,11 +1,20 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "myweb",
+  "main": "worker.js",
   "compatibility_date": "2026-09-14",
   "assets": {
     "directory": ".deploy-assets",
-    "not_found_handling": "404-page"
+    "not_found_handling": "404-page",
+    "binding": "ASSETS",
+    "run_worker_first": ["/api/*"]
   },
+  "kv_namespaces": [
+    {
+      "binding": "DONATIONS_KV",
+      "id": "31c4a7cbd1eb41a9baef425cff318861"
+    }
+  ],
   "workers_dev": true,
   "routes": [
     {
