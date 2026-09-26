@@ -4,6 +4,7 @@
   "private": true,
   "description": "Duc Manh's Personal Portfolio Website",
   "scripts": {
+    "start": "node server.mjs",
     "build:site": "node scripts/prepare-deploy.mjs",
     "test": "node --check main.js && node scripts/test-preview-runner.mjs",
     "deploy": "npm run build:site && wrangler deploy --assets .deploy-assets",

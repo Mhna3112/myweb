@@ -1,0 +1,7 @@
+services:
+  myweb:
+    build: .
+    container_name: ducmanh_web
+    restart: unless-stopped
+    ports:
+      - "80:80"
