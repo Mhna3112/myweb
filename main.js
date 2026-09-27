@@ -2626,7 +2626,10 @@ function typeHeroSubtitle() {
   const phrases = (HERO_PHRASES[currentLang] && HERO_PHRASES[currentLang].length)
     ? HERO_PHRASES[currentLang]
     : HERO_PHRASES.en;
-  if (!target || !phrases || !phrases.length) return;
+  if (!target || target.classList.contains('hidden') || target.style.display === 'none' || !phrases || !phrases.length) {
+    if (target) target.textContent = '';
+    return;
+  }
 
   const currentPhrase = phrases[heroPhraseIdx % phrases.length];
   if (heroIsDeleting) {

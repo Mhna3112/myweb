@@ -605,7 +605,7 @@ h1, h2, h3, .hero-title, .section-title, .serif-heading {
   line-height: 1.15;
   letter-spacing: -0.02em;
   margin-bottom: 20px;
-  min-height: 2.1em;
+  min-height: auto;
   color: var(--fg);
 }
 
