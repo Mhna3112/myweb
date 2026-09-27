@@ -55,6 +55,75 @@ var MEMOS_DATA = [
   }
 ];
 
+var FRIENDS_DATA = [
+  {
+    id: 'ciallovo',
+    name: '雾小蒜の小窝',
+    url: 'https://ciallovo.top',
+    avatar: 'https://ciallovo.top/assets/pic/head.webp',
+    tag: 'Blog · Anime · Tech',
+    bio: {
+      vi: 'Ciallovo! Không gian blog công nghệ và cuộc sống siêu đáng yêu.',
+      en: 'Ciallovo! Cute anime, tech, and life personal space.'
+    }
+  },
+  {
+    id: 'hk256',
+    name: '白熊工作室 (HK256)',
+    url: 'https://www.HK256.dev/',
+    avatar: 'https://www.hk256.dev/assets/images/avatar-256.png',
+    tag: 'Fullstack · Systems',
+    bio: {
+      vi: 'Gieo mầm hy vọng và đón nhận những niềm vui sáng tạo.',
+      en: 'A song of sowing and expectation, a song of harvest and joy.'
+    }
+  },
+  {
+    id: 'catp',
+    name: 'EdgeCat 小窝',
+    url: 'https://catp.cc/',
+    avatar: 'https://file.catp.cc/avatar.png',
+    tag: 'Web Eng · Blog',
+    bio: {
+      vi: 'Kỹ thuật web, chia sẻ kiến thức công nghệ và lập trình hiện đại.',
+      en: 'Web engineering, modern programming insights, and thoughts.'
+    }
+  },
+  {
+    id: 'nekro',
+    name: "Nekro's SEKAI",
+    url: 'https://www.nekro.top/',
+    avatar: 'https://avatars.githubusercontent.com/u/90670998?v=4',
+    tag: 'Dev · Tools',
+    bio: {
+      vi: 'Khám phá thế giới số và tạo nên những công cụ hữu ích.',
+      en: 'Exploring the digital realm and building useful software tools.'
+    }
+  },
+  {
+    id: 'transcircle',
+    name: 'TransCircle',
+    url: 'https://transcircle.org/',
+    avatar: 'https://avatars.githubusercontent.com/u/285014810?s=200&v=4',
+    tag: 'Open Source',
+    bio: {
+      vi: 'Cộng đồng chia sẻ và sáng tạo mã nguồn mở không giới hạn.',
+      en: 'Open-source community for developers and creators.'
+    }
+  },
+  {
+    id: 'connect',
+    name: 'Bạn bè & Bạn (Your Site)',
+    url: '#contact',
+    avatar: 'avatar.jpg',
+    tag: 'Trao đổi liên kết',
+    bio: {
+      vi: 'Hãy kết nối và cùng nhau trao đổi liên kết website nhé!',
+      en: 'Connect and exchange personal website links with me!'
+    }
+  }
+];
+
 var SITE_LAUNCH_DATE = new Date('2026-01-01T00:00:00Z').getTime();
 
 var MASCOT_PHRASES = [
@@ -200,52 +269,12 @@ const io = new IntersectionObserver((entries) => {
 }, { rootMargin: '-40% 0px -55% 0px' });
 sections.forEach(s => io.observe(s));
 
-// ── TYPEWRITER ─────────────────────────────────────────────────────
-let phraseIdx = 0;
-let charIdx   = 0;
-let deleting  = false;
-let twTimeout = null;
-const tw      = document.getElementById('typewriter');
-
-function getCurrentPhrases() {
-  return (typeof PHRASES !== 'undefined' && PHRASES[currentLang]) ? PHRASES[currentLang] : PHRASES.en;
-}
-
-function typeWriter() {
-  if (!tw) return;
-  const phrases = getCurrentPhrases();
-  const phrase  = phrases[phraseIdx % phrases.length];
-  if (!deleting) {
-    tw.textContent = phrase.slice(0, ++charIdx);
-    if (charIdx >= phrase.length) {
-      deleting = true;
-      twTimeout = setTimeout(typeWriter, 1800);
-      return;
-    }
-    twTimeout = setTimeout(typeWriter, 80);
-  } else {
-    tw.textContent = phrase.slice(0, --charIdx);
-    if (charIdx <= 0) {
-      deleting  = false;
-      charIdx   = 0;
-      phraseIdx = (phraseIdx + 1) % phrases.length;
-      twTimeout = setTimeout(typeWriter, 400);
-      return;
-    }
-    twTimeout = setTimeout(typeWriter, 40);
+// ── TYPEWRITER (Unified with Hero Typewriter) ──────────────────────
+function resetTypewriter() {
+  if (typeof resetHeroTypewriter === 'function') {
+    resetHeroTypewriter();
   }
 }
-
-function resetTypewriter() {
-  if (twTimeout) clearTimeout(twTimeout);
-  phraseIdx = 0;
-  charIdx   = 0;
-  deleting  = false;
-  if (tw) tw.textContent = '';
-  typeWriter();
-}
-
-resetTypewriter();
 
 // ── REVEAL ON SCROLL ───────────────────────────────────────────────
 const revealObserver = new IntersectionObserver((entries) => {
@@ -321,6 +350,8 @@ const TRANSLATIONS = {
     'nav.home':        'Home',
     'nav.about':       'About',
     'nav.projects':    'Projects',
+    'nav.memos':       'Memos',
+    'nav.friends':     'Friends',
     'nav.blog':        'Blog',
     'nav.github':      'GitHub',
     'nav.contact':     'Contact',
@@ -428,8 +459,19 @@ const TRANSLATIONS = {
     'github.visitProfile':   'Visit profile directly →',
     'github.noDesc':         'Personal developer project repository.',
     'github.viewRepo':       'View Code',
+    // Memos
+    'memos.label': '04. Memos',
+    'memos.title': 'Memos & Status',
+    'memos.desc':  'Short technical notes, thoughts, and programming journey updates.',
+    // Friends
+    'friends.label': '05. Friends',
+    'friends.title': 'Friends & Links',
+    'friends.desc':  'A warm corner connecting developer friends, fellow learners, and tech blogs.',
+    'friends.exchange_title': 'Trao đổi liên kết (Link Exchange)',
+    'friends.exchange_desc':  'Welcome developers & bloggers to connect and exchange site links!',
+    'friends.exchange_btn':   'Connect With Me >',
     // Contact
-    'contact.label':  '05. Contact',
+    'contact.label':  '06. Contact',
     'contact.title':  'Get In Touch',
     'contact.desc':   "I'd love to connect! Questions, collaborations, or just saying hi.",
     'contact.body':   "I'm currently <strong>learning</strong> and always open to new connections, feedback on my projects, or simply chatting about programming. My inbox is always open.",
@@ -465,6 +507,8 @@ const TRANSLATIONS = {
     'nav.home':        'Trang chủ',
     'nav.about':       'Giới thiệu',
     'nav.projects':    'Dự án',
+    'nav.memos':       'Bảng tin',
+    'nav.friends':     'Bạn bè',
     'nav.blog':        'Blog',
     'nav.github':      'GitHub',
     'nav.contact':     'Liên hệ',
@@ -572,8 +616,19 @@ const TRANSLATIONS = {
     'github.visitProfile':   'Truy cập hồ sơ trực tiếp →',
     'github.noDesc':         'Kho lưu trữ dự án cá nhân của lập trình viên.',
     'github.viewRepo':       'Xem mã nguồn',
+    // Memos
+    'memos.label': '04. Bảng tin',
+    'memos.title': 'Bảng tin & Trạng thái',
+    'memos.desc':  'Nhật ký ngắn, suy nghĩ kỹ thuật và cập nhật hành trình lập trình.',
+    // Friends
+    'friends.label': '05. Bạn bè',
+    'friends.title': '友人帐 · Bạn Bè & Liên Kết',
+    'friends.desc':  'Không gian kết nối cùng những người bạn lập trình và các blog công nghệ thú vị.',
+    'friends.exchange_title': 'Trao đổi liên kết (Link Exchange)',
+    'friends.exchange_desc':  'Chào đón bạn bè trao đổi liên kết cùng chia sẻ đam mê công nghệ!',
+    'friends.exchange_btn':   'Kết nối bạn bè >',
     // Contact
-    'contact.label':  '05. Liên hệ',
+    'contact.label':  '06. Liên hệ',
     'contact.title':  'Kết nối với tôi',
     'contact.desc':   'Tôi rất muốn kết nối! Câu hỏi, hợp tác, hoặc chỉ là chào hỏi.',
     'contact.body':   'Tôi đang <strong>học tập</strong> và luôn mở cửa cho các kết nối mới, phản hồi về dự án của tôi, hoặc chỉ là trò chuyện về lập trình. Hộp thư của tôi luôn rộng mở.',
@@ -650,9 +705,6 @@ function applyLang(lang) {
   }
 
   // Restart typewriter with new language
-  if (typeof resetTypewriter === 'function') {
-    resetTypewriter();
-  }
   if (typeof resetHeroTypewriter === 'function') {
     resetHeroTypewriter();
   }
@@ -669,6 +721,9 @@ function applyLang(lang) {
   }
   if (typeof renderMemosBoard === 'function') {
     renderMemosBoard();
+  }
+  if (typeof renderFriendsBoard === 'function') {
+    renderFriendsBoard();
   }
 }
 
@@ -2456,8 +2511,31 @@ function buildSearchIndex() {
     { type: 'section', id: 'about', title: currentLang === 'vi' ? 'Giới thiệu' : 'About Me', desc: 'Skills & Bio', tags: ['Bio'], action: () => { closeSearchModal(); if (typeof location !== 'undefined') location.hash = '#about'; } },
     { type: 'section', id: 'projects', title: currentLang === 'vi' ? 'Dự án' : 'Projects', desc: 'Things I have built', tags: ['Code'], action: () => { closeSearchModal(); if (typeof location !== 'undefined') location.hash = '#projects'; } },
     { type: 'section', id: 'memos', title: 'Memos & Status', desc: 'Short thoughts and developer logs', tags: ['Memos'], action: () => { closeSearchModal(); if (typeof location !== 'undefined') location.hash = '#memos'; } },
+    { type: 'section', id: 'friends', title: currentLang === 'vi' ? 'Bạn bè & Liên kết' : 'Friends & Links', desc: 'Developer friends, peers, and tech blogs', tags: ['Friends', 'Links', 'Bạn bè'], action: () => { closeSearchModal(); if (typeof location !== 'undefined') location.hash = '#friends'; } },
     { type: 'section', id: 'contact', title: currentLang === 'vi' ? 'Liên hệ' : 'Contact', desc: 'Get in touch', tags: ['Contact'], action: () => { closeSearchModal(); if (typeof location !== 'undefined') location.hash = '#contact'; } }
   );
+
+  // Add individual friends to search
+  if (typeof FRIENDS_DATA !== 'undefined' && Array.isArray(FRIENDS_DATA)) {
+    FRIENDS_DATA.forEach(f => {
+      const bioTxt = (f.bio && (f.bio[currentLang] || f.bio.vi || f.bio.en)) || '';
+      items.push({
+        type: 'friend',
+        id: f.id,
+        title: f.name,
+        desc: bioTxt,
+        tags: [f.tag, 'friend', 'links', 'bạn bè'],
+        action: () => {
+          closeSearchModal();
+          if (f.url.startsWith('#')) {
+            if (typeof location !== 'undefined') location.hash = f.url;
+          } else if (typeof window !== 'undefined') {
+            window.open(f.url, '_blank', 'noopener,noreferrer');
+          }
+        }
+      });
+    });
+  }
   return items;
 }
 
@@ -2646,7 +2724,33 @@ function renderMemosBoard() {
   }).join('');
 }
 
-// ── 4. Uptime Clock & Visitor Counter ────────────────────────────────
+// ── 4. Friends & Links (友人帐 - Ciallovo Architecture) ──────────────
+function renderFriendsBoard() {
+  if (typeof document === 'undefined') return;
+  const listEl = document.getElementById('friends-board-grid');
+  if (!listEl) return;
+  if (typeof FRIENDS_DATA === 'undefined' || !Array.isArray(FRIENDS_DATA)) return;
+  listEl.innerHTML = FRIENDS_DATA.map(f => {
+    const bioTxt = (f.bio && (f.bio[currentLang] || f.bio.vi || f.bio.en)) || '';
+    const isInternal = f.url.startsWith('#');
+    const targetAttr = isInternal ? '' : 'target="_blank" rel="noopener noreferrer"';
+    return `
+      <a href="${f.url}" ${targetAttr} class="friend-card" id="friend-${f.id}">
+        <img src="${f.avatar}" alt="${f.name}" class="friend-avatar" loading="lazy" onerror="this.onerror=null;this.src='avatar.jpg';" />
+        <div class="friend-body">
+          <div class="friend-name">
+            <span>${f.name}</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </div>
+          <p class="friend-bio">${bioTxt}</p>
+          <span class="friend-tag">${f.tag}</span>
+        </div>
+      </a>
+    `;
+  }).join('');
+}
+
+// ── 5. Uptime Clock & Visitor Counter ────────────────────────────────
 SITE_LAUNCH_DATE = new Date('2026-01-01T00:00:00Z').getTime();
 function updateUptimeClock() {
   const now = Date.now();
@@ -2796,6 +2900,7 @@ if (typeof document !== 'undefined') {
   document.addEventListener('DOMContentLoaded', () => {
     resetHeroTypewriter();
     renderMemosBoard();
+    renderFriendsBoard();
     updateUptimeClock();
     setInterval(updateUptimeClock, 1000);
     initVisitorCounter();
@@ -2805,6 +2910,7 @@ if (typeof document !== 'undefined') {
 
 // ── 5. INITIALIZE LANGUAGE & ALL PORTFOLIO COMPONENTS ─────────────────────
 applyLang(currentLang);
+renderFriendsBoard();
 
 // Expose public API on window for testing & debugging
 if (typeof window !== 'undefined') {
@@ -2827,12 +2933,14 @@ if (typeof window !== 'undefined') {
   window.buildSearchIndex = buildSearchIndex;
   window.HERO_PHRASES = HERO_PHRASES;
   window.MEMOS_DATA = MEMOS_DATA;
+  window.FRIENDS_DATA = FRIENDS_DATA;
   window.formatRelativeTime = formatRelativeTime;
   window.updateUptimeClock = updateUptimeClock;
   window.initVisitorCounter = initVisitorCounter;
   window.initKaomojiMascot = initKaomojiMascot;
   window.resetHeroTypewriter = resetHeroTypewriter;
   window.renderMemosBoard = renderMemosBoard;
+  window.renderFriendsBoard = renderFriendsBoard;
   window.hidePopoverImmediately = hidePopoverImmediately;
   window.scheduleShowPopover = scheduleShowPopover;
   window.toggleMobileNav = toggleMobileNav;
