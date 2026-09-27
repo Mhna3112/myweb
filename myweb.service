@@ -1,5 +1,5 @@
 [Unit]
-Description=Duc Manh Portfolio & SePay Webhook Server
+Description=Duc Manh Portfolio Server
 After=network.target
 
 [Service]
@@ -11,8 +11,6 @@ Restart=always
 RestartSec=5
 Environment=PORT=3000
 Environment=NODE_ENV=production
-# Điền API Key của SePay nếu bạn cấu hình trong Dashboard SePay (tuỳ chọn):
-# Environment=SEPAY_API_KEY=your_api_key_here
 
 [Install]
 WantedBy=multi-user.target

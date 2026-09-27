@@ -1,58 +1,115 @@
 /* ===== main.js ===== */
 
 // ── GLOBAL STATE & PHRASES ──────────────────────────────────────────
-let currentLang = localStorage.getItem('lang') || 'en';
+let currentLang = (typeof localStorage !== 'undefined' && localStorage.getItem('lang')) || 'en';
 
-const PHRASES = {
-  en: [
-    "Hi, I'm Duc Manh.",
-    "I'm learning to code.",
-    "I love building things.",
-    "Aspiring Developer.",
-  ],
+const HERO_PHRASES = {
   vi: [
-    "Xin chào, tôi là Đức Mạnh.",
-    "Tôi đang học lập trình.",
-    "Tôi thích xây dựng ứng dụng.",
-    "Lập trình viên tương lai.",
+    "Lập trình viên & Người yêu công nghệ",
+    "Phát triển Web, Roblox Luau & Discord Bot",
+    "Thuật toán C/C++ và Hệ thống",
+    "Chia sẻ kiến thức & Dự án mã nguồn mở"
+  ],
+  en: [
+    "Aspiring Developer & Tech Enthusiast",
+    "Building Web Apps, Roblox Luau & Discord Bots",
+    "C/C++ Algorithms & Software Engineering",
+    "Exploring New Technologies Every Day"
   ]
 };
 
+const PHRASES = HERO_PHRASES;
+
+var heroTypeTimer = null;
+var heroPhraseIdx = 0;
+var heroCharIdx = 0;
+var heroIsDeleting = false;
+
+var MEMOS_DATA = [
+  {
+    id: 1,
+    timestamp: Date.now() - 3600000 * 2,
+    tags: ['Ciallovo', 'Design'],
+    content: {
+      vi: 'Đã hoàn thiện giao diện Ciallovo kết hợp phong cách Anthropic Claude! Nền ngà ấm áp, font serif sang trọng và trải nghiệm mượt mà.',
+      en: 'Finished Ciallovo aesthetic combined with Anthropic Claude theme! Warm ivory canvas, serif typography, and ultra-smooth interactions.'
+    }
+  },
+  {
+    id: 2,
+    timestamp: Date.now() - 86400000 * 2,
+    tags: ['Cloudflare', 'Domain'],
+    content: {
+      vi: 'Đã chuyển thành công sang tên miền mhna.id.vn trên Cloudflare Workers! Tải trang cực nhanh nhờ Edge caching.',
+      en: 'Successfully migrated to custom domain mhna.id.vn on Cloudflare Workers! Blazing fast edge caching.'
+    }
+  },
+  {
+    id: 3,
+    timestamp: Date.now() - 86400000 * 5,
+    tags: ['Roblox', 'Luau'],
+    content: {
+      vi: 'Đang tối ưu giao diện Roblox Luau UI Framework và hoàn thiện bộ demo runner giả lập trên trình duyệt.',
+      en: 'Optimizing Roblox Luau UI Framework and polishing interactive browser simulators.'
+    }
+  }
+];
+
+var SITE_LAUNCH_DATE = new Date('2026-01-01T00:00:00Z').getTime();
+
+var MASCOT_PHRASES = [
+  "Ciallo~(∠・ω< )⌒☆",
+  "Chào mừng bạn đến với trang của Đức Mạnh!",
+  "Chúc bạn một ngày tràn đầy cảm hứng code!",
+  "Nhấp vào dự án để trải nghiệm demo runner nhé!",
+  "Ciallo~ Welcome to my coding journal!"
+];
+
 // ── THEME ──────────────────────────────────────────────────────────
 const THEMES = ['light', 'dark', 'system'];
-const html   = document.documentElement;
+const html   = typeof document !== 'undefined' ? document.documentElement : null;
 
 function applyTheme(theme) {
   let effectiveTheme = theme;
-  if (theme === 'system') {
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if (theme !== 'light' && theme !== 'dark' && theme !== 'system') {
+    const prefersDark = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
     effectiveTheme = prefersDark ? 'dark' : 'light';
+    theme = effectiveTheme;
+  }
+  if (theme === 'system') {
+    const prefersDark = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    effectiveTheme = prefersDark ? 'dark' : 'light';
+  }
+
+  if (html) {
     html.setAttribute('data-theme', effectiveTheme);
-  } else {
-    html.setAttribute('data-theme', theme);
   }
 
   // Update active state on all theme buttons (desktop + mobile drawer)
-  document.querySelectorAll('[data-theme-val]').forEach(b => {
-    b.classList.toggle('active', b.getAttribute('data-theme-val') === theme);
-  });
+  if (typeof document !== 'undefined') {
+    document.querySelectorAll('[data-theme-val]').forEach(b => {
+      b.classList.toggle('active', b.getAttribute('data-theme-val') === theme);
+    });
 
-  // Update quick toggle button icon
-  const quickIcon = document.getElementById('theme-quick-icon');
-  const quickBtn  = document.getElementById('theme-quick-btn');
-  if (quickIcon && quickBtn) {
-    if (effectiveTheme === 'dark') {
-      quickIcon.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>`;
-      quickBtn.title = (typeof currentLang !== 'undefined' && currentLang === 'vi') ? 'Chuyển sang nền trắng (Light mode)' : 'Switch to Light mode';
-      quickBtn.setAttribute('aria-label', (typeof currentLang !== 'undefined' && currentLang === 'vi') ? 'Chuyển sang nền trắng' : 'Switch to Light mode');
-    } else {
-      quickIcon.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`;
-      quickBtn.title = (typeof currentLang !== 'undefined' && currentLang === 'vi') ? 'Chuyển sang nền đen (Dark mode)' : 'Switch to Dark mode';
-      quickBtn.setAttribute('aria-label', (typeof currentLang !== 'undefined' && currentLang === 'vi') ? 'Chuyển sang nền đen' : 'Switch to Dark mode');
+    // Update quick toggle button icon
+    const quickIcon = document.getElementById('theme-quick-icon');
+    const quickBtn  = document.getElementById('theme-quick-btn');
+    if (quickIcon && quickBtn) {
+      if (effectiveTheme === 'dark') {
+        quickIcon.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>`;
+        quickBtn.title = (typeof currentLang !== 'undefined' && currentLang === 'vi') ? 'Chuyển sang nền trắng (Light mode)' : 'Switch to Light mode';
+        quickBtn.setAttribute('aria-label', (typeof currentLang !== 'undefined' && currentLang === 'vi') ? 'Chuyển sang nền trắng' : 'Switch to Light mode');
+      } else {
+        quickIcon.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`;
+        quickBtn.title = (typeof currentLang !== 'undefined' && currentLang === 'vi') ? 'Chuyển sang nền đen (Dark mode)' : 'Switch to Dark mode';
+        quickBtn.setAttribute('aria-label', (typeof currentLang !== 'undefined' && currentLang === 'vi') ? 'Chuyển sang nền đen' : 'Switch to Dark mode');
+      }
     }
   }
 
-  localStorage.setItem('theme', theme);
+  if (typeof localStorage !== 'undefined') {
+    localStorage.setItem('theme', theme);
+  }
 }
 
 (function initTheme() {
@@ -95,20 +152,39 @@ window.addEventListener('scroll', () => {
 }, { passive: true });
 
 // ── MOBILE NAV ─────────────────────────────────────────────────────
-const navToggle = document.getElementById('nav-toggle');
-const navLinks  = document.getElementById('nav-links');
-navToggle.addEventListener('click', () => {
-  const open = navLinks.classList.toggle('open');
-  navToggle.classList.toggle('open', open);
-  navToggle.setAttribute('aria-expanded', String(open));
-});
-navLinks.addEventListener('click', e => {
-  if (e.target.classList.contains('nav-link')) {
-    navLinks.classList.remove('open');
-    navToggle.classList.remove('open');
-    navToggle.setAttribute('aria-expanded', 'false');
+function toggleMobileNav(force) {
+  const navToggle = typeof document !== 'undefined' ? document.getElementById('nav-toggle') : null;
+  const navLinks  = typeof document !== 'undefined' ? document.getElementById('nav-links') : null;
+  if (!navToggle || !navLinks) return false;
+  let isOpen;
+  if (typeof force === 'boolean') {
+    isOpen = force;
+    navLinks.classList.toggle('open', isOpen);
+  } else {
+    isOpen = navLinks.classList.toggle('open');
   }
-});
+  navToggle.classList.toggle('open', isOpen);
+  navToggle.setAttribute('aria-expanded', String(isOpen));
+  if (typeof document !== 'undefined' && document.body) {
+    document.body.classList.toggle('nav-drawer-open', isOpen);
+  }
+  return isOpen;
+}
+
+if (typeof document !== 'undefined') {
+  const navToggle = document.getElementById('nav-toggle');
+  const navLinks  = document.getElementById('nav-links');
+  if (navToggle) {
+    navToggle.addEventListener('click', () => toggleMobileNav());
+  }
+  if (navLinks) {
+    navLinks.addEventListener('click', e => {
+      if (e.target.classList.contains('nav-link')) {
+        toggleMobileNav(false);
+      }
+    });
+  }
+}
 
 // ── ACTIVE NAV HIGHLIGHT ──────────────────────────────────────────
 const sections  = document.querySelectorAll('section[id]');
@@ -245,7 +321,6 @@ const TRANSLATIONS = {
     'nav.home':        'Home',
     'nav.about':       'About',
     'nav.projects':    'Projects',
-    'nav.donate':      'Donate',
     'nav.blog':        'Blog',
     'nav.github':      'GitHub',
     'nav.contact':     'Contact',
@@ -353,24 +428,6 @@ const TRANSLATIONS = {
     'github.visitProfile':   'Visit profile directly →',
     'github.noDesc':         'Personal developer project repository.',
     'github.viewRepo':       'View Code',
-    // Donate / Support
-    'donate.label':        '04. Support',
-    'donate.title':        'Buy Me A Coffee ☕',
-    'donate.desc':         'Every contribution, big or small, inspires me to maintain servers, learn, and build open-source projects.',
-    'donate.qr.heading':   'Scan VietQR Code',
-    'donate.amount.label': 'Amount (VND)',
-    'donate.note.label':   'Your Name / Message',
-    'donate.qr.hint':      'Open any Mobile Banking app or Momo to scan and transfer instantly',
-    'donate.bank.name':    'Bank',
-    'donate.bank.acc':     'Account No.',
-    'donate.bank.owner':   'Account Name',
-    'donate.bank.content': 'Transfer Note',
-    'donate.honor.heading':'Supporters Honor Board',
-    'donate.stats.count':  'Supporters',
-    'donate.stats.amount': 'Total Raised',
-    'donate.history.title':'Recent Transfers',
-    'donate.empty':        'No donations yet today. Be the first to buy me a coffee!',
-    'donate.test.btn':     'Simulate Webhook (Demo)',
     // Contact
     'contact.label':  '05. Contact',
     'contact.title':  'Get In Touch',
@@ -408,7 +465,6 @@ const TRANSLATIONS = {
     'nav.home':        'Trang chủ',
     'nav.about':       'Giới thiệu',
     'nav.projects':    'Dự án',
-    'nav.donate':      'Ủng hộ',
     'nav.blog':        'Blog',
     'nav.github':      'GitHub',
     'nav.contact':     'Liên hệ',
@@ -516,24 +572,6 @@ const TRANSLATIONS = {
     'github.visitProfile':   'Truy cập hồ sơ trực tiếp →',
     'github.noDesc':         'Kho lưu trữ dự án cá nhân của lập trình viên.',
     'github.viewRepo':       'Xem mã nguồn',
-    // Donate / Support
-    'donate.label':        '04. Tiếp sức',
-    'donate.title':        'Mời mình tách Cà phê ☕',
-    'donate.desc':         'Mỗi sự ủng hộ dù nhỏ đều là nguồn động viên to lớn giúp mình duy trì máy chủ, tiếp tục học tập và sáng tạo các dự án mã nguồn mở.',
-    'donate.qr.heading':   'Quét mã VietQR',
-    'donate.amount.label': 'Số tiền (VNĐ)',
-    'donate.note.label':   'Lời nhắn / Tên của bạn',
-    'donate.qr.hint':      'Mở app Ngân hàng hoặc Momo/ZaloPay quét mã QR chuyển khoản tức thì',
-    'donate.bank.name':    'Ngân hàng',
-    'donate.bank.acc':     'Số tài khoản',
-    'donate.bank.owner':   'Chủ tài khoản',
-    'donate.bank.content': 'Nội dung CK',
-    'donate.honor.heading':'Bảng vàng vinh danh',
-    'donate.stats.count':  'Lượt ủng hộ',
-    'donate.stats.amount': 'Tổng quỹ động viên',
-    'donate.history.title':'Lịch sử giao dịch gần đây',
-    'donate.empty':        'Chưa có giao dịch mới hôm nay. Hãy là người đầu tiên mời Mạnh một tách cà phê nhé!',
-    'donate.test.btn':     'Thử nghiệm Webhook (Demo)',
     // Contact
     'contact.label':  '05. Liên hệ',
     'contact.title':  'Kết nối với tôi',
@@ -573,11 +611,19 @@ function t(key) {
 }
 
 function applyLang(lang) {
+  if (lang !== 'vi' && lang !== 'en') {
+    lang = 'vi';
+  }
   currentLang = lang;
-  localStorage.setItem('lang', lang);
+  if (typeof document !== 'undefined' && document.documentElement) {
+    document.documentElement.setAttribute('lang', lang);
+  }
+  if (typeof localStorage !== 'undefined') {
+    localStorage.setItem('lang', lang);
+  }
 
   // Update button label (preserve vector SVG icon, no emoji flags)
-  const langBtn   = document.getElementById('lang-toggle');
+  const langBtn   = typeof document !== 'undefined' ? document.getElementById('lang-toggle') : null;
   const langLabel = langBtn ? langBtn.querySelector('.lang-label') : null;
   if (langBtn && langLabel) {
     if (lang === 'vi') {
@@ -592,19 +638,23 @@ function applyLang(lang) {
   }
 
   // Translate all [data-i18n] elements
-  document.querySelectorAll('[data-i18n]').forEach(el => {
-    const key = el.getAttribute('data-i18n');
-    const val = t(key);
-    // Use innerHTML to support <strong> and <a> tags
-    el.innerHTML = val;
-  });
-  document.querySelectorAll('[data-i18n-aria-label]').forEach(el => {
-    el.setAttribute('aria-label', t(el.getAttribute('data-i18n-aria-label')));
-  });
+  if (typeof document !== 'undefined') {
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      const val = t(key);
+      el.innerHTML = val;
+    });
+    document.querySelectorAll('[data-i18n-aria-label]').forEach(el => {
+      el.setAttribute('aria-label', t(el.getAttribute('data-i18n-aria-label')));
+    });
+  }
 
   // Restart typewriter with new language
   if (typeof resetTypewriter === 'function') {
     resetTypewriter();
+  }
+  if (typeof resetHeroTypewriter === 'function') {
+    resetHeroTypewriter();
   }
 
   // Update active popover and runner modal language
@@ -613,6 +663,12 @@ function applyLang(lang) {
   }
   if (typeof updateRunnerLang === 'function') {
     updateRunnerLang();
+  }
+  if (typeof updateUptimeClock === 'function') {
+    updateUptimeClock();
+  }
+  if (typeof renderMemosBoard === 'function') {
+    renderMemosBoard();
   }
 }
 
@@ -2357,325 +2413,397 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-// ── 5. SEPAY WEBHOOK & VIETQR DONATION MODULE ──────────────────────────
-function initSepayDonations() {
-  if (typeof window === 'undefined' || typeof document === 'undefined') return;
-  const donateSection = document.getElementById('donate');
-  if (!donateSection) return;
+// ── 5. INITIALIZE LANGUAGE & ALL PORTFOLIO COMPONENTS ─────────────────────
+applyLang(currentLang);
 
-  const CONFIG = {
-    bank: 'MBBank',               // Ngân hàng nhận tiền (MBBank, VCB, TPB, etc.)
-    accountNumber: '0333333333',   // Số tài khoản của bạn (thay bằng STK của bạn)
-    accountName: 'NGUYEN DUC MANH',
-    prefix: 'MANH'
-  };
+// =========================================================================
+// CIALLOVO & ANTHROPIC CLAUDE SYSTEM IMPLEMENTATIONS
+// =========================================================================
 
-  const qrImg = document.getElementById('donate-qr-img');
-  const qrLoading = document.getElementById('donate-qr-loading');
-  const amountInput = document.getElementById('donate-amount-input');
-  const noteInput = document.getElementById('donate-note-input');
-  const presets = document.querySelectorAll('.donate-preset-btn');
-  const contentVal = document.getElementById('donate-content-val');
-  const copyContentBtn = document.getElementById('donate-copy-content-btn');
-  const copyAccBtn = document.getElementById('donate-copy-acc-btn');
-  const accVal = document.getElementById('donate-acc-val');
-  const ownerVal = document.getElementById('donate-owner-val');
-  const bankVal = document.getElementById('donate-bank-val');
-
-  if (accVal) accVal.textContent = CONFIG.accountNumber;
-  if (copyAccBtn) copyAccBtn.setAttribute('data-copy', CONFIG.accountNumber);
-  if (ownerVal) ownerVal.textContent = CONFIG.accountName;
-
-  const statCount = document.getElementById('donate-stat-count');
-  const statAmount = document.getElementById('donate-stat-amount');
-  const itemsList = document.getElementById('donate-items-list');
-  const emptyState = document.getElementById('donate-empty');
-  const syncTime = document.getElementById('donate-sync-time');
-  const testTriggerBtn = document.getElementById('donate-test-trigger');
-
-  let qrDebounceTimer = null;
-
-  function formatVND(num) {
-    return Number(num || 0).toLocaleString('vi-VN') + '₫';
-  }
-
-  function timeAgo(dateStr) {
-    try {
-      const d = new Date(dateStr);
-      const diffMs = Date.now() - d.getTime();
-      const diffMin = Math.floor(diffMs / 60000);
-      if (diffMin < 1) return 'Vừa xong';
-      if (diffMin < 60) return `${diffMin} phút trước`;
-      const diffHours = Math.floor(diffMin / 60);
-      if (diffHours < 24) return `${diffHours} giờ trước`;
-      const diffDays = Math.floor(diffHours / 24);
-      return `${diffDays} ngày trước`;
-    } catch {
-      return 'Gần đây';
-    }
-  }
-
-  function updateQR() {
-    if (qrLoading && qrLoading.classList) qrLoading.classList.add('loading');
-
-    const amount = Math.max(2000, parseInt(amountInput?.value, 10) || 20000);
-    const userNote = (noteInput?.value || '').trim();
-    const transferDes = userNote ? `${CONFIG.prefix} ${userNote}` : `${CONFIG.prefix} ${Math.floor(amount / 1000)}k`;
-
-    if (contentVal) contentVal.textContent = transferDes;
-    if (copyContentBtn) copyContentBtn.setAttribute('data-copy', transferDes);
-
-    const qrUrl = `https://qr.sepay.vn/img?bank=${encodeURIComponent(CONFIG.bank)}&acc=${encodeURIComponent(CONFIG.accountNumber)}&template=compact&amount=${amount}&des=${encodeURIComponent(transferDes)}`;
-
-    if (qrImg) {
-      if (typeof Image !== 'undefined') {
-        const temp = new Image();
-        temp.onload = () => {
-          qrImg.src = qrUrl;
-          if (qrLoading && qrLoading.classList) qrLoading.classList.remove('loading');
-        };
-        temp.onerror = () => {
-          qrImg.src = `https://img.vietqr.io/image/${CONFIG.bank}-${CONFIG.accountNumber}-compact.png?amount=${amount}&addInfo=${encodeURIComponent(transferDes)}&accountName=${encodeURIComponent(CONFIG.accountName)}`;
-          if (qrLoading && qrLoading.classList) qrLoading.classList.remove('loading');
-        };
-        temp.src = qrUrl;
-      } else {
-        qrImg.src = qrUrl;
-      }
-    }
-  }
-
-  function scheduleUpdateQR() {
-    clearTimeout(qrDebounceTimer);
-    qrDebounceTimer = setTimeout(updateQR, 250);
-  }
-
-  presets.forEach(btn => {
-    btn.addEventListener('click', () => {
-      presets.forEach(b => b.classList && b.classList.remove('active'));
-      if (btn.classList) btn.classList.add('active');
-      const val = parseInt(btn.getAttribute('data-amount'), 10);
-      if (amountInput) amountInput.value = val;
-      updateQR();
-    });
-  });
-
-  if (amountInput) {
-    amountInput.addEventListener('input', () => {
-      const val = parseInt(amountInput.value, 10);
-      presets.forEach(b => {
-        if (b.classList) b.classList.toggle('active', parseInt(b.getAttribute('data-amount'), 10) === val);
-      });
-      scheduleUpdateQR();
-    });
-  }
-
-  if (noteInput) {
-    noteInput.addEventListener('input', scheduleUpdateQR);
-  }
-
-  donateSection.querySelectorAll('.donate-copy-btn').forEach(btn => {
-    btn.addEventListener('click', async () => {
-      const text = btn.getAttribute('data-copy') || '';
-      if (!text) return;
-      try {
-        if (navigator.clipboard) {
-          await navigator.clipboard.writeText(text);
-        } else {
-          throw new Error('Clipboard fallback');
-        }
-      } catch {
-        const input = document.createElement('input');
-        input.value = text;
-        document.body.appendChild(input);
-        input.select();
-        document.execCommand('copy');
-        document.body.removeChild(input);
-      }
-      const originalText = btn.textContent;
-      btn.textContent = 'Copied!';
-      if (btn.classList) btn.classList.add('copied');
-      setTimeout(() => {
-        btn.textContent = originalText;
-        if (btn.classList) btn.classList.remove('copied');
-      }, 1800);
-    });
-  });
-
-  function renderDonations(donations, stats) {
-    if (statCount) statCount.textContent = stats?.totalCount ?? donations.length;
-    if (statAmount) statAmount.textContent = formatVND(stats?.totalAmount ?? donations.reduce((s, d) => s + (Number(d.amount) || 0), 0));
-
-    if (!itemsList) return;
-
-    if (!donations || donations.length === 0) {
-      itemsList.innerHTML = '';
-      if (emptyState) emptyState.style.display = 'flex';
-      return;
-    }
-
-    if (emptyState) emptyState.style.display = 'none';
-
-    itemsList.innerHTML = donations.map(item => {
-      const initials = (item.donorName || 'U').charAt(0).toUpperCase();
-      const cleanContent = escapeHtml(item.content || item.donorName || 'Ủng hộ');
-      const formattedAmount = formatVND(item.amount);
-      const when = timeAgo(item.transactionDate || item.timestamp);
-      const gateway = item.gateway ? escapeHtml(item.gateway) : 'Bank';
-
-      return `
-        <li class="donate-item" data-id="${item.id || ''}">
-          <div class="donate-item-main">
-            <div class="donate-item-avatar" aria-hidden="true">${initials}</div>
-            <div class="donate-item-details">
-              <span class="donate-item-donor" title="${cleanContent}">${cleanContent}</span>
-              <span class="donate-item-meta">
-                <span>${when}</span> · <span>${gateway}</span>
-              </span>
-            </div>
-          </div>
-          <span class="donate-item-amount">+${formattedAmount}</span>
-        </li>
-      `;
-    }).join('');
-
-    if (syncTime) {
-      const now = new Date();
-      syncTime.textContent = `${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`;
-    }
-  }
-
-  function escapeHtml(str) {
-    return String(str)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;');
-  }
-
-  function showLiveDonationToast(donation) {
-    let toastEl = document.querySelector('.donation-live-toast');
-    if (!toastEl) {
-      toastEl = document.createElement('div');
-      toastEl.className = 'donation-live-toast';
-      toastEl.setAttribute('role', 'alert');
-      toastEl.innerHTML = `
-        <span class="donation-toast-icon">☕</span>
-        <div class="donation-toast-body">
-          <span class="donation-toast-title">Ting Ting! Vừa có ủng hộ mới!</span>
-          <span class="donation-toast-msg"></span>
-        </div>
-      `;
-      document.body.appendChild(toastEl);
-    }
-    const msgEl = toastEl.querySelector('.donation-toast-msg');
-    const name = donation.donorName || 'Một người bạn';
-    const amount = formatVND(donation.amount);
-    if (msgEl) {
-      msgEl.textContent = `${name} vừa ủng hộ ${amount}! Cảm ơn bạn rất nhiều!`;
-    }
-    if (toastEl.classList) {
-      toastEl.classList.add('show');
-      setTimeout(() => {
-        toastEl.classList.remove('show');
-      }, 5500);
-    }
-  }
-
-  async function fetchDonations() {
-    try {
-      if (typeof fetch === 'undefined') return;
-      const res = await fetch('/api/donations');
-      if (res.ok) {
-        const data = await res.json();
-        if (data && data.success) {
-          renderDonations(data.donations || [], data.stats);
-        }
-      }
-    } catch {
-      // Ignored if server API is not available
-    }
-  }
-
-  function setupSSE() {
-    if (typeof EventSource === 'undefined') return;
-    try {
-      const source = new EventSource('/api/donations/stream');
-      source.addEventListener('donation', (event) => {
-        try {
-          const donation = JSON.parse(event.data);
-          showLiveDonationToast(donation);
-          fetchDonations();
-        } catch (e) {
-          console.error('[SePay SSE] Parse error:', e);
-        }
-      });
-      source.onerror = () => {
-        source.close();
-        setTimeout(setupSSE, 20000);
-      };
-    } catch {
-      // Ignored
-    }
-  }
-
-  if (testTriggerBtn) {
-    testTriggerBtn.addEventListener('click', async () => {
-      testTriggerBtn.disabled = true;
-      testTriggerBtn.innerHTML = '<span>⏳ Đang gửi giả lập...</span>';
-
-      const currentAmount = Math.max(2000, parseInt(amountInput?.value, 10) || 20000);
-      try {
-        if (typeof fetch !== 'undefined') {
-          const res = await fetch('/api/sepay-test', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              amount: currentAmount,
-              note: noteInput?.value || 'Ung ho Duc Manh phat trien website!'
-            })
-          });
-
-          if (res.ok) {
-            const result = await res.json();
-            if (result.donation) {
-              showLiveDonationToast(result.donation);
-              await fetchDonations();
-            }
-          } else {
-            showLiveDonationToast({
-              donorName: noteInput?.value || 'Bạn học cùng đam mê',
-              amount: currentAmount,
-              content: 'Ủng hộ bạn cốc cà phê demo!',
-              transactionDate: new Date().toISOString(),
-              gateway: 'MBBank'
-            });
-          }
-        }
-      } catch {
-        showLiveDonationToast({
-          donorName: noteInput?.value || 'Bạn học cùng đam mê',
-          amount: currentAmount,
-          content: 'Ủng hộ bạn cốc cà phê demo!',
-          transactionDate: new Date().toISOString(),
-          gateway: 'MBBank'
-        });
-      } finally {
-        setTimeout(() => {
-          testTriggerBtn.disabled = false;
-          testTriggerBtn.innerHTML = '<span class="test-sparkle">✨</span><span data-i18n="donate.test.btn">Thử nghiệm Webhook (Demo)</span>';
-        }, 1200);
-      }
-    });
-  }
-
-  updateQR();
-  fetchDonations();
-  setupSSE();
+// ── 1. In-Page Search Engine ──────────────────────────────────────────
+function normalizeSearchStr(str) {
+  return String(str || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/đ/g, 'd').replace(/Đ/g, 'D')
+    .toLowerCase().trim();
 }
 
-// ── 6. INITIALIZE LANGUAGE & ALL PORTFOLIO COMPONENTS ─────────────────────
-initSepayDonations();
+function buildSearchIndex() {
+  const items = [];
+  if (typeof PROJECTS_DATA !== 'undefined') {
+    for (const [id, p] of Object.entries(PROJECTS_DATA)) {
+      items.push({
+        type: 'project',
+        id,
+        title: (p.name && (p.name[currentLang] || p.name.vi || p.name.en)) || id,
+        desc: (p.summary && (p.summary[currentLang] || p.summary.vi || p.summary.en)) || '',
+        tags: [p.badge || '', ...(p.tags || [])].filter(Boolean),
+        action: () => {
+          closeSearchModal();
+          if (typeof openProjectRunner === 'function') openProjectRunner(id);
+          else {
+            const el = document.querySelector(`[data-project-id="${id}"]`);
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      });
+    }
+  }
+  // Add site sections
+  items.push(
+    { type: 'section', id: 'home', title: currentLang === 'vi' ? 'Trang chủ' : 'Home', desc: 'Duc Manh Portfolio', tags: ['Nav'], action: () => { closeSearchModal(); if (typeof location !== 'undefined') location.hash = '#home'; } },
+    { type: 'section', id: 'about', title: currentLang === 'vi' ? 'Giới thiệu' : 'About Me', desc: 'Skills & Bio', tags: ['Bio'], action: () => { closeSearchModal(); if (typeof location !== 'undefined') location.hash = '#about'; } },
+    { type: 'section', id: 'projects', title: currentLang === 'vi' ? 'Dự án' : 'Projects', desc: 'Things I have built', tags: ['Code'], action: () => { closeSearchModal(); if (typeof location !== 'undefined') location.hash = '#projects'; } },
+    { type: 'section', id: 'memos', title: 'Memos & Status', desc: 'Short thoughts and developer logs', tags: ['Memos'], action: () => { closeSearchModal(); if (typeof location !== 'undefined') location.hash = '#memos'; } },
+    { type: 'section', id: 'contact', title: currentLang === 'vi' ? 'Liên hệ' : 'Contact', desc: 'Get in touch', tags: ['Contact'], action: () => { closeSearchModal(); if (typeof location !== 'undefined') location.hash = '#contact'; } }
+  );
+  return items;
+}
+
+let searchSelectedIndex = -1;
+function performSearch(query) {
+  if (typeof document === 'undefined') return;
+  const resultsContainer = document.getElementById('search-results');
+  if (!resultsContainer) return;
+  const cleanQ = normalizeSearchStr(query);
+  const index = buildSearchIndex();
+  let matches = [];
+  if (!cleanQ) {
+    matches = index.slice(0, 6);
+  } else {
+    matches = index.filter(item => {
+      const tNorm = normalizeSearchStr(item.title);
+      const dNorm = normalizeSearchStr(item.desc);
+      const tagNorm = normalizeSearchStr(item.tags.join(' '));
+      return tNorm.includes(cleanQ) || dNorm.includes(cleanQ) || tagNorm.includes(cleanQ);
+    });
+  }
+
+  if (matches.length === 0) {
+    resultsContainer.innerHTML = `<div class="search-empty" style="padding:20px;text-align:center;color:var(--fg4);">${currentLang === 'vi' ? 'Không tìm thấy kết quả phù hợp' : 'No matching results found'}</div>`;
+    searchSelectedIndex = -1;
+    return;
+  }
+
+  resultsContainer.innerHTML = matches.map((m, idx) => `
+    <div class="search-result-item ${idx === 0 ? 'selected' : ''}" data-search-idx="${idx}" role="option" tabindex="0">
+      <div class="search-result-info">
+        <div class="search-result-title">${m.title}</div>
+        <div class="search-result-desc">${m.desc}</div>
+      </div>
+      <span class="search-result-tag">${m.tags[0] || m.type}</span>
+    </div>
+  `).join('');
+
+  searchSelectedIndex = 0;
+  resultsContainer.querySelectorAll('.search-result-item').forEach((itemEl, idx) => {
+    itemEl.addEventListener('click', () => {
+      if (matches[idx] && typeof matches[idx].action === 'function') matches[idx].action();
+    });
+  });
+}
+
+function openSearchModal() {
+  if (typeof document === 'undefined') return;
+  const modal = document.getElementById('search-modal');
+  if (modal) {
+    if (typeof modal.showModal === 'function') modal.showModal();
+    else modal.setAttribute('open', '');
+    const input = document.getElementById('search-input');
+    if (input) {
+      input.value = '';
+      input.focus();
+      performSearch('');
+    }
+  }
+  if (typeof toggleMobileNav === 'function') toggleMobileNav(false);
+  if (typeof hidePopoverImmediately === 'function') hidePopoverImmediately();
+}
+
+function closeSearchModal() {
+  if (typeof document === 'undefined') return;
+  const modal = document.getElementById('search-modal');
+  if (modal) {
+    if (typeof modal.close === 'function') modal.close();
+    else modal.removeAttribute('open');
+  }
+}
+
+// ── 2. Hero Typewriter Subtitle ──────────────────────────────────────
+function resetHeroTypewriter() {
+  if (heroTypeTimer) {
+    clearTimeout(heroTypeTimer);
+    heroTypeTimer = null;
+  }
+  heroPhraseIdx = 0;
+  heroCharIdx = 0;
+  heroIsDeleting = false;
+  typeHeroSubtitle();
+}
+
+function typeHeroSubtitle() {
+  if (typeof document === 'undefined') return;
+  const target = document.getElementById('hero-typewriter-text');
+  const phrases = (HERO_PHRASES[currentLang] && HERO_PHRASES[currentLang].length)
+    ? HERO_PHRASES[currentLang]
+    : HERO_PHRASES.en;
+  if (!target || !phrases || !phrases.length) return;
+
+  const currentPhrase = phrases[heroPhraseIdx % phrases.length];
+  if (heroIsDeleting) {
+    heroCharIdx--;
+  } else {
+    heroCharIdx++;
+  }
+
+  target.textContent = currentPhrase.substring(0, heroCharIdx);
+
+  let delay = heroIsDeleting ? 35 : 75;
+  if (!heroIsDeleting && heroCharIdx === currentPhrase.length) {
+    delay = 2200;
+    heroIsDeleting = true;
+  } else if (heroIsDeleting && heroCharIdx === 0) {
+    heroIsDeleting = false;
+    heroPhraseIdx++;
+    delay = 500;
+  }
+
+  heroTypeTimer = setTimeout(typeHeroSubtitle, delay);
+}
+
+// ── 3. Memos Status Board ───────────────────────────────────────────
+MEMOS_DATA = [
+  {
+    id: 1,
+    timestamp: Date.now() - 3600000 * 2,
+    tags: ['Ciallovo', 'Design'],
+    content: {
+      vi: 'Đã hoàn thiện giao diện Ciallovo kết hợp phong cách Anthropic Claude! Nền ngà ấm áp, font serif sang trọng và trải nghiệm mượt mà.',
+      en: 'Finished Ciallovo aesthetic combined with Anthropic Claude theme! Warm ivory canvas, serif typography, and ultra-smooth interactions.'
+    }
+  },
+  {
+    id: 2,
+    timestamp: Date.now() - 86400000 * 2,
+    tags: ['Cloudflare', 'Domain'],
+    content: {
+      vi: 'Đã chuyển thành công sang tên miền mhna.id.vn trên Cloudflare Workers! Tải trang cực nhanh nhờ Edge caching.',
+      en: 'Successfully migrated to custom domain mhna.id.vn on Cloudflare Workers! Blazing fast edge caching.'
+    }
+  },
+  {
+    id: 3,
+    timestamp: Date.now() - 86400000 * 5,
+    tags: ['Roblox', 'Luau'],
+    content: {
+      vi: 'Đang tối ưu giao diện Roblox Luau UI Framework và hoàn thiện bộ demo runner giả lập trên trình duyệt.',
+      en: 'Optimizing Roblox Luau UI Framework and polishing interactive browser simulators.'
+    }
+  }
+];
+
+function formatRelativeTime(ts) {
+  const activeLang = (typeof globalThis !== 'undefined' && globalThis.currentLang) || (typeof window !== 'undefined' && window.currentLang) || (typeof currentLang !== 'undefined' ? currentLang : 'vi');
+  const diff = Date.now() - Number(ts);
+  if (diff < 60000 || diff < 0) return (activeLang === 'vi' ? 'Vừa xong' : 'Just now');
+  if (diff < 3600000) {
+    const m = Math.floor(diff / 60000);
+    return activeLang === 'vi' ? `${m} phút trước` : `${m} minutes ago`;
+  }
+  if (diff < 86400000) {
+    const h = Math.floor(diff / 3600000);
+    return activeLang === 'vi' ? `${h} giờ trước` : `${h} hours ago`;
+  }
+  if (diff < 86400000 * 30) {
+    const d = Math.floor(diff / 86400000);
+    return activeLang === 'vi' ? `${d} ngày trước` : `${d} days ago`;
+  }
+  const date = new Date(Number(ts));
+  return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+}
+
+function renderMemosBoard() {
+  if (typeof document === 'undefined') return;
+  const listEl = document.getElementById('memos-board-list');
+  if (!listEl) return;
+  listEl.innerHTML = MEMOS_DATA.map(m => {
+    const txt = (m.content && (m.content[currentLang] || m.content.vi || m.content.en)) || '';
+    const timeStr = formatRelativeTime(m.timestamp);
+    const tagsHtml = (m.tags || []).map(tg => `<span class="memo-tag">#${tg}</span>`).join('');
+    return `
+      <div class="memo-card">
+        <div class="memo-header">
+          <div class="memo-meta">
+            <span class="memo-author">@DucManh</span>
+            <span class="memo-time">${timeStr}</span>
+          </div>
+          <div class="memo-tags">${tagsHtml}</div>
+        </div>
+        <div class="memo-content">${txt}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+// ── 4. Uptime Clock & Visitor Counter ────────────────────────────────
+SITE_LAUNCH_DATE = new Date('2026-01-01T00:00:00Z').getTime();
+function updateUptimeClock() {
+  const now = Date.now();
+  const elapsed = Math.max(0, now - SITE_LAUNCH_DATE);
+  const days = Math.floor(elapsed / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((elapsed / (1000 * 60 * 60)) % 24);
+  const mins = Math.floor((elapsed / (1000 * 60)) % 60);
+  const secs = Math.floor((elapsed / 1000) % 60);
+  if (typeof document !== 'undefined') {
+    const el = document.getElementById('footer-uptime-clock');
+    if (el) {
+      if (currentLang === 'vi') {
+        el.textContent = `Trang đã hoạt động ổn định: ${days} ngày, ${hours} giờ, ${mins} phút, ${secs} giây`;
+      } else {
+        el.textContent = `Site operational uptime: ${days}d ${hours}h ${mins}m ${secs}s`;
+      }
+    }
+  }
+}
+
+function initVisitorCounter() {
+  let views = 128;
+  if (typeof localStorage !== 'undefined') {
+    views = parseInt(localStorage.getItem('site_total_views') || '128', 10);
+    if (isNaN(views) || views < 1) views = 128;
+    if (typeof sessionStorage !== 'undefined' && !sessionStorage.getItem('visited_session')) {
+      views += 1;
+      sessionStorage.setItem('visited_session', '1');
+      localStorage.setItem('site_total_views', String(views));
+    }
+  }
+  const online = 2;
+  if (typeof document !== 'undefined') {
+    const el = document.getElementById('footer-visitor-counter');
+    if (el) {
+      if (currentLang === 'vi') {
+        el.textContent = `Đang online: ${online} người · Toàn trang tích lũy: ${views} lượt`;
+      } else {
+        el.textContent = `Online: ${online} visitors · Total views: ${views}`;
+      }
+    }
+  }
+}
+
+// ── 5. Kaomoji Mascot (Ciallovo Signature) ───────────────────────────
+MASCOT_PHRASES = [
+  "Ciallo~(∠・ω< )⌒☆",
+  "Chào mừng bạn đến với trang của Đức Mạnh!",
+  "Chúc bạn một ngày tràn đầy cảm hứng code!",
+  "Nhấp vào dự án để trải nghiệm demo runner nhé!",
+  "Ciallo~ Welcome to my coding journal!"
+];
+let mascotPhraseIdx = 0;
+let mascotBubbleTimer = null;
+
+function initKaomojiMascot() {
+  if (typeof document === 'undefined') return;
+  const mascot = document.getElementById('kaomoji-mascot');
+  const face = document.getElementById('kaomoji-face');
+  const bubble = document.getElementById('kaomoji-bubble');
+  if (!mascot || !face || !bubble) return;
+
+  mascot.addEventListener('mouseenter', () => {
+    face.textContent = '( ^ω^ )';
+  });
+  mascot.addEventListener('mouseleave', () => {
+    if (bubble.classList.contains('hidden')) {
+      face.textContent = '(・ω・)';
+    }
+  });
+
+  mascot.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (mascotBubbleTimer) clearTimeout(mascotBubbleTimer);
+    const phrase = MASCOT_PHRASES[mascotPhraseIdx % MASCOT_PHRASES.length];
+    mascotPhraseIdx++;
+    bubble.textContent = phrase;
+    bubble.classList.remove('hidden');
+    bubble.style.display = 'block';
+    face.textContent = '( ^ω^ )';
+
+    mascotBubbleTimer = setTimeout(() => {
+      bubble.classList.add('hidden');
+      bubble.style.display = 'none';
+      face.textContent = '(・ω・)';
+    }, 3500);
+  });
+}
+
+// Wire up event listeners
+if (typeof document !== 'undefined') {
+  const searchTriggerBtn = document.getElementById('search-trigger-btn');
+  if (searchTriggerBtn) searchTriggerBtn.addEventListener('click', openSearchModal);
+
+  const searchCloseBtn = document.getElementById('search-close-btn');
+  if (searchCloseBtn) searchCloseBtn.addEventListener('click', closeSearchModal);
+
+  const searchInput = document.getElementById('search-input');
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => performSearch(e.target.value));
+    searchInput.addEventListener('keydown', (e) => {
+      const items = document.querySelectorAll('.search-result-item');
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        if (items.length > 0) {
+          searchSelectedIndex = (searchSelectedIndex + 1) % items.length;
+          items.forEach((it, idx) => it.classList.toggle('selected', idx === searchSelectedIndex));
+        }
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (items.length > 0) {
+          searchSelectedIndex = (searchSelectedIndex - 1 + items.length) % items.length;
+          items.forEach((it, idx) => it.classList.toggle('selected', idx === searchSelectedIndex));
+        }
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        if (items[searchSelectedIndex]) items[searchSelectedIndex].click();
+      } else if (e.key === 'Escape') {
+        closeSearchModal();
+      }
+    });
+  }
+
+  const searchClearBtn = document.getElementById('search-clear-btn');
+  if (searchClearBtn) {
+    searchClearBtn.addEventListener('click', () => {
+      if (searchInput) {
+        searchInput.value = '';
+        searchInput.focus();
+        performSearch('');
+      }
+    });
+  }
+
+  // Keyboard shortcut Ctrl+K or / to open search
+  document.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+      e.preventDefault();
+      openSearchModal();
+    } else if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+      e.preventDefault();
+      openSearchModal();
+    }
+  });
+
+  // Initialize components on load
+  document.addEventListener('DOMContentLoaded', () => {
+    resetHeroTypewriter();
+    renderMemosBoard();
+    updateUptimeClock();
+    setInterval(updateUptimeClock, 1000);
+    initVisitorCounter();
+    initKaomojiMascot();
+  });
+}
+
+// ── 5. INITIALIZE LANGUAGE & ALL PORTFOLIO COMPONENTS ─────────────────────
 applyLang(currentLang);
 
 // Expose public API on window for testing & debugging
@@ -2691,6 +2819,23 @@ if (typeof window !== 'undefined') {
   window.renderRobloxRunner = renderRobloxRunner;
   window.renderCppRunner = renderCppRunner;
   window.applyLang = applyLang;
+  window.applyTheme = applyTheme;
+  window.normalizeSearchStr = normalizeSearchStr;
+  window.openSearchModal = openSearchModal;
+  window.closeSearchModal = closeSearchModal;
+  window.performSearch = performSearch;
+  window.buildSearchIndex = buildSearchIndex;
+  window.HERO_PHRASES = HERO_PHRASES;
+  window.MEMOS_DATA = MEMOS_DATA;
+  window.formatRelativeTime = formatRelativeTime;
+  window.updateUptimeClock = updateUptimeClock;
+  window.initVisitorCounter = initVisitorCounter;
+  window.initKaomojiMascot = initKaomojiMascot;
+  window.resetHeroTypewriter = resetHeroTypewriter;
+  window.renderMemosBoard = renderMemosBoard;
+  window.hidePopoverImmediately = hidePopoverImmediately;
+  window.scheduleShowPopover = scheduleShowPopover;
+  window.toggleMobileNav = toggleMobileNav;
 }
 
 

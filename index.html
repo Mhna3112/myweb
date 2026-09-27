@@ -70,11 +70,25 @@
   }
   </script>
 
+  <script>
+    (function() {
+      try {
+        var t = localStorage.getItem('theme');
+        if (!t || (t !== 'light' && t !== 'dark')) {
+          t = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    })();
+  </script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,400;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,400;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" />
-  <link rel="stylesheet" href="style.css?v=3.3" />
+  <link rel="stylesheet" href="style.css?v=3.4" />
 </head>
 <body>
   <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -89,7 +103,6 @@
         <li><a href="#home"     class="nav-link" data-i18n="nav.home">Home</a></li>
         <li><a href="#about"    class="nav-link" data-i18n="nav.about">About</a></li>
         <li><a href="#projects" class="nav-link" data-i18n="nav.projects">Projects</a></li>
-        <li><a href="donate/"   class="nav-link" data-i18n="nav.donate">Donate ↗</a></li>
         <li><a href="#contact"  class="nav-link" data-i18n="nav.contact">Contact</a></li>
         <li class="mobile-theme-menu">
           <div class="mobile-theme-title" data-i18n="nav.theme_title">GIAO DIỆN</div>
@@ -116,11 +129,10 @@
         </li>
       </ul>
       <div class="nav-actions">
-        <a href="donate/" class="donate-nav-pill" title="Ủng hộ cà phê" aria-label="Ủng hộ cà phê">
-          <span class="donate-pill-icon">☕</span>
-          <span class="donate-pill-text" data-i18n="nav.donate">Donate</span>
-        </a>
-        <button class="theme-quick-btn" id="theme-quick-btn" aria-label="Đổi nền sáng/tối" title="Đổi nền trắng / đen">
+        <button class="search-trigger-btn search-trigger" id="search-trigger-btn" aria-label="Tìm kiếm dự án (Search)" title="Tìm kiếm (Ctrl+K)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </button>
+        <button class="theme-quick-btn theme-toggle" id="theme-quick-btn" aria-label="Đổi nền sáng/tối" title="Đổi nền trắng / đen">
           <span class="theme-quick-icon" id="theme-quick-icon">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
           </span>
@@ -147,7 +159,7 @@
     </nav>
   </header>
   <main id="main-content">
-    <section id="home" class="section hero-section">
+    <section id="home" class="section hero-section index-hero">
       <div class="hero-bg-grid" aria-hidden="true"></div>
       <div class="container hero-container">
         <div class="hero-text">
@@ -158,10 +170,10 @@
             </div>
             <div class="hero-badge"><span class="badge-dot"></span><span data-i18n="hero.badge">Open to learning &amp; collaboration</span></div>
           </div>
-          <h1 class="hero-title"><span id="typewriter"></span><span class="cursor" aria-hidden="true">|</span></h1>
+          <h1 class="hero-title"><span class="hero-greeting">Hi, I'm Duc Manh</span><span class="hero-pipe"> | </span><span id="hero-typewriter-text" class="typewriter-text"></span><span id="typewriter" class="hidden"></span><span class="cursor" aria-hidden="true">|</span></h1>
           <p class="hero-sub" data-i18n="hero.sub">I am passionate about <strong>learning programming</strong> and building projects. I enjoy exploring new technologies, improving my coding skills, and documenting my learning journey — one commit at a time.</p>
           <div class="hero-cta">
-            <a href="#about"    class="btn btn-primary"  data-i18n="hero.cta.about">About Me</a>
+            <a href="#about"    class="btn btn-primary"  data-i18n="hero.cta.about">Về tôi &gt;</a>
             <a href="#projects" class="btn btn-outline"  data-i18n="hero.cta.projects">My Projects</a>
             <a href="mailto:manhntp22@gmail.com?subject=Duc%20Manh%20CV%20Request" class="btn btn-outline btn-cv" id="hero-cv-btn" title="Liên hệ nhận CV / Request CV">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
@@ -290,7 +302,7 @@ one line at a time"</span></code></pre>
           <h2 class="section-title" data-i18n="projects.title">Things I've Built</h2>
           <p class="section-desc" data-i18n="projects.desc">A collection of personal projects I've built while learning to code.</p>
         </div>
-        <div class="projects-grid" id="projects-grid">
+        <div class="projects-grid posts-container" id="posts-container">
           <!-- 1. MediaHub Downloader (Mhnaproject1) -->
           <article class="project-card project-card--linked project-card--live reveal" data-project-id="mediahub">
             <div class="project-card-header">
@@ -466,6 +478,18 @@ int main() {
       </div>
     </section>
 
+    <!-- 04. Memos / Status Updates (Ciallovo Architecture) -->
+    <section id="memos" class="section index-memo-zone">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label" data-i18n="memos.label">04. Memos</span>
+          <h2 class="section-title" data-i18n="memos.title">Memos &amp; Status</h2>
+          <p class="section-desc" data-i18n="memos.desc">Nhật ký ngắn, suy nghĩ kỹ thuật và cập nhật hành trình lập trình.</p>
+        </div>
+        <div id="memos-board-list" class="memos-container memos-board-list"></div>
+      </div>
+    </section>
+
     <section id="contact" class="section contact-section">
       <div class="container">
         <div class="section-header">
@@ -582,15 +606,46 @@ int main() {
     </div>
   </dialog>
 
+  <!-- In-Page Search Modal (Ciallovo Architecture) -->
+  <dialog id="search-modal" class="search-modal" aria-labelledby="search-modal-title">
+    <div class="search-modal-content">
+      <div class="search-modal-header">
+        <div class="search-input-wrapper">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="search" id="search-input" placeholder="Tìm kiếm dự án, công nghệ, bài viết..." autocomplete="off" spellcheck="false" />
+          <button type="button" id="search-clear-btn" class="search-clear-btn" aria-label="Xóa tìm kiếm">&times;</button>
+        </div>
+        <button type="button" id="search-close-btn" class="search-close-btn" aria-label="Đóng">&times;</button>
+      </div>
+      <div id="search-results" class="search-results" role="listbox"></div>
+      <div class="search-modal-footer">
+        <span class="search-hint"><kbd>↑</kbd> <kbd>↓</kbd> để di chuyển, <kbd>Enter</kbd> để mở, <kbd>ESC</kbd> để đóng</span>
+      </div>
+    </div>
+  </dialog>
+
   <footer class="footer" role="contentinfo">
     <div class="container footer-inner">
+      <div class="footer-uptime">
+        <span class="status-dot"></span>
+        <span id="footer-uptime-clock">Trang đã hoạt động ổn định: đang tính...</span>
+        <span class="footer-sep">·</span>
+        <span id="footer-visitor-counter">Đang online: 2 người · Toàn trang tích lũy: 128 lượt</span>
+      </div>
       <p class="footer-brand"><span class="logo-bracket">&lt;</span>DucManh<span class="logo-bracket">/&gt;</span></p>
-      <p class="footer-copy"><span data-i18n="footer.copy">Built with love · </span><span id="footer-year"></span></p>
+      <p class="footer-copy"><span data-i18n="footer.copy">© 2026 Duc Manh. All rights reserved. </span><span id="footer-year"></span></p>
       <p class="footer-stack">Pure <strong>HTML</strong> · <strong>CSS</strong> · <strong>JavaScript</strong></p>
     </div>
   </footer>
+
+  <!-- Floating Kaomoji Mascot (Ciallovo Signature) -->
+  <div id="kaomoji-mascot" class="kaomoji-mascot" title="Ciallo~">
+    <div id="kaomoji-bubble" class="kaomoji-bubble hidden"></div>
+    <div id="kaomoji-face" class="kaomoji-face">(・ω・)</div>
+  </div>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
-  <script src="main.js?v=3.2"></script>
+  <script src="main.js?v=3.4"></script>
 </body>
 </html>
