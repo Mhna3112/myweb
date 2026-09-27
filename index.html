@@ -161,7 +161,7 @@
     </nav>
   </header>
   <main id="main-content">
-    <section id="home" class="section hero-section index-hero">
+    <section id="home" class="section hero-section index-hero slide">
       <div class="hero-bg-grid" aria-hidden="true"></div>
       <div class="container hero-container">
         <div class="hero-text">
@@ -210,8 +210,8 @@ one line at a time"</span></code></pre>
       </div>
       <div class="scroll-indicator" aria-hidden="true"><div class="scroll-arrow"></div><span data-i18n="hero.scroll">Scroll to explore</span></div>
     </section>
-    <section id="about" class="section about-section">
-      <div class="container">
+    <section id="about" class="section about-section slide">
+      <div class="container slide-scrollable">
         <div class="section-header">
           <span class="section-label" data-i18n="about.label">01. About</span>
           <h2 class="section-title" data-i18n="about.title">Who Am I?</h2>
@@ -297,8 +297,8 @@ one line at a time"</span></code></pre>
         </div>
       </div>
     </section>
-    <section id="projects" class="section projects-section">
-      <div class="container">
+    <section id="projects" class="section projects-section slide">
+      <div class="container slide-scrollable">
         <div class="section-header">
           <span class="section-label" data-i18n="projects.label">02. Projects</span>
           <h2 class="section-title" data-i18n="projects.title">Things I've Built</h2>
@@ -435,22 +435,21 @@ one line at a time"</span></code></pre>
           </article>
         </div>
         <div class="projects-cta"><a href="https://github.com/Mhna3112" target="_blank" rel="noopener" class="btn btn-outline" data-i18n="projects.cta">View All on GitHub</a></div>
-      </div>
-    </section>
-    <section class="section code-section">
-      <div class="container">
-        <div class="section-header">
-          <span class="section-label" data-i18n="code.label">03. Code</span>
-          <h2 class="section-title" data-i18n="code.title">Code Samples</h2>
-          <p class="section-desc" data-i18n="code.desc">Some snippets from my learning sessions.</p>
-        </div>
-        <div class="code-tabs">
-          <button class="code-tab active" data-tab="js">JavaScript</button>
-          <button class="code-tab" data-tab="python">Python</button>
-          <button class="code-tab" data-tab="c">C</button>
-        </div>
-        <div class="code-blocks">
-          <div class="code-block-wrapper active" id="tab-js"><div class="code-block-header"><span class="code-lang">javascript</span><button class="copy-btn" data-target="code-js" data-i18n="code.copy">Copy</button></div><pre><code class="language-javascript" id="code-js">// JavaScript: Finding duplicates in an array
+
+        <!-- Embedded Code Samples Component (Preserved within Slide 3) -->
+        <div class="code-section">
+          <div class="section-header">
+            <span class="section-label" data-i18n="code.label">03. Code</span>
+            <h2 class="section-title" data-i18n="code.title">Code Samples</h2>
+            <p class="section-desc" data-i18n="code.desc">Some snippets from my learning sessions.</p>
+          </div>
+          <div class="code-tabs">
+            <button class="code-tab active" data-tab="js">JavaScript</button>
+            <button class="code-tab" data-tab="python">Python</button>
+            <button class="code-tab" data-tab="c">C</button>
+          </div>
+          <div class="code-blocks">
+            <div class="code-block-wrapper active" id="tab-js"><div class="code-block-header"><span class="code-lang">javascript</span><button class="copy-btn" data-target="code-js" data-i18n="code.copy">Copy</button></div><pre><code class="language-javascript" id="code-js">// JavaScript: Finding duplicates in an array
 function findDuplicates(arr) {
   const seen = new Set(); const duplicates = new Set();
   for (const item of arr) { if (seen.has(item)) { duplicates.add(item); } else { seen.add(item); } }
@@ -458,14 +457,14 @@ function findDuplicates(arr) {
 }
 const numbers = [1, 2, 3, 2, 4, 3, 5];
 console.log(findDuplicates(numbers)); // [2, 3]</code></pre></div>
-          <div class="code-block-wrapper" id="tab-python"><div class="code-block-header"><span class="code-lang">python</span><button class="copy-btn" data-target="code-python" data-i18n="code.copy">Copy</button></div><pre><code class="language-python" id="code-python"># Python: List comprehension magic
+            <div class="code-block-wrapper" id="tab-python"><div class="code-block-header"><span class="code-lang">python</span><button class="copy-btn" data-target="code-python" data-i18n="code.copy">Copy</button></div><pre><code class="language-python" id="code-python"># Python: List comprehension magic
 numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 even_squares = [n ** 2 for n in numbers if n % 2 == 0]
 print(even_squares)  # [4, 16, 36, 64, 100]
 matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
 flat = [num for row in matrix for num in row]
 print(flat)  # [1, 2, 3, 4, 5, 6, 7, 8, 9]</code></pre></div>
-          <div class="code-block-wrapper" id="tab-c"><div class="code-block-header"><span class="code-lang">c</span><button class="copy-btn" data-target="code-c" data-i18n="code.copy">Copy</button></div><pre><code class="language-c" id="code-c">/* C: Reverse a string in-place */
+            <div class="code-block-wrapper" id="tab-c"><div class="code-block-header"><span class="code-lang">c</span><button class="copy-btn" data-target="code-c" data-i18n="code.copy">Copy</button></div><pre><code class="language-c" id="code-c">/* C: Reverse a string in-place */
 #include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 void reverse_string(char *str) {
@@ -476,13 +475,14 @@ int main() {
     char message[] = "Hello, World!";
     printf("Before: %s\n", message); reverse_string(message); printf("After:  %s\n", message); return 0;
 }</code></pre></div>
+          </div>
         </div>
       </div>
     </section>
 
     <!-- 04. Memos / Status Updates (Ciallovo Architecture) -->
-    <section id="memos" class="section index-memo-zone">
-      <div class="container">
+    <section id="memos" class="section index-memo-zone slide">
+      <div class="container slide-scrollable">
         <div class="section-header">
           <span class="section-label" data-i18n="memos.label">04. Memos</span>
           <h2 class="section-title" data-i18n="memos.title">Memos &amp; Status</h2>
@@ -493,8 +493,8 @@ int main() {
     </section>
 
     <!-- 05. Friends & Links (友人帐 - Ciallovo Architecture) -->
-    <section id="friends" class="section friends-section">
-      <div class="container">
+    <section id="friends" class="section friends-section slide">
+      <div class="container slide-scrollable">
         <div class="section-header">
           <span class="section-label" data-i18n="friends.label">05. Friends</span>
           <h2 class="section-title" data-i18n="friends.title">Friends &amp; Links</h2>
@@ -514,8 +514,8 @@ int main() {
       </div>
     </section>
 
-    <section id="contact" class="section contact-section">
-      <div class="container">
+    <section id="contact" class="section contact-section slide">
+      <div class="container contact-container slide-scrollable">
         <div class="section-header">
           <span class="section-label" data-i18n="contact.label">06. Contact</span>
           <h2 class="section-title" data-i18n="contact.title">Get In Touch</h2>
@@ -562,6 +562,19 @@ int main() {
           </div>
         </div>
       </div>
+      <footer class="footer" role="contentinfo">
+        <div class="container footer-inner">
+          <div class="footer-uptime">
+            <span class="status-dot"></span>
+            <span id="footer-uptime-clock">Trang đã hoạt động ổn định: đang tính...</span>
+            <span class="footer-sep">·</span>
+            <span id="footer-visitor-counter">Đang online: 2 người · Toàn trang tích lũy: 128 lượt</span>
+          </div>
+          <p class="footer-brand"><span class="logo-bracket">&lt;</span>DucManh<span class="logo-bracket">/&gt;</span></p>
+          <p class="footer-copy"><span data-i18n="footer.copy">© 2026 Duc Manh. All rights reserved. </span><span id="footer-year"></span></p>
+          <p class="footer-stack">Pure <strong>HTML</strong> · <strong>CSS</strong> · <strong>JavaScript</strong></p>
+        </div>
+      </footer>
     </section>
   </main>
   <dialog id="email-dialog" class="contact-email-dialog" aria-labelledby="email-dialog-title" aria-describedby="email-dialog-desc">
@@ -648,19 +661,47 @@ int main() {
     </div>
   </dialog>
 
-  <footer class="footer" role="contentinfo">
-    <div class="container footer-inner">
-      <div class="footer-uptime">
-        <span class="status-dot"></span>
-        <span id="footer-uptime-clock">Trang đã hoạt động ổn định: đang tính...</span>
-        <span class="footer-sep">·</span>
-        <span id="footer-visitor-counter">Đang online: 2 người · Toàn trang tích lũy: 128 lượt</span>
-      </div>
-      <p class="footer-brand"><span class="logo-bracket">&lt;</span>DucManh<span class="logo-bracket">/&gt;</span></p>
-      <p class="footer-copy"><span data-i18n="footer.copy">© 2026 Duc Manh. All rights reserved. </span><span id="footer-year"></span></p>
-      <p class="footer-stack">Pure <strong>HTML</strong> · <strong>CSS</strong> · <strong>JavaScript</strong></p>
-    </div>
-  </footer>
+  <!-- Floating Side Slide Indicator -->
+  <nav id="slide-indicator" class="slide-indicator" aria-label="Slide Navigation">
+    <ul class="slide-indicator-list" role="list">
+      <li class="slide-indicator-item">
+        <button type="button" class="slide-dot active" data-slide-index="0" data-slide="0" data-target="#home" aria-label="Trang chủ (Home)" aria-current="true">
+          <span class="dot-visual" aria-hidden="true"></span>
+          <span class="dot-tooltip" data-i18n="nav.home">Trang chủ</span>
+        </button>
+      </li>
+      <li class="slide-indicator-item">
+        <button type="button" class="slide-dot" data-slide-index="1" data-slide="1" data-target="#about" aria-label="Giới thiệu (About)">
+          <span class="dot-visual" aria-hidden="true"></span>
+          <span class="dot-tooltip" data-i18n="nav.about">Giới thiệu</span>
+        </button>
+      </li>
+      <li class="slide-indicator-item">
+        <button type="button" class="slide-dot" data-slide-index="2" data-slide="2" data-target="#projects" aria-label="Dự án (Projects)">
+          <span class="dot-visual" aria-hidden="true"></span>
+          <span class="dot-tooltip" data-i18n="nav.projects">Dự án</span>
+        </button>
+      </li>
+      <li class="slide-indicator-item">
+        <button type="button" class="slide-dot" data-slide-index="3" data-slide="3" data-target="#memos" aria-label="Bảng tin (Memos)">
+          <span class="dot-visual" aria-hidden="true"></span>
+          <span class="dot-tooltip" data-i18n="nav.memos">Bảng tin</span>
+        </button>
+      </li>
+      <li class="slide-indicator-item">
+        <button type="button" class="slide-dot" data-slide-index="4" data-slide="4" data-target="#friends" aria-label="Bạn bè (Friends)">
+          <span class="dot-visual" aria-hidden="true"></span>
+          <span class="dot-tooltip" data-i18n="nav.friends">Bạn bè</span>
+        </button>
+      </li>
+      <li class="slide-indicator-item">
+        <button type="button" class="slide-dot" data-slide-index="5" data-slide="5" data-target="#contact" aria-label="Liên hệ (Contact)">
+          <span class="dot-visual" aria-hidden="true"></span>
+          <span class="dot-tooltip" data-i18n="nav.contact">Liên hệ</span>
+        </button>
+      </li>
+    </ul>
+  </nav>
 
   <!-- Floating Kaomoji Mascot (Ciallovo Signature) -->
   <div id="kaomoji-mascot" class="kaomoji-mascot" title="Ciallo~">

@@ -255,6 +255,397 @@ if (typeof document !== 'undefined') {
   }
 }
 
+// ── FULL-PAGE SINGLE SLIDE PRESENTATION ENGINE ─────────────────────
+const SLIDE_IDS = ['home', 'about', 'projects', 'memos', 'friends', 'contact'];
+let currentSlide = 0;
+let isSlideTransitionActive = false;
+const SLIDE_COOLDOWN_MS = 700;
+let lastSlideTransitionTime = 0;
+
+function isSlideTransitioning() {
+  return isSlideTransitionActive;
+}
+
+function getCurrentSlide() {
+  return currentSlide;
+}
+
+function updateNavActiveState(index) {
+  if (typeof document === 'undefined') return;
+  const activeId = SLIDE_IDS[index];
+  document.querySelectorAll('.nav-link').forEach(link => {
+    const href = link.getAttribute('href');
+    link.classList.toggle('active', href === `#${activeId}`);
+  });
+}
+
+function updateSideDotsActive(index) {
+  if (typeof document === 'undefined') return;
+  document.querySelectorAll('.slide-dot').forEach(dot => {
+    const idxAttr = dot.getAttribute('data-slide-index') || dot.getAttribute('data-slide');
+    const idx = parseInt(idxAttr, 10);
+    const isActive = idx === index;
+    dot.classList.toggle('active', isActive);
+    dot.setAttribute('aria-current', isActive ? 'true' : 'false');
+  });
+}
+
+function updateSlideProgress(index, total) {
+  if (typeof document === 'undefined') return;
+  const pBar = document.getElementById('reading-progress');
+  if (pBar && pBar.style) {
+    const pct = total > 1 ? (index / (total - 1)) * 100 : 0;
+    pBar.style.width = pct + '%';
+  }
+  const nb = document.getElementById('navbar');
+  if (nb && nb.classList) {
+    nb.classList.toggle('scrolled', index > 0 || (typeof window !== 'undefined' && window.scrollY > 20));
+  }
+}
+
+function syncUrlHash(slideId) {
+  if (typeof window === 'undefined' || !window.location) return;
+  const targetHash = '#' + slideId;
+  if (window.location.hash !== targetHash) {
+    try {
+      if (typeof history !== 'undefined' && history.replaceState) {
+        history.replaceState(null, '', targetHash);
+      } else {
+        window.location.hash = targetHash;
+      }
+    } catch {
+      window.location.hash = targetHash;
+    }
+  }
+}
+
+function goToSlide(targetIndex, options = {}) {
+  const {
+    smooth = true,
+    updateHash = true,
+    force = false
+  } = options;
+
+  if (typeof document === 'undefined') return;
+
+  // Safely parse and validate targetIndex
+  const parsed = typeof targetIndex === 'number' ? targetIndex : parseInt(targetIndex, 10);
+  if (Number.isNaN(parsed)) return;
+  const clampedIndex = Math.max(0, Math.min(SLIDE_IDS.length - 1, Math.round(parsed)));
+
+  // If already on target and not forced, ignore
+  if (clampedIndex === currentSlide && !force) return;
+
+  // If transition lock active and not forced, ignore
+  if (isSlideTransitionActive && !force) return;
+
+  // Immediately dismiss any active or scheduled popovers
+  if (typeof hidePopoverImmediately === 'function') {
+    hidePopoverImmediately();
+  }
+
+  const previousIndex = currentSlide;
+  currentSlide = clampedIndex;
+  isSlideTransitionActive = true;
+  lastSlideTransitionTime = Date.now();
+
+  const targetEl = document.getElementById(SLIDE_IDS[clampedIndex]);
+  if (targetEl && typeof targetEl.scrollIntoView === 'function') {
+    targetEl.scrollIntoView({
+      behavior: smooth ? 'smooth' : 'auto',
+      block: 'start'
+    });
+  }
+
+  // Update UI indicators
+  updateNavActiveState(clampedIndex);
+  updateSideDotsActive(clampedIndex);
+  updateSlideProgress(clampedIndex, SLIDE_IDS.length);
+
+  // Clean URL hash update without jarring browser jumps
+  if (updateHash) {
+    syncUrlHash(SLIDE_IDS[clampedIndex]);
+  }
+
+  // Cooldown release
+  setTimeout(() => {
+    isSlideTransitionActive = false;
+  }, SLIDE_COOLDOWN_MS);
+
+  // Dispatch custom event for extensible hooks
+  if (typeof window !== 'undefined') {
+    try {
+      window.dispatchEvent(new CustomEvent('slidechange', {
+        detail: {
+          previousIndex,
+          currentIndex: clampedIndex,
+          slideId: SLIDE_IDS[clampedIndex]
+        }
+      }));
+    } catch {}
+  }
+}
+
+function nextSlide() {
+  goToSlide(currentSlide + 1);
+}
+
+function prevSlide() {
+  goToSlide(currentSlide - 1);
+}
+
+function isInsideScrollableContent(element, deltaY) {
+  if (!element) return false;
+  if (typeof document !== 'undefined' && document.querySelector) {
+    try {
+      if (document.querySelector('dialog[open]')) return true;
+    } catch {}
+  }
+  let curr = element;
+  while (curr && curr !== document.body && curr !== document.documentElement) {
+    if (curr.tagName === 'DIALOG' && curr.open) return true;
+    if (curr.classList) {
+      if (typeof curr.classList.contains === 'function') {
+        if (
+          curr.classList.contains('project-runner-modal') ||
+          curr.classList.contains('search-modal') ||
+          curr.classList.contains('contact-email-dialog') ||
+          curr.classList.contains('project-hover-popover')
+        ) {
+          return true;
+        }
+        if (curr.classList.contains('slide-scrollable')) {
+          if (curr.scrollHeight && curr.clientHeight && curr.scrollHeight > curr.clientHeight) {
+            if (deltaY > 0) {
+              if ((curr.scrollTop || 0) + curr.clientHeight < curr.scrollHeight - 4) {
+                return true;
+              }
+            } else if (deltaY < 0) {
+              if ((curr.scrollTop || 0) > 4) {
+                return true;
+              }
+            }
+          }
+        }
+      }
+    }
+    curr = curr.parentElement || curr.parentNode;
+  }
+  return false;
+}
+
+function handleWheelNavigation(e) {
+  if (typeof document === 'undefined') return;
+
+  // Pillar 4: Modal dialog bypass
+  const isModalOpen = (typeof isDemoRunnerOpen === 'function' && isDemoRunnerOpen()) ||
+    (typeof document !== 'undefined' && (
+      document.querySelector('dialog[open]') ||
+      (document.getElementById('project-runner-modal') && document.getElementById('project-runner-modal').open) ||
+      (document.getElementById('search-modal') && document.getElementById('search-modal').open)
+    ));
+  if (isModalOpen) return;
+
+  // Pillar 3: Internal scrollable boundary check
+  if (isInsideScrollableContent(e.target, e.deltaY)) return;
+
+  // Pillar 2: Minimum delta threshold and horizontal trackpad swipe rejection
+  if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
+  if (Math.abs(e.deltaY) < 20) return;
+
+  // Prevent default native scroll jump to guarantee single-slide progression
+  if (e.cancelable) {
+    e.preventDefault();
+  }
+
+  // Pillar 1: Cooldown and transition lock
+  const now = Date.now();
+  if (isSlideTransitionActive) return;
+  if (now - lastSlideTransitionTime < SLIDE_COOLDOWN_MS) return;
+
+  if (e.deltaY > 0) {
+    nextSlide();
+  } else {
+    prevSlide();
+  }
+}
+
+function handleKeyboardNavigation(e) {
+  if (typeof document === 'undefined') return;
+
+  // Shared transition lock to prevent keydown spam skipping
+  const isLocked = isSlideTransitionActive || isSlideTransitioning();
+  if (isLocked) return;
+
+  // 1. Modifier keys bypass
+  if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+  // 2. Active input/textarea bypass
+  const activeEl = document.activeElement;
+  if (activeEl && (
+    activeEl.tagName === 'INPUT' ||
+    activeEl.tagName === 'TEXTAREA' ||
+    activeEl.tagName === 'SELECT' ||
+    activeEl.isContentEditable
+  )) {
+    return;
+  }
+
+  // 3. Modal dialog open bypass
+  if (document.querySelector('dialog[open]')) return;
+
+  // 4. Mobile drawer open bypass
+  const navLinks = document.getElementById('nav-links');
+  if (navLinks && navLinks.classList && navLinks.classList.contains('open')) return;
+
+  // 5. Button / Anchor focus bypass for Space/Enter
+  if (activeEl && (activeEl.tagName === 'BUTTON' || activeEl.tagName === 'A') && (e.key === ' ' || e.key === 'Enter')) {
+    return;
+  }
+
+  switch (e.key) {
+    case 'ArrowDown':
+    case 'PageDown':
+      if (e.cancelable) e.preventDefault();
+      nextSlide();
+      break;
+    case 'ArrowUp':
+    case 'PageUp':
+      if (e.cancelable) e.preventDefault();
+      prevSlide();
+      break;
+    case ' ':
+      if (e.cancelable) e.preventDefault();
+      if (e.shiftKey) {
+        prevSlide();
+      } else {
+        nextSlide();
+      }
+      break;
+    case 'Home':
+      if (e.cancelable) e.preventDefault();
+      goToSlide(0);
+      break;
+    case 'End':
+      if (e.cancelable) e.preventDefault();
+      goToSlide(SLIDE_IDS.length - 1);
+      break;
+  }
+}
+
+// Mobile touch swipe handling
+let touchStartX = 0;
+let touchStartY = 0;
+let touchStartTime = 0;
+
+function handleTouchStart(e) {
+  if (!e.touches || e.touches.length !== 1) return;
+  if (typeof document !== 'undefined' && document.querySelector('dialog[open]')) return;
+
+  touchStartX = e.touches[0].clientX;
+  touchStartY = e.touches[0].clientY;
+  touchStartTime = Date.now();
+}
+
+function handleTouchEnd(e) {
+  if (typeof document !== 'undefined' && document.querySelector('dialog[open]')) return;
+  if (!touchStartTime || !e.changedTouches || !e.changedTouches.length) return;
+
+  const touchEndY = e.changedTouches[0].clientY;
+  const touchEndX = e.changedTouches[0].clientX;
+  const deltaY = touchStartY - touchEndY;
+  const deltaX = touchStartX - touchEndX;
+  const duration = Date.now() - touchStartTime;
+  touchStartTime = 0;
+
+  // Maximum swipe duration and minimum distance threshold
+  if (duration > 700) return;
+  if (Math.abs(deltaY) < 50) return;
+
+  // Vertical dominance check
+  if (Math.abs(deltaY) <= Math.abs(deltaX) * 1.2) return;
+
+  // Internal scrollable boundary check
+  if (isInsideScrollableContent(e.target, deltaY)) return;
+
+  if (deltaY > 0) {
+    nextSlide(); // Swipe up -> next slide
+  } else {
+    prevSlide(); // Swipe down -> prev slide
+  }
+}
+
+let isSlideEngineInitialized = false;
+
+function initSlideEngine() {
+  if (typeof window === 'undefined') return;
+  if (isSlideEngineInitialized) return;
+  isSlideEngineInitialized = true;
+
+  // Wheel listener with passive: false to allow e.preventDefault()
+  window.addEventListener('wheel', handleWheelNavigation, { passive: false });
+
+  // Keyboard navigation
+  window.addEventListener('keydown', handleKeyboardNavigation);
+
+  // Touch gesture listeners
+  window.addEventListener('touchstart', handleTouchStart, { passive: true });
+  window.addEventListener('touchend', handleTouchEnd, { passive: true });
+
+  // Side indicator dot buttons
+  if (typeof document !== 'undefined') {
+    document.querySelectorAll('.slide-dot').forEach(dot => {
+      dot.addEventListener('click', () => {
+        const isLocked = isSlideTransitionActive || isSlideTransitioning();
+        if (isLocked) return;
+        const idxAttr = dot.getAttribute('data-slide-index') || dot.getAttribute('data-slide');
+        const idx = parseInt(idxAttr, 10);
+        if (!isNaN(idx)) {
+          goToSlide(idx);
+        }
+      });
+    });
+  }
+
+  // Window resize listener to maintain slide alignment (debounced 100ms)
+  let slideResizeTimer = null;
+  window.addEventListener('resize', () => {
+    if (slideResizeTimer) clearTimeout(slideResizeTimer);
+    slideResizeTimer = setTimeout(() => {
+      if (typeof document !== 'undefined') {
+        const activeEl = document.getElementById(SLIDE_IDS[currentSlide]);
+        if (activeEl && typeof activeEl.scrollIntoView === 'function') {
+          activeEl.scrollIntoView({ behavior: 'auto', block: 'start' });
+        }
+      }
+    }, 100);
+  });
+
+  // Initial deep-link hash routing
+  if (typeof window !== 'undefined' && window.location && window.location.hash) {
+    const initialHash = window.location.hash.slice(1);
+    const initialIdx = SLIDE_IDS.indexOf(initialHash);
+    if (initialIdx > 0) {
+      goToSlide(initialIdx, { smooth: false, updateHash: false, force: true });
+    }
+  }
+
+  // Popstate history listener
+  if (typeof window !== 'undefined') {
+    window.addEventListener('popstate', () => {
+      if (window.location && window.location.hash) {
+        const hash = window.location.hash.slice(1);
+        const idx = SLIDE_IDS.indexOf(hash);
+        if (idx !== -1 && idx !== currentSlide) {
+          goToSlide(idx, { smooth: true, updateHash: false });
+        }
+      } else if (currentSlide !== 0) {
+        goToSlide(0, { smooth: true, updateHash: false });
+      }
+    });
+  }
+}
+
 // ── ACTIVE NAV HIGHLIGHT ──────────────────────────────────────────
 const sections  = document.querySelectorAll('section[id]');
 const navAnchors = document.querySelectorAll('.nav-link');
@@ -264,6 +655,12 @@ const io = new IntersectionObserver((entries) => {
       navAnchors.forEach(a => a.classList.remove('active'));
       const active = document.querySelector('.nav-link[href="#' + e.target.id + '"]');
       if (active) active.classList.add('active');
+      const idx = SLIDE_IDS.indexOf(e.target.id);
+      if (idx !== -1 && !isSlideTransitioning()) {
+        currentSlide = idx;
+        updateSideDotsActive(idx);
+        updateSlideProgress(idx, SLIDE_IDS.length);
+      }
     }
   });
 }, { rootMargin: '-40% 0px -55% 0px' });
@@ -329,13 +726,25 @@ document.querySelectorAll('.copy-btn').forEach(btn => {
 const yearEl = document.getElementById('footer-year');
 if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-// ── SMOOTH SCROLL ──────────────────────────────────────────────────
+// ── SMOOTH SCROLL & SLIDE NAVIGATION ──────────────────────────────
 document.querySelectorAll('a[href^="#"]').forEach(a => {
   a.addEventListener('click', e => {
-    const target = document.querySelector(a.getAttribute('href'));
-    if (target) {
+    const href = a.getAttribute('href');
+    if (!href || href === '#') return;
+    const targetId = href.slice(1);
+    const slideIdx = SLIDE_IDS.indexOf(targetId);
+    if (slideIdx !== -1) {
       e.preventDefault();
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      goToSlide(slideIdx);
+      if (typeof toggleMobileNav === 'function') {
+        toggleMobileNav(false);
+      }
+    } else {
+      const target = document.querySelector(href);
+      if (target && typeof target.scrollIntoView === 'function') {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     }
   });
 });
@@ -2651,6 +3060,9 @@ function typeHeroSubtitle() {
   }
 
   heroTypeTimer = setTimeout(typeHeroSubtitle, delay);
+  if (heroTypeTimer && typeof heroTypeTimer.unref === 'function') {
+    heroTypeTimer.unref();
+  }
 }
 
 // ── 3. Memos Status Board ───────────────────────────────────────────
@@ -2908,12 +3320,14 @@ if (typeof document !== 'undefined') {
     setInterval(updateUptimeClock, 1000);
     initVisitorCounter();
     initKaomojiMascot();
+    initSlideEngine();
   });
 }
 
 // ── 5. INITIALIZE LANGUAGE & ALL PORTFOLIO COMPONENTS ─────────────────────
 applyLang(currentLang);
 renderFriendsBoard();
+initSlideEngine();
 
 // Expose public API on window for testing & debugging
 if (typeof window !== 'undefined') {
@@ -2947,6 +3361,14 @@ if (typeof window !== 'undefined') {
   window.hidePopoverImmediately = hidePopoverImmediately;
   window.scheduleShowPopover = scheduleShowPopover;
   window.toggleMobileNav = toggleMobileNav;
+
+  // Slide Presentation Engine APIs
+  window.SLIDE_IDS = SLIDE_IDS;
+  window.getCurrentSlide = getCurrentSlide;
+  window.goToSlide = goToSlide;
+  window.nextSlide = nextSlide;
+  window.prevSlide = prevSlide;
+  window.isSlideTransitioning = isSlideTransitioning;
 }
 
 
