@@ -640,7 +640,7 @@ emailForm.addEventListener('submit', event => {
   const message = document.getElementById('email-message').value.trim();
   if (!name || !email || !message) return;
 
-  const subject = currentLang === 'vi' ? `Lời nhắn từ ${name} qua ducmanh.xyz` : `Message from ${name} via ducmanh.xyz`;
+  const subject = currentLang === 'vi' ? `Lời nhắn từ ${name} qua mhna.id.vn` : `Message from ${name} via mhna.id.vn`;
   const body = currentLang === 'vi'
     ? `Tên: ${name}\nEmail: ${email}\n\nLời nhắn:\n${message}`
     : `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`;

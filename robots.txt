@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://ducmanh.xyz/sitemap.xml
+Sitemap: https://mhna.id.vn/sitemap.xml
