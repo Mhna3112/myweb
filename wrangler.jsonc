@@ -17,9 +17,14 @@
   ],
   "workers_dev": true,
   "routes": [
-    // Bật lại 2 dòng mhna.id.vn bên dưới ngay sau khi thêm domain vào Cloudflare Dashboard:
-    // { "pattern": "mhna.id.vn", "custom_domain": true },
-    // { "pattern": "www.mhna.id.vn", "custom_domain": true },
+    {
+      "pattern": "mhna.id.vn",
+      "custom_domain": true
+    },
+    {
+      "pattern": "www.mhna.id.vn",
+      "custom_domain": true
+    },
     {
       "pattern": "ducmanh.xyz",
       "custom_domain": true
