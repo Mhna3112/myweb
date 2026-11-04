@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" fill="none">
+  <defs>
+    <linearGradient id="dm-grad-silver" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="50%" stop-color="#E2E8F0" />
+      <stop offset="100%" stop-color="#94A3B8" />
+    </linearGradient>
+    <linearGradient id="dm-grad-gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FDE047" />
+      <stop offset="100%" stop-color="#D9A441" />
+    </linearGradient>
+    <filter id="dm-glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Outer Precision Hexagon / Facet -->
+  <polygon points="50,10 88,30 88,70 50,90 12,70 12,30" 
+           stroke="url(#dm-grad-silver)" 
+           stroke-width="2.5" 
+           stroke-linecap="round" 
+           stroke-linejoin="round" 
+           opacity="0.85" />
+
+  <!-- Inner Architectural 'M' Monogram (Đức Mạnh) -->
+  <path d="M 28,68 L 28,34 L 50,54 L 72,34 L 72,68" 
+        stroke="url(#dm-grad-silver)" 
+        stroke-width="3.5" 
+        stroke-linecap="round" 
+        stroke-linejoin="round" />
+
+  <!-- Central Nexus Core (Gold Vertex Anchor) -->
+  <circle cx="50" cy="54" r="3.5" fill="url(#dm-grad-gold)" filter="url(#dm-glow)" />
+
+  <!-- Geometric Coordinate Crosshair Lines -->
+  <line x1="50" y1="18" x2="50" y2="38" stroke="url(#dm-grad-gold)" stroke-width="1.5" stroke-dasharray="2 2" opacity="0.6" />
+  <line x1="50" y1="70" x2="50" y2="82" stroke="url(#dm-grad-gold)" stroke-width="1.5" stroke-dasharray="2 2" opacity="0.6" />
+
+  <!-- Side Satellite Nodes -->
+  <circle cx="28" cy="34" r="2" fill="#E2E8F0" />
+  <circle cx="72" cy="34" r="2" fill="#E2E8F0" />
+  <circle cx="28" cy="68" r="2" fill="#E2E8F0" />
+  <circle cx="72" cy="68" r="2" fill="#E2E8F0" />
+</svg>

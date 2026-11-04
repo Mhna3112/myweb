@@ -3,367 +3,229 @@ import path from 'node:path';
 import vm from 'node:vm';
 
 const projectRoot = process.cwd();
-console.log('--- RUNNING HOVER PREVIEW & DEMO RUNNER TESTS ---');
+console.log('--- RUNNING SINGLE SLIDE & STREAMLINED PORTFOLIO TESTS ---');
 
 // 1. Read index.html and verify required DOM IDs & attributes
 const htmlContent = fs.readFileSync(path.join(projectRoot, 'index.html'), 'utf8');
 
 const requiredElements = [
-  'id="project-hover-popover"',
-  'id="project-runner-modal"',
-  'id="runner-modal-title"',
-  'id="runner-badge"',
-  'id="runner-device-switcher"',
-  'id="runner-reload-btn"',
-  'id="runner-external-link"',
-  'id="close-runner-modal"',
-  'id="runner-dot-close"',
-  'id="runner-modal-body"',
-  'data-project-id="mediahub"',
-  'data-project-id="gplx"',
-  'data-project-id="todo"',
-  'data-project-id="discord"',
-  'data-project-id="roblox"',
-  'data-project-id="cpp"',
-  'class="project-demo-btn"',
+  'id="home"',
+  'id="about"',
+  'id="friends"',
+  'id="contact"',
+  'id="hero-typewriter-name"',
+  'id="hero-typewriter-cursor"',
+  'id="slide-indicator"',
+  'id="kaomoji-mascot"',
+  'id="kaomoji-face"',
+  'id="km-eye-l"',
+  'id="km-eye-r"',
+  'id="friends-board-grid"',
+  '<p class="footer-brand"><span class="logo-bracket">&lt;</span>ducmanh<span class="logo-bracket">/&gt;</span></p>',
 ];
 
-console.log('\n[TEST 1] Verifying index.html markup elements:');
-let missingElements = 0;
+const forbiddenElements = [
+  'id="memos"',
+  'id="hero-cv-btn"',
+  'footer-uptime-clock',
+  'footer-visitor-counter',
+  'section-label',
+];
+
+console.log('\n[TEST 1] Verifying required elements in index.html:');
+let failed = 0;
 for (const elem of requiredElements) {
   if (htmlContent.includes(elem)) {
     console.log(`  ✓ Found: ${elem}`);
   } else {
     console.error(`  ✗ MISSING: ${elem}`);
-    missingElements++;
+    failed++;
   }
 }
-if (missingElements > 0) {
+
+console.log('\n[TEST 2] Verifying removed elements are NOT present in index.html:');
+for (const elem of forbiddenElements) {
+  if (!htmlContent.includes(elem)) {
+    console.log(`  ✓ Correctly removed: ${elem}`);
+  } else {
+    console.error(`  ✗ UNEXPECTEDLY PRESENT: ${elem}`);
+    failed++;
+  }
+}
+
+if (failed > 0) {
+  console.error(`\nFAILED: ${failed} element checks failed.`);
   process.exit(1);
 }
 
-// 2. Read main.js and extract PROJECTS_DATA
+// 2. Read main.js and verify logic
 const jsContent = fs.readFileSync(path.join(projectRoot, 'main.js'), 'utf8');
 
-console.log('\n[TEST 2] Verifying PROJECTS_DATA definitions and structure:');
-const requiredProjects = ['mediahub', 'gplx', 'todo', 'discord', 'roblox', 'cpp'];
+console.log('\n[TEST 3] Verifying main.js SLIDE_IDS and components:');
+if (jsContent.includes("const SLIDE_IDS = ['home', 'about', 'friends', 'contact'];")) {
+  console.log("  ✓ SLIDE_IDS correctly configured for 4 slides: ['home', 'about', 'friends', 'contact']");
+} else {
+  console.error("  ✗ SLIDE_IDS is not configured correctly!");
+  process.exit(1);
+}
 
-// Create minimal DOM sandbox
+if (jsContent.includes("var FRIENDS_DATA = [];")) {
+  console.log("  ✓ FRIENDS_DATA is reset to empty array []");
+} else {
+  console.error("  ✗ FRIENDS_DATA is not empty!");
+  process.exit(1);
+}
+
+if (jsContent.includes('km-eye-l') && jsContent.includes('km-eye-r') && jsContent.includes('mousemove')) {
+  console.log("  ✓ Kaomoji mascot tracks mouse coordinates across window via mousemove");
+} else {
+  console.error("  ✗ Kaomoji mascot mouse tracking missing!");
+  process.exit(1);
+}
+
+if (jsContent.includes("Hi, I'm Duc Manh") && jsContent.includes('hero-typewriter-name')) {
+  console.log("  ✓ Hero typewriter configured to type \"Hi, I'm Duc Manh\"");
+} else {
+  console.error("  ✗ Hero typewriter for name missing!");
+  process.exit(1);
+}
+
+// 3. Execution Sandbox Test
 class MockElement {
   constructor(tag, id = '') {
     this.tagName = tag.toUpperCase();
     this.id = id;
     this.className = '';
+    this.innerHTML = '';
+    this.textContent = '';
+    this.style = {};
+    this.children = [];
+    this.attributes = new Map();
     this.classList = {
       classes: new Set(),
       add: (...c) => c.forEach(x => this.classList.classes.add(x)),
       remove: (...c) => c.forEach(x => this.classList.classes.delete(x)),
       toggle: (c, force) => {
         if (force === undefined) {
-          if (this.classList.classes.has(c)) { this.classList.classes.delete(c); return false; }
-          else { this.classList.classes.add(c); return true; }
+          if (this.classList.classes.has(c)) this.classList.classes.delete(c);
+          else this.classList.classes.add(c);
+        } else if (force) {
+          this.classList.classes.add(c);
+        } else {
+          this.classList.classes.delete(c);
         }
-        if (force) { this.classList.classes.add(c); return true; }
-        else { this.classList.classes.delete(c); return false; }
       },
       contains: (c) => this.classList.classes.has(c)
     };
-    this.style = {};
-    this.attributes = new Map();
-    this.children = [];
-    this.innerHTML = '';
-    this.textContent = '';
-    this.dataset = {};
-    this.listeners = {};
-    this.offsetWidth = 380;
-    this.offsetHeight = 380;
   }
+  querySelector() { return null; }
+  querySelectorAll() { return []; }
   setAttribute(k, v) { this.attributes.set(k, String(v)); }
   getAttribute(k) { return this.attributes.get(k) || null; }
   removeAttribute(k) { this.attributes.delete(k); }
-  addEventListener(event, fn) {
-    if (!this.listeners[event]) this.listeners[event] = [];
-    this.listeners[event].push(fn);
-  }
-  removeEventListener(event, fn) {
-    if (!this.listeners[event]) return;
-    this.listeners[event] = this.listeners[event].filter(f => f !== fn);
-  }
-  dispatchEvent(event) {
-    if (this.listeners[event.type]) {
-      this.listeners[event.type].forEach(fn => fn(event));
-    }
-  }
-  querySelector(sel) {
-    if (sel.startsWith('#')) {
-      const targetId = sel.slice(1);
-      return this.id === targetId ? this : null;
-    }
-    return new MockElement('div');
-  }
-  querySelectorAll(sel) {
-    return [new MockElement('div'), new MockElement('div')];
-  }
-  appendChild(child) { this.children.push(child); }
+  addEventListener() {}
+  removeEventListener() {}
+  scrollIntoView() {}
   getBoundingClientRect() {
-    return { top: 100, bottom: 400, left: 200, right: 600, width: 400, height: 300 };
+    return { top: 800, left: 1200, width: 80, height: 36, right: 1280, bottom: 836 };
   }
-  showModal() { this.open = true; }
-  close() { this.open = false; }
 }
 
 const mockDoc = {
+  elements: new Map(),
+  getElementById(id) {
+    if (!this.elements.has(id)) {
+      this.elements.set(id, new MockElement('div', id));
+    }
+    return this.elements.get(id);
+  },
+  querySelectorAll() { return []; },
+  querySelector() { return null; },
+  addEventListener() {},
   documentElement: new MockElement('html'),
-  getElementById: (id) => new MockElement('div', id),
-  querySelectorAll: (sel) => [
-    Object.assign(new MockElement('article'), { dataset: { projectId: 'mediahub' } }),
-    Object.assign(new MockElement('article'), { dataset: { projectId: 'gplx' } }),
-    Object.assign(new MockElement('article'), { dataset: { projectId: 'todo' } }),
-    Object.assign(new MockElement('article'), { dataset: { projectId: 'discord' } }),
-    Object.assign(new MockElement('article'), { dataset: { projectId: 'roblox' } }),
-    Object.assign(new MockElement('article'), { dataset: { projectId: 'cpp' } }),
-  ],
-  querySelector: (sel) => new MockElement('div'),
-  createElement: (tag) => new MockElement(tag),
-  addEventListener: () => {},
-  removeEventListener: () => {},
+  body: new MockElement('body'),
+  activeElement: { tagName: 'BODY' }
 };
 
 const sandbox = {
+  console,
+  setTimeout: (fn, ms) => {
+    const t = setTimeout(fn, ms);
+    return { unref: () => clearTimeout(t) };
+  },
+  clearTimeout,
   document: mockDoc,
   window: {
-    innerWidth: 1440,
-    innerHeight: 900,
-    addEventListener: () => {},
-    matchMedia: () => ({ matches: true, addEventListener: () => {} }),
-    location: { href: '' },
+    addEventListener() {},
+    removeEventListener() {},
+    location: { hash: '' },
     scrollY: 0,
-  },
-  navigator: {
-    clipboard: {
-      writeText: async (t) => true
-    }
+    dispatchEvent() {},
+    matchMedia: () => ({ matches: false, addEventListener() {}, removeEventListener() {} })
   },
   localStorage: {
-    store: {},
-    getItem: (k) => sandbox.localStorage.store[k] || null,
-    setItem: (k, v) => { sandbox.localStorage.store[k] = v; }
+    store: new Map(),
+    getItem(k) { return this.store.get(k) || null; },
+    setItem(k, v) { this.store.set(k, String(v)); }
+  },
+  sessionStorage: {
+    store: new Map(),
+    getItem(k) { return this.store.get(k) || null; },
+    setItem(k, v) { this.store.set(k, String(v)); }
   },
   IntersectionObserver: class {
     observe() {}
     unobserve() {}
     disconnect() {}
   },
-  performance: { now: () => Date.now() },
-  console,
-  setTimeout,
-  clearTimeout,
-  setInterval,
-  clearInterval,
-  Date,
+  CustomEvent: class {
+    constructor(type, params = {}) {
+      this.type = type;
+      this.detail = params.detail;
+    }
+  },
+  history: { replaceState() {} },
   Math,
+  Date,
   Array,
   Object,
+  String,
+  Number,
+  Boolean,
   Set,
   Map,
-  String,
-  encodeURIComponent
+  parseInt,
+  parseFloat,
+  isNaN
 };
 
 vm.createContext(sandbox);
-vm.runInContext(jsContent, sandbox);
 
-const projectsData = sandbox.window.PROJECTS_DATA;
-if (!projectsData) {
-  console.error('  ✗ PROJECTS_DATA is not defined on window in main.js');
-  process.exit(1);
-}
+console.log('\n[TEST 4] Testing main.js runtime initialization in sandbox:');
+try {
+  vm.runInContext(jsContent, sandbox);
+  console.log('  ✓ main.js evaluated without runtime errors');
 
-for (const pid of requiredProjects) {
-  const p = projectsData[pid];
-  if (!p) {
-    console.error(`  ✗ Project ${pid} is missing from PROJECTS_DATA!`);
+  // Test friends board rendering empty state
+  const friendsGrid = mockDoc.getElementById('friends-board-grid');
+  sandbox.renderFriendsBoard();
+  if (friendsGrid.innerHTML.includes('friends-empty-card')) {
+    console.log('  ✓ renderFriendsBoard() produces friends-empty-card when FRIENDS_DATA is empty');
+  } else {
+    console.error('  ✗ renderFriendsBoard() did not render empty card!');
     process.exit(1);
   }
-  if (!p.name?.vi || !p.name?.en) {
-    console.error(`  ✗ Project ${pid} is missing bilingual name!`);
-    process.exit(1);
-  }
-  if (!p.badge?.vi || !p.badge?.en) {
-    console.error(`  ✗ Project ${pid} is missing bilingual badge!`);
-    process.exit(1);
-  }
-  if (!p.features?.vi || p.features.vi.length < 3 || !p.features?.en || p.features.en.length < 3) {
-    console.error(`  ✗ Project ${pid} does not have at least 3 bilingual features!`);
-    process.exit(1);
-  }
-  if (!p.mockupHtml) {
-    console.error(`  ✗ Project ${pid} is missing mockupHtml!`);
-    process.exit(1);
-  }
-  console.log(`  ✓ Project [${pid}] (${p.type}): ${p.name.vi} | ${p.badge.vi} — 3 features verified`);
-}
 
-// 3. Test popover content generator
-console.log('\n[TEST 3] Testing popover HTML generator:');
-for (const pid of requiredProjects) {
-  const html = sandbox.window.renderPopoverContent(pid);
-  if (!html.includes('popover-header') || !html.includes('popover-features') || !html.includes('popover-btn-demo')) {
-    console.error(`  ✗ renderPopoverContent(${pid}) missing critical sections!`);
-    process.exit(1);
-  }
-  console.log(`  ✓ renderPopoverContent('${pid}') generated valid markup (${html.length} chars)`);
-}
+  // Test typewriter trigger
+  sandbox.resetHeroTypewriter();
+  const heroNameEl = mockDoc.getElementById('hero-typewriter-name');
+  console.log('  ✓ resetHeroTypewriter() initialized successfully');
 
-// 4. Test C++ Sorting visualizer generators
-console.log('\n[TEST 4] Testing C++ Sorting Generators:');
-const testArray = [45, 12, 85, 32, 89, 39, 69, 22, 58, 75];
-
-// Test QuickSort
-function* quickSortGen(arr, low = 0, high = arr.length - 1) {
-  if (low < high) {
-    const pivot = arr[high];
-    let i = low - 1;
-    for (let j = low; j < high; j++) {
-      yield { type: 'compare', indices: [j, high] };
-      if (arr[j] < pivot) {
-        i++;
-        if (i !== j) {
-          const temp = arr[i];
-          arr[i] = arr[j];
-          arr[j] = temp;
-          yield { type: 'swap', indices: [i, j], arr: [...arr] };
-        }
-      }
-    }
-    const temp = arr[i + 1];
-    arr[i + 1] = arr[high];
-    arr[high] = temp;
-    yield { type: 'swap', indices: [i + 1, high], arr: [...arr] };
-    yield { type: 'sorted', indices: [i + 1] };
-    const pi = i + 1;
-    yield* quickSortGen(arr, low, pi - 1);
-    yield* quickSortGen(arr, pi + 1, high);
-  }
-}
-
-const arrCopy = [...testArray];
-const gen = quickSortGen(arrCopy);
-let steps = 0;
-let next = gen.next();
-while (!next.done) {
-  steps++;
-  next = gen.next();
-}
-console.log(`  ✓ QuickSort generated ${steps} interactive steps, final array sorted: ${JSON.stringify(arrCopy)}`);
-const isSorted = arrCopy.every((v, i, a) => !i || a[i - 1] <= v);
-if (!isSorted) {
-  console.error('  ✗ QuickSort did not sort array correctly!');
+} catch (err) {
+  console.error('  ✗ Runtime evaluation error in sandbox:', err);
   process.exit(1);
 }
-
-// Test Binary Search generator
-function* binarySearchGen(arr, target) {
-  let low = 0;
-  let high = arr.length - 1;
-  while (low <= high) {
-    const mid = Math.floor((low + high) / 2);
-    yield { type: 'search', indices: [mid] };
-    if (arr[mid] === target) {
-      yield { type: 'found', indices: [mid] };
-      return mid;
-    }
-    if (arr[mid] < target) {
-      low = mid + 1;
-    } else {
-      high = mid - 1;
-    }
-  }
-  return -1;
-}
-
-const sortedArr = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
-const bsGen = binarySearchGen(sortedArr, 70);
-let bsSteps = 0;
-let bsResult = bsGen.next();
-while (!bsResult.done) {
-  bsSteps++;
-  bsResult = bsGen.next();
-}
-console.log(`  ✓ Binary Search found 70 in ${bsSteps} steps, return value: ${bsResult.value}`);
-if (bsResult.value !== 6) {
-  console.error('  ✗ Binary Search did not find index 6!');
-  process.exit(1);
-}
-
-// 5. Test applyLang integration
-console.log('\n[TEST 5] Testing multilingual applyLang switching:');
-sandbox.window.applyLang('vi');
-let pVi = sandbox.window.renderPopoverContent('mediahub');
-if (!pVi.includes('Chạy thử demo') || !pVi.includes('Mã nguồn')) {
-  console.error('  ✗ Vietnamese popover content missing translated buttons!');
-  process.exit(1);
-}
-console.log('  ✓ applyLang("vi") correctly outputs Vietnamese labels');
-
-sandbox.window.applyLang('en');
-let pEn = sandbox.window.renderPopoverContent('mediahub');
-if (!pEn.includes('Try Interactive Demo') || !pEn.includes('Source Code')) {
-  console.error('  ✗ English popover content missing translated buttons!');
-  process.exit(1);
-}
-console.log('  ✓ applyLang("en") correctly outputs English labels');
-
-// 6. Test runner lifecycle, cleanup, and CSS containment
-console.log('\n[TEST 6] Testing runner lifecycle, cleanup, and CSS containment:');
-const cssContent = fs.readFileSync(path.join(projectRoot, 'style.css'), 'utf8');
-if (!cssContent.includes('max-height: calc(100vh - 32px)') || !cssContent.includes('overflow-y: auto')) {
-  console.error('  ✗ Popover CSS missing vertical viewport containment!');
-  process.exit(1);
-}
-console.log('  ✓ Popover CSS has max-height and overflow-y containment');
-
-if (!cssContent.includes('touch-action: none')) {
-  console.error('  ✗ Roblox header CSS missing touch-action: none!');
-  process.exit(1);
-}
-console.log('  ✓ Roblox draggable header has touch-action: none');
-
-// Test runner opening and closing
-sandbox.window.openProjectRunner('mediahub');
-sandbox.window.closeProjectRunner();
-console.log('  ✓ Modal runner opens and closes with complete cleanup');
-
-// 7. Test Hover Auto-Open, Auto-Run, and Huge Theater Modal Styles
-console.log('\n[TEST 7] Testing Hover Auto-Open, Auto-Run, and Theater Modal Dimensions:');
-if (typeof sandbox.window.scheduleOpenRunner !== 'function' || typeof sandbox.window.scheduleCloseRunner !== 'function') {
-  console.error('  ✗ scheduleOpenRunner or scheduleCloseRunner is not exposed on window!');
-  process.exit(1);
-}
-console.log('  ✓ scheduleOpenRunner & scheduleCloseRunner APIs verified');
-
-// Test auto-run invocation with options
-sandbox.window.openProjectRunner('cpp', { autoRun: true, triggeredByHover: true });
-sandbox.window.closeProjectRunner();
-sandbox.window.openProjectRunner('discord', { autoRun: true, triggeredByHover: true });
-sandbox.window.closeProjectRunner();
-console.log('  ✓ Auto-run and triggeredByHover options handled smoothly across simulator engines');
-
-// Verify huge modal dimensions & animations in CSS
-if (!cssContent.includes('min(1240px, 95vw)') || !cssContent.includes('min(880px, 92vh)')) {
-  console.error('  ✗ Runner modal CSS missing expanded "to đùng" dimensions (1240px x 880px)!');
-  process.exit(1);
-}
-console.log('  ✓ Runner modal sized to large theater view (min(1240px, 95vw) x min(880px, 92vh))');
-
-if (!cssContent.includes('runnerModalEnter') || !cssContent.includes('runnerBackdropFade')) {
-  console.error('  ✗ Runner modal CSS missing entrance and backdrop animations!');
-  process.exit(1);
-}
-console.log('  ✓ Entrance animation (runnerModalEnter) & backdrop fade (runnerBackdropFade) verified');
 
 console.log('\n======================================================');
-console.log('🎉 ALL TESTS PASSED SUCCESSFULLY WITH ZERO DEFECTS!');
-console.log('======================================================');
-process.exit(0);
-
+console.log('🎉 ALL TESTS PASSED! CLEAN SINGLE SLIDE EXPERIENCE READY');
+console.log('======================================================\n');

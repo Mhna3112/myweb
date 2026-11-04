@@ -1,0 +1,724 @@
+/* ==========================================================================
+   MHNAHUB DEMO — Web replica of MhnaaUI.luau (github.com/Mhna3112/Mhnauxui)
+   All colors / sizes mirror MhnaaUI.CurrentTheme and the Luau layout code.
+   ========================================================================== */
+
+.rbx-overlay {
+  --mh-bg: rgb(26, 26, 28);
+  --mh-sidebar: rgb(21, 21, 23);
+  --mh-topbar: rgb(30, 30, 34);
+  --mh-card: rgb(33, 33, 37);
+  --mh-border: rgb(44, 44, 50);
+  --mh-accent: rgb(104, 157, 248);
+  --mh-accent-hover: rgb(124, 172, 255);
+  --mh-tag: rgb(245, 166, 35);
+  --mh-title: rgb(240, 242, 245);
+  --mh-muted: rgb(138, 140, 150);
+  --mh-sidebar-text: rgb(155, 158, 170);
+  --mh-input-border: rgb(45, 45, 52);
+  --mh-input-bg: rgb(24, 24, 27);
+  --mh-font: 'Gotham', 'Montserrat', 'Be Vietnam Pro', system-ui, sans-serif;
+
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(8px, 3vw, 28px);
+  background: rgba(14, 13, 12, 0.68);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  will-change: opacity;
+  animation: rbxFade 0.18s ease-out forwards;
+}
+
+@keyframes rbxFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* --------------------------------------------------------------------------
+   ROBLOX GAME SCREEN (mock viewport)
+   -------------------------------------------------------------------------- */
+.rbx-screen {
+  position: relative;
+  width: min(94vw, 1080px);
+  aspect-ratio: 16 / 9;
+  max-height: 86vh;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  font-family: var(--mh-font);
+  color: var(--mh-title);
+  will-change: transform, opacity;
+  transform: translate3d(0, 0, 0);
+  contain: layout paint;
+  animation: rbxPop 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  user-select: none;
+}
+
+@keyframes rbxPop {
+  from { opacity: 0; transform: translate3d(0, 10px, 0) scale(0.96); }
+  to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+
+.rbx-world {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, #5FA8E8 0%, #9CCBF2 45%, #DCEEFB 62%);
+  perspective: 600px;
+}
+
+.rbx-sun {
+  position: absolute;
+  top: 9%;
+  right: 22%;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #FFFBE6 0%, rgba(255, 246, 200, 0.6) 40%, transparent 70%);
+}
+
+.rbx-floor {
+  position: absolute;
+  left: -50%;
+  right: -50%;
+  bottom: -10%;
+  height: 62%;
+  background-color: #8E8E91;
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.12) 1px, transparent 1px);
+  background-size: 48px 48px;
+  transform: rotateX(62deg);
+  transform-origin: bottom center;
+}
+
+.rbx-block {
+  position: absolute;
+  border-radius: 2px;
+  box-shadow: inset -10px -10px 0 rgba(0, 0, 0, 0.18);
+}
+.rbx-block.b1 { left: 8%; bottom: 30%; width: 70px; height: 70px; background: #C4281C; }
+.rbx-block.b2 { left: 14%; bottom: 24%; width: 46px; height: 46px; background: #0D69AC; }
+.rbx-block.b3 { right: 9%; bottom: 27%; width: 90px; height: 54px; background: #4B974B; }
+
+/* Classic Roblox "noob" avatar */
+.rbx-avatar {
+  position: absolute;
+  left: 22%;
+  bottom: 16%;
+  width: 44px;
+  height: 92px;
+}
+.rbx-avatar span { position: absolute; display: block; }
+.av-head { left: 11px; top: 0; width: 22px; height: 22px; border-radius: 6px; background: #F5CD30; }
+.av-torso { left: 0; top: 24px; width: 44px; height: 36px; border-radius: 2px; background: #0D69AC; }
+.av-leg { top: 60px; width: 21px; height: 32px; background: #A4BD47; }
+.av-leg.l { left: 0; }
+.av-leg.r { right: 0; }
+
+/* Roblox CoreGui topbar buttons */
+.rbx-topbar {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: flex;
+  gap: 8px;
+  z-index: 2;
+}
+.rbx-tb-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(18, 18, 21, 0.62);
+  color: #fff;
+  backdrop-filter: blur(6px);
+}
+
+/* Player list */
+.rbx-leaderboard {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 190px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: rgba(18, 18, 21, 0.55);
+  font-size: 12px;
+  z-index: 2;
+}
+.lb-head,
+.lb-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 10px;
+}
+.lb-head { font-weight: 700; background: rgba(0, 0, 0, 0.25); color: #fff; }
+.lb-row { color: #E6E6E6; font-weight: 500; }
+.lb-row.me { color: #fff; font-weight: 700; }
+
+/* --------------------------------------------------------------------------
+   MHNAA UI WINDOW (680 x 420)
+   -------------------------------------------------------------------------- */
+.mh-window {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 680px;
+  height: 420px;
+  display: flex;
+  flex-direction: column;
+  background: var(--mh-bg);
+  border: 1.2px solid var(--mh-border);
+  border-radius: 10px;
+  box-shadow: 0 18px 50px -10px rgba(0, 0, 0, 0.6);
+  transform: translate(-50%, -50%) scale(calc(var(--fit, 1) * var(--mh-scale, 1)));
+  transform-origin: center;
+  z-index: 3;
+  overflow: hidden;
+  transition: height 0.22s ease;
+}
+.mh-window.minimized { height: 46px; }
+
+.mh-window button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+/* Topbar */
+.mh-topbar {
+  position: relative;
+  flex: 0 0 46px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  background: var(--mh-topbar);
+  border-bottom: 1px solid var(--mh-border);
+}
+
+.mh-brand {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-left: 12px;
+  width: 190px;
+  flex-shrink: 0;
+}
+
+.mh-brand-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--mh-accent-hover), var(--mh-accent));
+  color: #fff;
+  font-weight: 800;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.mh-title {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--mh-title);
+  white-space: nowrap;
+}
+.mh-tag {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--mh-tag);
+}
+
+.mh-back {
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: transparent;
+  color: var(--mh-sidebar-text);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.mh-pipe {
+  width: 1px;
+  height: 16px;
+  margin: 0 11px 0 4px;
+  background: var(--mh-border);
+  flex-shrink: 0;
+}
+
+.mh-search {
+  position: relative;
+  flex: 1;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  background: var(--mh-input-bg);
+  border: 1px solid var(--mh-input-border);
+  border-radius: 6px;
+}
+.mh-search-icon {
+  width: 30px;
+  text-align: center;
+  font-size: 11px;
+  color: var(--mh-muted);
+}
+.mh-search input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--mh-title);
+  font-family: inherit;
+  font-size: 11px;
+}
+.mh-search input::placeholder { color: var(--mh-muted); }
+.mh-search:focus-within { border-color: var(--mh-accent); }
+
+.mh-ctrlk {
+  width: 48px;
+  height: 20px;
+  margin-right: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  background: rgb(36, 36, 40);
+  border: 1px solid var(--mh-border);
+  color: var(--mh-muted);
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.mh-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 70px;
+  padding: 0 8px 0 10px;
+  flex-shrink: 0;
+}
+.mh-min,
+.mh-close {
+  width: 22px;
+  height: 22px;
+  border: none;
+  background: transparent;
+  color: var(--mh-muted);
+  font-weight: 700;
+  line-height: 1;
+  transition: color 0.15s;
+}
+.mh-min { font-size: 15px; }
+.mh-close { font-size: 19px; }
+.mh-min:hover { color: rgb(180, 200, 255); }
+.mh-close:hover { color: rgb(255, 80, 80); }
+
+/* Body */
+.mh-body {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+
+/* Sidebar (180px) */
+.mh-sidebar {
+  position: relative;
+  width: 180px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--mh-sidebar);
+  border-right: 1px solid var(--mh-border);
+}
+
+.mh-game-header {
+  height: 26px;
+  margin: 10px 10px 2px 14px;
+  display: flex;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--mh-sidebar-text);
+}
+
+.mh-tabs {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 0 8px;
+  overflow-y: auto;
+}
+
+.mh-tab {
+  height: 34px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-left: 12px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--mh-sidebar-text);
+  font-size: 12px;
+  font-weight: 500;
+  text-align: left;
+  transition: background 0.18s, color 0.18s;
+}
+.mh-tab:hover { background: rgba(255, 255, 255, 0.15); color: rgb(220, 222, 230); }
+.mh-tab.active { background: var(--mh-accent); color: #fff; }
+.mh-tab-icon { font-size: 12px; width: 16px; text-align: center; }
+
+.mh-sidebar-bottom {
+  margin: 0 8px;
+  padding: 6px 0 8px;
+  border-top: 1px solid var(--mh-border);
+}
+.mh-sidebar-bottom .mh-tab { width: 100%; }
+
+/* Content */
+.mh-content {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  background: var(--mh-bg);
+}
+
+.mh-page {
+  position: absolute;
+  inset: 12px 8px 4px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+  padding-right: 6px;
+  scrollbar-width: thin;
+  scrollbar-color: rgb(48, 48, 56) transparent;
+}
+.mh-page::-webkit-scrollbar { width: 3px; }
+.mh-page::-webkit-scrollbar-thumb { background: rgb(48, 48, 56); border-radius: 3px; }
+
+.mh-page-title {
+  flex: 0 0 32px;
+  display: flex;
+  align-items: center;
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--mh-title);
+}
+
+.mh-section {
+  flex: 0 0 26px;
+  display: flex;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--mh-sidebar-text);
+  border-bottom: 1px solid var(--mh-border);
+}
+
+/* Card base (Toggle / Button / Keybind / Slider / Dropdown) */
+.mh-card {
+  position: relative;
+  flex-shrink: 0;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 0 12px;
+  background: var(--mh-card);
+  border: 1px solid var(--mh-border);
+  border-radius: 6px;
+}
+.mh-card.has-desc { min-height: 54px; }
+
+.mh-card-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+.mh-card-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--mh-title);
+}
+.mh-card-desc {
+  font-size: 11px;
+  color: var(--mh-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Checkbox toggle (20x20, radius 4) */
+.mh-check {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border-radius: 4px;
+  border: 1.2px solid var(--mh-border);
+  background: rgb(24, 24, 28);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  transition: background 0.18s, border-color 0.18s;
+}
+.mh-check span { opacity: 0; transition: opacity 0.18s; line-height: 1; }
+.mh-check.on { background: var(--mh-accent); border-color: var(--mh-accent); }
+.mh-check.on span { opacity: 1; }
+
+/* Slider (card 56px) */
+.mh-slider-card {
+  min-height: 56px;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  gap: 10px;
+}
+.mh-slider-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.mh-slider-val {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--mh-accent);
+}
+.mh-track {
+  position: relative;
+  height: 6px;
+  border-radius: 999px;
+  background: rgb(44, 44, 52);
+}
+.mh-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--pct);
+  border-radius: 999px;
+  background: var(--mh-accent);
+}
+.mh-knob {
+  position: absolute;
+  right: -6px;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  margin-top: -6px;
+  border-radius: 50%;
+  background: #fff;
+}
+.mh-track input {
+  position: absolute;
+  inset: -8px -6px;
+  width: calc(100% + 12px);
+  height: 22px;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Dropdown combobox */
+.mh-dropdown-card {
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  padding: 0 12px;
+}
+.mh-dropdown-row {
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.mh-combo {
+  width: 170px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+  border-radius: 5px;
+  border: 1px solid var(--mh-input-border);
+  background: var(--mh-input-bg);
+  color: var(--mh-title);
+  font-size: 12px;
+}
+.mh-chevron {
+  color: var(--mh-muted);
+  font-weight: 700;
+  transition: transform 0.18s;
+}
+.mh-chevron.up { transform: rotate(180deg); }
+
+.mh-options {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0 0 10px auto;
+  width: 170px;
+  padding: 4px;
+  border-radius: 5px;
+  border: 1px solid var(--mh-input-border);
+  background: var(--mh-input-bg);
+  animation: mhDrop 0.18s ease;
+}
+@keyframes mhDrop {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: none; }
+}
+.mh-option {
+  height: 26px;
+  padding: 0 8px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--mh-sidebar-text);
+  font-size: 12px;
+  text-align: left;
+}
+.mh-option:hover { background: rgba(255, 255, 255, 0.06); color: var(--mh-title); }
+.mh-option.selected { color: var(--mh-accent); font-weight: 600; }
+
+/* Action button (96x28) */
+.mh-action {
+  width: 96px;
+  height: 28px;
+  flex-shrink: 0;
+  border: none;
+  border-radius: 5px;
+  background: var(--mh-accent);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  transition: background 0.15s, transform 0.1s;
+}
+.mh-action:hover { background: var(--mh-accent-hover); }
+.mh-action:active { transform: scale(0.96); }
+
+/* Keybind */
+.mh-keybind {
+  min-width: 34px;
+  height: 24px;
+  padding: 0 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  border: 1px solid var(--mh-input-border);
+  background: var(--mh-input-bg);
+  color: var(--mh-title);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.mh-resize {
+  position: absolute;
+  right: 3px;
+  bottom: 1px;
+  font-size: 11px;
+  color: var(--mh-border);
+  pointer-events: none;
+}
+
+/* Floating widget (UI hidden) */
+.mh-widget {
+  position: absolute;
+  top: 56px;
+  left: 10px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px 6px 6px;
+  border-radius: 8px;
+  border: 1px solid var(--mh-border);
+  background: var(--mh-topbar);
+  color: var(--mh-title);
+  font-family: var(--mh-font);
+  font-weight: 700;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+/* Toast notifications (bottom-right, 300px) */
+.mh-toasts {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  z-index: 4;
+  pointer-events: none;
+}
+.mh-toast {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 10px 12px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--mh-border);
+  background: var(--mh-card);
+  overflow: hidden;
+  animation: mhToastIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes mhToastIn {
+  from { opacity: 0; transform: translateX(40px); }
+  to { opacity: 1; transform: none; }
+}
+.mh-toast-title { font-size: 13px; font-weight: 700; color: var(--mh-title); }
+.mh-toast-desc { font-size: 11px; color: var(--mh-muted); line-height: 1.4; }
+.mh-toast-bar {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 100%;
+  background: var(--mh-accent);
+  transform-origin: left;
+  animation: mhToastBar 3.2s linear forwards;
+}
+@keyframes mhToastBar {
+  from { transform: scaleX(1); }
+  to { transform: scaleX(0); }
+}
+
+/* --------------------------------------------------------------------------
+   MOBILE
+   -------------------------------------------------------------------------- */
+@media (max-width: 640px) {
+  .rbx-screen {
+    width: 96vw;
+    aspect-ratio: auto;
+    height: 78vh;
+  }
+  .rbx-leaderboard { display: none; }
+  .mh-toasts { width: calc(100% - 28px); }
+}

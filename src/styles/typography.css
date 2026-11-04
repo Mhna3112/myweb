@@ -1,0 +1,727 @@
+/* ==========================================================================
+   NGUYỄN ĐỨC MẠNH — TYPOGRAPHIC CONTINUOUS SCROLL EXPERIENCE
+   NO 3D, NO IMAGES, NO DECORATIVE NOISE
+   Claude Warm Ivory & Obsidian Paper Aesthetic
+   Font: Be Vietnam Pro (Chuẩn xác 100% tiếng Việt)
+   ========================================================================== */
+
+:root {
+  /* Claude AI Signature Warm Palette */
+  --bg-color: #FAF7F2; /* Màu giấy ngà ấm áp đặc trưng của Claude */
+  --bg-surface: #F3EFE6;
+  --text-primary: #1F1E1D; /* Màu mực đen than obsidian ấm của Claude */
+  --text-secondary: #3D3B35;
+  --text-muted: #6B6860;
+  --accent-claude: #CC5636; /* Màu đất nung Terracotta trứ danh của Claude */
+  
+  --font-display: 'DFVN ED Lavonia', 'Cormorant Garamond', Georgia, serif;
+  --font-main: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+  --font-legacy: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Font chữ thư pháp DFVN ED Lavonia cho tiêu đề */
+@font-face {
+  font-family: 'DFVN ED Lavonia';
+  src: url('/fonts/lavonia.otf') format('opentype');
+  font-display: swap;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  font-family: var(--font-main);
+  scroll-behavior: auto; /* Điều khiển bởi Lenis */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  width: 100%;
+  min-height: 100vh;
+}
+
+::selection {
+  background: var(--accent-claude);
+  color: #FAF7F2;
+}
+
+/* --------------------------------------------------------------------------
+   CANVAS & PINNED VIEWPORT
+   -------------------------------------------------------------------------- */
+.canvas-wrapper {
+  position: relative;
+  width: 100%;
+  background-color: var(--bg-color);
+}
+
+.film-pin-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  background-color: var(--bg-color);
+  overflow: hidden;
+}
+
+/* --------------------------------------------------------------------------
+   STREAM ARCHITECTURE: CONTINUOUS VERTICAL CAMERA PAN
+   Mỗi section chiếm chính xác 100vh / 100dvh, căn giữa tuyệt đối
+   -------------------------------------------------------------------------- */
+.stream-viewport {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  background-color: var(--bg-color);
+  contain: strict;
+}
+
+.stream-track {
+  position: relative;
+  width: 100%;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.stream-section {
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-sizing: border-box;
+  pointer-events: none;
+  padding: 0 clamp(16px, 4vw, 40px);
+  contain: layout style;
+}
+
+.section-content-wrap {
+  width: 90vw;
+  max-width: 1100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin: auto;
+  pointer-events: auto;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.film-viewport {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  background-color: var(--bg-color);
+  overflow: hidden;
+}
+
+/* --------------------------------------------------------------------------
+   BLOCKS POSITIONING & CENTERING
+   Mỗi phân cảnh luôn nằm CHÍNH GIỮA TUYỆT ĐỐI của khung hình
+   -------------------------------------------------------------------------- */
+.film-block {
+  width: 90vw;
+  max-width: 1100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  pointer-events: none;
+  margin: auto;
+}
+
+/* Khung block luôn là pointer-events: none để các block trong suốt không che mất tương tác */
+.film-block.has-links {
+  pointer-events: none;
+}
+
+/* --------------------------------------------------------------------------
+   UNICODE SPLIT TEXT CHARACTERS
+   -------------------------------------------------------------------------- */
+.split-phrase {
+  display: inline;
+}
+
+.split-word {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.split-char {
+  display: inline-block;
+  opacity: 0;
+  transform: translate3d(0, 20px, 0) scale(0.92);
+  color: inherit;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform-origin: center center;
+}
+
+.split-space {
+  display: inline-block;
+  width: 0.28em;
+}
+
+/* --------------------------------------------------------------------------
+   LINE STYLES DÙNG CHO CÁC LOẠI CHỮ TRONG STORY_BLOCKS
+   -------------------------------------------------------------------------- */
+.line-item {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+/* 1. Tên chính (Hero Name) */
+.line-hero-name {
+  font-family: var(--font-display);
+  text-transform: none;
+  font-size: clamp(2.8rem, 9vw, 7.5rem);
+  font-weight: 400;
+  color: var(--text-primary);
+  letter-spacing: 0;
+  line-height: 1.25;
+  max-width: 100%;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+/* 2. Tiêu đề lớn (Heading) */
+.line-heading {
+  font-family: var(--font-display);
+  text-transform: none;
+  font-size: clamp(1.8rem, 4.5vw, 3.8rem);
+  font-weight: 400;
+  color: var(--text-primary);
+  letter-spacing: 0;
+  line-height: 1.3;
+  margin-bottom: clamp(6px, 1.5vh, 16px);
+}
+
+/* 3. Tiêu đề phụ (Subheading) */
+.line-subheading {
+  font-size: clamp(1.1rem, 2.2vw, 1.8rem);
+  font-weight: 500;
+  color: var(--text-secondary);
+  letter-spacing: 0.01em;
+  font-style: italic;
+  line-height: 1.3;
+  margin-bottom: clamp(10px, 2vh, 20px);
+}
+
+/* 4. Đoạn văn mô tả (Body) */
+.line-body {
+  font-size: clamp(0.95rem, 1.8vw, 1.35rem);
+  font-weight: 400;
+  color: var(--text-muted);
+  line-height: 1.6;
+  max-width: 740px;
+  margin-top: clamp(6px, 1vh, 12px);
+}
+
+/* 5. Câu trích dẫn / Triết lý (Quote) */
+.line-quote {
+  font-family: var(--font-display);
+  text-transform: none;
+  font-size: clamp(1.7rem, 4.2vw, 3.6rem);
+  font-weight: 400;
+  color: var(--accent-claude);
+  letter-spacing: 0;
+  line-height: 1.3;
+  margin-bottom: clamp(10px, 2vh, 18px);
+}
+
+/* 6. Hàng chứa liên kết (Link) */
+.line-link-wrap {
+  margin: clamp(4px, 1vh, 10px) 0;
+}
+
+.film-link {
+  font-size: clamp(1.1rem, 2.4vw, 1.8rem);
+  font-weight: 700;
+  color: var(--text-primary);
+  text-decoration: none;
+  position: relative;
+  padding: 4px 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.film-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--accent-claude);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.film-link:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.film-link:hover {
+  color: var(--accent-claude);
+  opacity: 0.9;
+}
+
+/* 7. Dòng chân trang (Footer) */
+.line-footer {
+  font-size: clamp(0.8rem, 1.2vw, 0.95rem);
+  font-weight: 400;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+  margin-top: clamp(12px, 2vh, 24px);
+}
+
+/* --------------------------------------------------------------------------
+   8. SOCIAL FAN CARDS (BỘ THẺ XÒE QUẠT TRÊN PHẦN DMS)
+   -------------------------------------------------------------------------- */
+.cards-fan-deck {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1200px;
+  width: 100%;
+  margin-bottom: clamp(16px, 2.5vh, 28px);
+  padding: 24px 0 16px;
+  pointer-events: auto;
+  touch-action: pan-y;
+}
+
+.social-fan-card {
+  position: relative;
+  display: block;
+  text-decoration: none;
+  width: clamp(125px, 12vw, 175px);
+  height: clamp(185px, 17vw, 250px);
+  border-radius: 20px;
+  margin: 0 clamp(-18px, -1.2vw, -12px);
+  cursor: pointer;
+  box-shadow: 0 12px 28px -6px rgba(0, 0, 0, 0.28), 0 4px 10px -2px rgba(0, 0, 0, 0.15);
+  transform-origin: center bottom;
+  transition: box-shadow 0.35s ease, z-index 0.1s;
+  overflow: hidden;
+  user-select: none;
+  will-change: transform, opacity;
+  pointer-events: auto;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Chỉ áp dụng hiệu ứng nâng thẻ khi hover trên thiết bị có chuột (Desktop) */
+@media (hover: hover) and (pointer: fine) {
+  .social-fan-card:hover {
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease !important;
+    transform: translateY(-28px) scale(1.08) rotate(0deg) !important;
+    z-index: 50 !important;
+    box-shadow: 0 25px 50px -8px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.2);
+  }
+}
+
+/* Phản hồi chạm trên thiết bị di động (Active) */
+.social-fan-card:active {
+  transform: translateY(-8px) scale(0.97) !important;
+  opacity: 0.9;
+}
+
+.card-inner {
+  width: 100%;
+  height: 100%;
+  padding: clamp(14px, 2vh, 22px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  text-align: left;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+
+.card-top-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.card-icon-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(34px, 3vw, 42px);
+  height: clamp(34px, 3vw, 42px);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  color: inherit;
+}
+
+.card-icon-badge svg {
+  width: clamp(18px, 1.8vw, 22px);
+  height: clamp(18px, 1.8vw, 22px);
+}
+
+.card-brand-title {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-main);
+  font-weight: 900;
+  font-size: clamp(1.4rem, 2.4vw, 2.2rem);
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  color: inherit;
+  margin: clamp(4px, 1vh, 8px) 0;
+}
+
+.card-title-line {
+  display: block;
+}
+
+.card-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: clamp(0.68rem, 0.9vw, 0.8rem);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  background: rgba(255, 255, 255, 0.24);
+  color: inherit;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-github {
+  box-shadow: 0 12px 28px -6px rgba(0, 0, 0, 0.35), inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+}
+
+.card-tiktok {
+  box-shadow: 0 12px 28px -6px rgba(0, 0, 0, 0.4), inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+}
+
+/* --------------------------------------------------------------------------
+   ROBLOX STUDIO PLATFORM CARD (Phân cảnh Dự án — Giống các thẻ nền tảng khác)
+   -------------------------------------------------------------------------- */
+.roblox-scene-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: clamp(16px, 2.5vh, 28px);
+  pointer-events: auto;
+}
+
+.roblox-platform-card {
+  position: relative;
+  width: clamp(135px, 15vw, 185px);
+  height: clamp(230px, 25vw, 305px);
+  border-radius: 26px;
+  background: linear-gradient(150deg, #16171B 0%, #0D0E13 55%, #0A1C2E 100%) !important;
+  color: #FFFFFF !important;
+  border: 1px solid rgba(0, 162, 255, 0.35);
+  box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.45), 0 0 24px -4px rgba(0, 162, 255, 0.22);
+  cursor: pointer;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease;
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.roblox-platform-card:hover {
+  transform: translateY(-8px) scale(1.05);
+  border-color: rgba(0, 162, 255, 0.7);
+  box-shadow: 0 24px 50px -10px rgba(0, 0, 0, 0.6), 0 0 35px rgba(0, 162, 255, 0.4);
+}
+
+.roblox-badge-glow {
+  background: rgba(0, 162, 255, 0.18) !important;
+  border: 1px solid rgba(0, 162, 255, 0.45);
+  color: #00A2FF !important;
+  box-shadow: 0 0 16px rgba(0, 162, 255, 0.35);
+}
+
+.roblox-scene-container {
+  flex-direction: row;
+  gap: clamp(16px, 2.5vw, 32px);
+}
+
+.roblox-scene-container .project-card {
+  margin: 0;
+}
+
+.discord-platform-card {
+  position: relative;
+  width: clamp(135px, 15vw, 185px);
+  height: clamp(230px, 25vw, 305px);
+  border-radius: 26px;
+  background: linear-gradient(150deg, #5865F2 0%, #404EED 55%, #2B2D84 100%) !important;
+  color: #FFFFFF !important;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.45), 0 0 24px -4px rgba(88, 101, 242, 0.35);
+  cursor: pointer;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.discord-platform-card:hover {
+  transform: translateY(-8px) scale(1.05);
+  box-shadow: 0 24px 50px -10px rgba(0, 0, 0, 0.6), 0 0 35px rgba(88, 101, 242, 0.55);
+}
+
+.discord-badge-glow {
+  background: rgba(255, 255, 255, 0.18) !important;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: #FFFFFF !important;
+}
+
+/* --------------------------------------------------------------------------
+   RESPONSIVE ADJUSTMENTS (ĐẶC BIỆT TỐI ƯU CHO ĐIỆN THOẠI)
+   -------------------------------------------------------------------------- */
+@media (max-width: 640px) {
+  .stream-section {
+    padding: 0 8px;
+  }
+
+  .section-content-wrap,
+  .film-block {
+    width: 98vw;
+    padding: 0 4px;
+    pointer-events: auto;
+  }
+
+  .split-space {
+    width: 0.24em;
+  }
+
+  .cards-fan-deck {
+    padding: 16px 0 10px;
+    margin-bottom: 8px;
+    touch-action: pan-y;
+  }
+
+  /* Kích thước và khoảng cách tối ưu để ngón tay chạm chính xác từng thẻ */
+  .social-fan-card {
+    width: clamp(62px, 17.5vw, 76px);
+    height: clamp(120px, 27vw, 145px);
+    border-radius: 14px;
+    margin: 0 clamp(-3px, -0.8vw, -1px);
+    box-shadow: 0 8px 18px -4px rgba(0, 0, 0, 0.35);
+    pointer-events: auto;
+    touch-action: manipulation;
+  }
+
+  .card-inner {
+    padding: 8px 6px;
+    pointer-events: none;
+  }
+
+  .card-top-row {
+    margin-bottom: 2px;
+  }
+
+  .card-icon-badge {
+    width: 24px;
+    height: 24px;
+  }
+
+  .card-icon-badge svg {
+    width: 13px;
+    height: 13px;
+  }
+
+  .card-brand-title {
+    font-size: clamp(0.76rem, 3.1vw, 0.92rem);
+    margin: 2px 0;
+    line-height: 1.08;
+  }
+
+  .card-badge-pill {
+    padding: 2px 5px;
+    font-size: 0.52rem;
+    letter-spacing: 0;
+  }
+
+  /* Kích thước & bố cục thẻ Roblox Platform Card trên điện thoại */
+  .roblox-scene-container {
+    margin-top: 10px;
+  }
+
+  .roblox-platform-card,
+  .discord-platform-card {
+    width: clamp(110px, 32vw, 135px);
+    height: clamp(190px, 48vw, 225px);
+    border-radius: 18px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   9. AUDIO CONTROL (GÓC DƯỚI BÊN PHẢI — NÚT TRÒN EQUALIZER TỐI GIẢN)
+   -------------------------------------------------------------------------- */
+.audio-control-fixed {
+  position: fixed;
+  bottom: clamp(16px, 3vh, 28px);
+  right: clamp(16px, 3vw, 28px);
+  left: auto;
+  z-index: 9999;
+  pointer-events: auto;
+  user-select: none;
+}
+
+.audio-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: rgba(250, 247, 242, 0.85);
+  border: 1px solid rgba(31, 30, 29, 0.12);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 4px 16px -2px rgba(31, 30, 29, 0.08), 0 2px 6px -1px rgba(31, 30, 29, 0.04);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  color: var(--text-primary);
+  outline: none;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.audio-btn:hover {
+  background: #FFFFFF;
+  border-color: rgba(204, 86, 54, 0.35);
+  box-shadow: 0 8px 24px -4px rgba(31, 30, 29, 0.12);
+  transform: translateY(-2px) scale(1.06);
+}
+
+.audio-btn:active {
+  transform: translateY(0) scale(0.94);
+}
+
+.audio-btn.is-active {
+  border-color: rgba(204, 86, 54, 0.4);
+}
+
+/* Equalizer Bars */
+.equalizer-bars {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 2.5px;
+  height: 16px;
+  width: 16px;
+  padding-bottom: 1px;
+}
+
+.eq-bar {
+  display: block;
+  width: 2px;
+  height: 15px;
+  background-color: var(--text-primary);
+  border-radius: 1px;
+  transform-origin: bottom center;
+  transform: scaleY(0.2);
+  transition: transform 0.3s ease;
+  will-change: transform;
+}
+
+/* Khi đang phát nhạc: Các cột sóng nhảy múa nhịp nhàng bằng GPU scaleY (không gây layout reflow) */
+.equalizer-bars.playing .eq-bar-1 {
+  animation: eqJump 0.8s ease-in-out infinite alternate;
+}
+
+.equalizer-bars.playing .eq-bar-2 {
+  animation: eqJump 1.1s ease-in-out 0.2s infinite alternate;
+}
+
+.equalizer-bars.playing .eq-bar-3 {
+  animation: eqJump 0.9s ease-in-out 0.4s infinite alternate;
+}
+
+.equalizer-bars.playing .eq-bar-4 {
+  animation: eqJump 1.2s ease-in-out 0.1s infinite alternate;
+}
+
+@keyframes eqJump {
+  0% {
+    transform: scaleY(0.2);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+  100% {
+    transform: scaleY(0.4);
+  }
+}
+
+@media (max-width: 640px) {
+  .audio-control-fixed {
+    bottom: 16px;
+    right: 14px;
+    left: auto;
+  }
+
+  .audio-btn {
+    width: 40px;
+    height: 40px;
+  }
+
+  .equalizer-bars {
+    height: 14px;
+    width: 14px;
+    gap: 2px;
+  }
+
+  .eq-bar {
+    width: 2px;
+  }
+}
+
+/* Trang đầu: toàn bộ chữ dùng cùng font thư pháp Lavonia */
+.stream-section-0 .line-item {
+  font-family: var(--font-display);
+  font-style: normal;
+  letter-spacing: 0;
+  perspective: 600px;
+}
+.stream-section-0 .line-subheading {
+  font-size: clamp(1.5rem, 3.2vw, 2.6rem);
+  color: var(--text-secondary);
+}

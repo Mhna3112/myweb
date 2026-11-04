@@ -1,46 +1,28 @@
 import { cp, mkdir, rm, stat } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { execSync } from 'node:child_process';
 
 const root = resolve(fileURLToPath(new URL('..', import.meta.url)));
 const output = join(root, '.deploy-assets');
 
-if (output !== join(root, '.deploy-assets')) {
-  throw new Error('Unexpected deploy output path');
-}
+console.log('--- PREPARING DUAL-DOMAIN DEPLOYMENT ---');
 
-const files = [
-  'index.html',
-  'main.js',
-  'style.css',
-  'avatar.jpg',
-  'favicon.png',
-  'apple-touch-icon.png',
-  'og-image.jpg',
-  'robots.txt',
-  'sitemap.xml',
-  'site.webmanifest',
-  '404.html'
-];
-const directories = ['gplx'];
-const todoFiles = ['index.html', 'style.css', 'script.js', 'todo-calendar.html', 'todo2.html', 'vietnam-flag.jpg'];
-
+// 1. Clean output directory
 await rm(output, { recursive: true, force: true });
 await mkdir(output, { recursive: true });
 
-for (const name of files) {
-  await cp(join(root, name), join(output, name));
-}
+// 2. Build Vite React Typography project into .deploy-assets/ducmanh
+console.log('Building ducmanh.xyz (React + Vite Typography)...');
+execSync('npx vite build', { cwd: root, stdio: 'inherit' });
 
-for (const name of directories) {
-  await cp(join(root, name), join(output, name), { recursive: true });
-}
+// 3. Prepare mhna.id.vn (Original Portfolio) in .deploy-assets/mhna
+console.log('Preparing mhna.id.vn (Original Project)...');
+const mhnaOutput = join(output, 'mhna');
+await mkdir(mhnaOutput, { recursive: true });
+await cp(join(root, 'mhna-site'), mhnaOutput, { recursive: true });
 
-await mkdir(join(output, 'todo'), { recursive: true });
-for (const name of todoFiles) {
-  await cp(join(root, 'todo', name), join(output, 'todo', name));
-}
-await cp(join(root, 'todo', 'dist'), join(output, 'todo', 'dist'), { recursive: true });
+
 
 const count = async (dir) => {
   const { readdir } = await import('node:fs/promises');
@@ -51,4 +33,4 @@ const count = async (dir) => {
   }))).reduce((total, value) => total + value, 0);
 };
 
-console.log(`Prepared ${await count(output)} public files in ${output}`);
+console.log(`\n🎉 Dual-domain assets prepared: ${await count(output)} files in ${output}`);
